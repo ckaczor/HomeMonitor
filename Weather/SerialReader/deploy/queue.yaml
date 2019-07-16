@@ -1,0 +1,68 @@
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: weather-queue
+  namespace: home-monitor
+  labels:
+    app: weather-queue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-queue
+  serviceName: weather-queue
+  template:
+    metadata:
+      labels:
+        app: weather-queue
+    spec:
+      containers:
+      - name: weather-queue
+        image: rabbitmq:3.7.16-management-alpine
+        terminationMessagePath: "/dev/termination-log"
+        terminationMessagePolicy: File
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: RABBITMQ_DEFAULT_USER
+          valueFrom:
+            secretKeyRef:
+              name: weather-queue-credentials
+              key: username               
+        - name: RABBITMQ_DEFAULT_PASS
+          valueFrom:
+            secretKeyRef:
+              name: weather-queue-credentials
+              key: password
+        volumeMounts:
+          - name: data
+            mountPath: /var/lib/rabbitmq       
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        kubernetes.io/hostname: weather
+      schedulerName: default-scheduler
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 1Gi      
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: weather-queue
+spec:
+  ports:
+  - name: client
+    port: 5672
+  - name: http
+    port: 15672
+  selector:
+    app: weather-queue
+  type: ClusterIP

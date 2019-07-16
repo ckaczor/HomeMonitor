@@ -1,0 +1,16 @@
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0.0-preview6-buster-slim-arm32v7 AS base
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0.100-preview6-buster AS build
+WORKDIR /src
+COPY ["Weather/SerialReader/SerialReader.csproj", "Weather/SerialReader/"]
+COPY ["Weather/Models/Models.csproj", "Weather/Models/"]
+RUN dotnet restore -r linux-arm "Weather/SerialReader/SerialReader.csproj"
+COPY . .
+WORKDIR "/src/Weather/SerialReader"
+RUN dotnet publish -r linux-arm --self-contained=false "SerialReader.csproj" -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=build /app .
+ENTRYPOINT ["dotnet", "Weather.SerialReader.dll"]
