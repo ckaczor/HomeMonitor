@@ -1,7 +1,7 @@
 variables:
-  Major: '1'
-  Minor: '0'
-  Patch: '0'
+  majorMinorVersion: 1.0
+  semanticVersion: $[counter(variables['majorMinorVersion'], 0)]
+  buildConfiguration: 'Release'
 
 trigger:
   batch: true
@@ -16,11 +16,9 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: 'pack'
+    configuration: $(BuildConfiguration)
     packagesToPack: 'Weather/Models/Models.csproj'
     versioningScheme: byBuildNumber
-    majorVersion: '$(Major)'
-    minorVersion: '$(Minor)'
-    patchVersion: '$(Patch)'
 - task: NuGetCommand@2
   inputs:
     command: 'push'
