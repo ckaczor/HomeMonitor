@@ -3,11 +3,20 @@ variables:
   Minor: '0'
   Patch: '0'
 
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - Weather/Models/**/*
+
 steps:
 - task: NuGetCommand@2
   inputs:
     command: pack
-    packagesToPack: 'Weather\Models\Models.csproj'
+    packagesToPack: 'Weather/Models/Models.csproj'
     versioningScheme: byPrereleaseNumber
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
@@ -15,6 +24,6 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    packagesToPush: 'Weather/Models/**/*.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: '2eb33313-2dc4-435d-ab24-74b653cdd7bc'
