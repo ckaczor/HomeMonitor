@@ -13,8 +13,8 @@ steps:
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
 - task: NuGetCommand@2
-  displayName: 'NuGet push'
   inputs:
-    command: push
-    publishVstsFeed: 'HomeMonitor'
-    allowPackageConflicts: true    
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '2eb33313-2dc4-435d-ab24-74b653cdd7bc'
