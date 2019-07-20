@@ -1,0 +1,14 @@
+variables:
+  Major: '1'
+  Minor: '0'
+  Patch: '0'
+
+steps:
+- task: NuGetCommand@2
+  inputs:
+    command: pack
+    packagesToPack: '**/*.csproj'
+    versioningScheme: byPrereleaseNumber
+    majorVersion: '$(Major)'
+    minorVersion: '$(Minor)'
+    patchVersion: '$(Patch)'
