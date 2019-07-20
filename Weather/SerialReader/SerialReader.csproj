@@ -7,8 +7,8 @@
 
   <PropertyGroup>
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
-    <AssemblyName>Weather.SerialReader</AssemblyName>
-    <RootNamespace>Weather.SerialReader</RootNamespace>
+    <AssemblyName>ChrisKaczor.HomeMonitor.Weather.SerialReader</AssemblyName>
+    <RootNamespace>ChrisKaczor.HomeMonitor.Weather.SerialReader</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

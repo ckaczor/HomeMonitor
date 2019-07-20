@@ -3,8 +3,8 @@
   <PropertyGroup>
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <AssemblyName>Weather.Models</AssemblyName>
-    <RootNamespace>Weather.Models</RootNamespace>
+    <AssemblyName>ChrisKaczor.HomeMonitor.Weather.Models</AssemblyName>
+    <RootNamespace>ChrisKaczor.HomeMonitor.Weather.Models</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

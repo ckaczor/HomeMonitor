@@ -6,9 +6,9 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Weather.Models;
+using ChrisKaczor.HomeMonitor.Weather.Models;
 
-namespace Weather.SerialReader
+namespace ChrisKaczor.HomeMonitor.Weather.SerialReader
 {
     internal static class Program
     {

@@ -5,7 +5,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 
-namespace Weather.Models
+namespace ChrisKaczor.HomeMonitor.Weather.Models
 {
     public enum MessageType
     {
@@ -35,6 +35,7 @@ namespace Weather.Models
         NorthNorthWest = 338
     }
 
+    [PublicAPI]
     public class WeatherMessage
     {
         [JsonConverter(typeof(StringEnumConverter))]

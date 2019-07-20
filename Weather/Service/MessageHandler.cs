@@ -9,10 +9,10 @@ using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Weather.Models;
-using Weather.Service.Data;
+using ChrisKaczor.HomeMonitor.Weather.Models;
+using ChrisKaczor.HomeMonitor.Weather.Service.Data;
 
-namespace Weather.Service
+namespace ChrisKaczor.HomeMonitor.Weather.Service
 {
     [UsedImplicitly]
     public class MessageHandler : IHostedService

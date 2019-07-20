@@ -13,4 +13,4 @@ RUN dotnet publish -r linux-arm --self-contained=false "SerialReader.csproj" -c 
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app .
-ENTRYPOINT ["dotnet", "Weather.SerialReader.dll"]
+ENTRYPOINT ["dotnet", "ChrisKaczor.HomeMonitor.Weather.SerialReader.dll"]

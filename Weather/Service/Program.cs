@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
-namespace Weather.Service
+namespace ChrisKaczor.HomeMonitor.Weather.Service
 {
     public static class Program
     {

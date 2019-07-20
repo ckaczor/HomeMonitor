@@ -1,9 +1,9 @@
-﻿using Dapper;
+﻿using ChrisKaczor.HomeMonitor.Weather.Models;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
-using Weather.Models;
 
-namespace Weather.Service.Data
+namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
 {
     public class Database
     {

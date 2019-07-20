@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Weather.Service.Data;
+using ChrisKaczor.HomeMonitor.Weather.Service.Data;
 
-namespace Weather.Service
+namespace ChrisKaczor.HomeMonitor.Weather.Service
 {
     public class Startup
     {

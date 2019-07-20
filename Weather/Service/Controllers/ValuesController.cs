@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
-namespace Weather.Service.Controllers
+namespace ChrisKaczor.HomeMonitor.Weather.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

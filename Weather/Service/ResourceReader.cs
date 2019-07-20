@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace Weather.Service
+namespace ChrisKaczor.HomeMonitor.Weather.Service
 {
     public static class ResourceReader
     {

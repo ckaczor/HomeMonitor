@@ -4,8 +4,8 @@
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <AssemblyName>Weather.Service</AssemblyName>
-    <RootNamespace>Weather.Service</RootNamespace>
+    <AssemblyName>ChrisKaczor.HomeMonitor.Weather.Service</AssemblyName>
+    <RootNamespace>ChrisKaczor.HomeMonitor.Weather.Service</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
