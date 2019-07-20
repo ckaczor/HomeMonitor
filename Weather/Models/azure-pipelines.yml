@@ -10,14 +10,14 @@ trigger:
     - master
   paths:
     include:
-    - Weather/Models/**/*
+    - Weather/Models
 
 steps:
 - task: NuGetCommand@2
   inputs:
-    command: pack
+    command: 'pack'
     packagesToPack: 'Weather/Models/Models.csproj'
-    versioningScheme: byPrereleaseNumber
+    versioningScheme: byBuildNumber
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
     patchVersion: '$(Patch)'
