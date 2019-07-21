@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
-namespace Hub.Service.Controllers
+namespace ChrisKaczor.HomeMonitor.Hub.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

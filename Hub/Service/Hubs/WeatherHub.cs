@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Threading.Tasks;
 
-namespace Hub.Service.Hubs
+namespace ChrisKaczor.HomeMonitor.Hub.Service.Hubs
 {
     [UsedImplicitly]
     public class WeatherHub : Microsoft.AspNetCore.SignalR.Hub

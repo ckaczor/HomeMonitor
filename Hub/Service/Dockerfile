@@ -4,14 +4,13 @@ EXPOSE 80
 
 FROM microsoft/dotnet:2.2-sdk-stretch AS build
 WORKDIR /src
-COPY ["Hub/Service/Service.csproj", "Hub/Service/"]
-COPY ["Weather/Models/Models.csproj", "Weather/Models/"]
-RUN dotnet restore "Hub/Service/Service.csproj"
+COPY ["./Service.csproj", "./"]
+RUN dotnet restore "Service.csproj"
 COPY . .
-WORKDIR "/src/Hub/Service"
+WORKDIR "/src"
 RUN dotnet publish "Service.csproj" -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app .
-ENTRYPOINT ["dotnet", "Hub.Service.dll"]
+ENTRYPOINT ["dotnet", "ChrisKaczor.HomeMonitor.Hub.Service.dll"]

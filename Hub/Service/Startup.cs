@@ -1,10 +1,10 @@
-﻿using Hub.Service.Hubs;
+﻿using ChrisKaczor.HomeMonitor.Hub.Service.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Hub.Service
+namespace ChrisKaczor.HomeMonitor.Hub.Service
 {
     public class Startup
     {

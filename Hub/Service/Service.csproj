@@ -4,17 +4,14 @@
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <AssemblyName>Hub.Service</AssemblyName>
-    <RootNamespace>Hub.Service</RootNamespace>
+    <AssemblyName>ChrisKaczor.HomeMonitor.Hub.Service</AssemblyName>
+    <RootNamespace>ChrisKaczor.HomeMonitor.Hub.Service</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ChrisKaczor.HomeMonitor.Weather.Models" Version="1.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Weather\Models\Models.csproj" />
   </ItemGroup>
 
 

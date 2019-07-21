@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Hub.Service
+namespace ChrisKaczor.HomeMonitor.Hub.Service
 {
     public static class Program
     {
