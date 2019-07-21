@@ -19,7 +19,7 @@ steps:
     containerregistrytype: 'Container Registry'
     dockerRegistryConnection: 'Docker Hub'
     dockerFile: 'Weather/SerialReader/Dockerfile'
-    imageName: 'ckaczor/home-monitor-weather-serialreader:$(Build.BuildId)'
+    imageName: 'ckaczor/home-monitor-weather-serialreader:$(Rev:r)'
     includeLatestTag: true
 
 - task: Docker@0
@@ -28,5 +28,5 @@ steps:
     containerregistrytype: 'Container Registry'
     dockerRegistryConnection: 'Docker Hub'
     action: 'Push an image'
-    imageName: 'ckaczor/home-monitor-weather-serialreader:$(Build.BuildId)'
+    imageName: 'ckaczor/home-monitor-weather-serialreader:$(Rev:r)'
     includeLatestTag: true
