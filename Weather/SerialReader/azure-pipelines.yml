@@ -13,20 +13,11 @@ pool:
   name: Hosted Ubuntu 1604
   
 steps:
-- task: Docker@0
-  displayName: 'Build an image'
+- task: Docker@2
   inputs:
-    containerregistrytype: 'Container Registry'
-    dockerRegistryConnection: 'Docker Hub'
-    dockerFile: 'Weather/SerialReader/Dockerfile'
-    imageName: 'ckaczor/home-monitor-weather-serialreader:$(Build.BuildId)'
-    includeLatestTag: true
-
-- task: Docker@0
-  displayName: 'Push an image'
-  inputs:
-    containerregistrytype: 'Container Registry'
-    dockerRegistryConnection: 'Docker Hub'
-    action: 'Push an image'
-    imageName: 'ckaczor/home-monitor-weather-serialreader:$(Build.BuildId)'
-    includeLatestTag: true
+    containerRegistry: 'Docker Hub'
+    repository: 'ckaczor'
+    command: 'buildAndPush'
+    Dockerfile: 'Dockerfile'
+    buildContext: 'Weather/SerialReader'
+    tags: '$(Rev:r)'
