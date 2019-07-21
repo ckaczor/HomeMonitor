@@ -1,27 +1,37 @@
-name: 1.0.$(rev:.r)
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
 
 variables:
   buildConfiguration: 'Release'
 
-trigger:
-  batch: true
-  branches:
-    include:
-    - master
-  paths:
-    include:
-    - Weather/Models
-
 steps:
-- task: NuGetCommand@2
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  inputs:
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration)'
+    projects: 'Weather/Models/Models.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: "dotnet pack"
   inputs:
     command: 'pack'
-    configuration: $(BuildConfiguration)
+    arguments: '--configuration $(buildConfiguration)'
     packagesToPack: 'Weather/Models/Models.csproj'
-    versioningScheme: byBuildNumber
+    nobuild: true
+    versioningScheme: 'off'
+
 - task: NuGetCommand@2
+  displayName: 'nuget push'
   inputs:
     command: 'push'
-    packagesToPush: 'Weather/Models/**/*.nupkg'
+    feedsToUse: 'select'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: '2eb33313-2dc4-435d-ab24-74b653cdd7bc'
+    publishVstsFeed: 'HomeMonitor'
+    versioningScheme: 'off'
+    allowPackageConflicts: true
