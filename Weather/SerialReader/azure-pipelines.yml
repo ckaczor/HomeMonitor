@@ -18,6 +18,6 @@ steps:
     containerRegistry: 'Docker Hub'
     repository: 'ckaczor'
     command: 'buildAndPush'
-    Dockerfile: 'Dockerfile'
+    Dockerfile: 'Weather/SerialReader/Dockerfile'
     buildContext: 'Weather/SerialReader'
     tags: '$(Rev:r)'
