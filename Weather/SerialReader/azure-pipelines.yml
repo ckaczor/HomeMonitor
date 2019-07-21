@@ -1,0 +1,32 @@
+name: 1.0.$(Rev:r)
+
+trigger:
+  batch: 'true'
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - Weather/SerialReader
+
+pool:
+  name: Hosted Ubuntu 1604
+  
+steps:
+- task: Docker@0
+  displayName: 'Build an image'
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryConnection: 'Docker Hub'
+    dockerFile: 'Weather/SerialReader/Dockerfile'
+    imageName: 'ckaczor/home-monitor-weather-serialreader:$(Build.BuildId)'
+    includeLatestTag: true
+
+- task: Docker@0
+  displayName: 'Push an image'
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryConnection: 'Docker Hub'
+    action: 'Push an image'
+    imageName: 'ckaczor/home-monitor-weather-serialreader:$(Build.BuildId)'
+    includeLatestTag: true
