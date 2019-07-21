@@ -1,0 +1,32 @@
+name: $(Rev:r)
+
+trigger:
+  batch: 'true'
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - Hub/Service
+
+pool:
+  name: Hosted Ubuntu 1604
+  
+steps:
+- task: Docker@0
+  displayName: 'Build an image'
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryConnection: 'Docker Hub'
+    dockerFile: 'Hub/Service/Dockerfile'
+    imageName: 'ckaczor/home-monitor-hub-service:$(Build.BuildNumber)'
+    includeLatestTag: true
+
+- task: Docker@0
+  displayName: 'Push an image'
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryConnection: 'Docker Hub'
+    action: 'Push an image'
+    imageName: 'ckaczor/home-monitor-hub-service:$(Build.BuildNumber)'
+    includeLatestTag: true
