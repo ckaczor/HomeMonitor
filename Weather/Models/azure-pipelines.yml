@@ -1,5 +1,7 @@
+name: 1.0.$(Rev:r)
+
 trigger:
-  batch: true
+  batch: 'true'
   branches:
     include:
     - master
@@ -29,7 +31,7 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
     packagesToPack: 'Weather/Models/Models.csproj'
     nobuild: true
-    versioningScheme: 'off'
+    versioningScheme: 'byBuildNumber'
 
 - task: NuGetCommand@2
   displayName: 'nuget push'
@@ -39,5 +41,5 @@ steps:
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: 'HomeMonitor'
-    versioningScheme: 'off'
+    versioningScheme: 'byBuildNumber'
     allowPackageConflicts: true
