@@ -39,7 +39,8 @@ steps:
     command: 'push'
     feedsToUse: 'select'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'internal'
+    nuGetFeedType: external
+    publishFeedCredentials: 'NuGet'
     publishVstsFeed: 'HomeMonitor'
     versioningScheme: 'byBuildNumber'
     allowPackageConflicts: true
