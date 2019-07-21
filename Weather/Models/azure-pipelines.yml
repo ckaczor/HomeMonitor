@@ -1,5 +1,11 @@
 trigger:
-- master
+  batch: true
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - Weather/Models
 
 pool:
   vmImage: 'windows-latest'
