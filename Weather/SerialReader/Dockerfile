@@ -3,11 +3,10 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0.100-preview6-buster AS build
 WORKDIR /src
-COPY ["Weather/SerialReader/SerialReader.csproj", "Weather/SerialReader/"]
-COPY ["Weather/Models/Models.csproj", "Weather/Models/"]
-RUN dotnet restore -r linux-arm "Weather/SerialReader/SerialReader.csproj"
+COPY ["./SerialReader.csproj", "./"]
+RUN dotnet restore -r linux-arm "SerialReader.csproj"
 COPY . .
-WORKDIR "/src/Weather/SerialReader"
+WORKDIR "/src/"
 RUN dotnet publish -r linux-arm --self-contained=false "SerialReader.csproj" -c Release -o /app
 
 FROM base AS final
