@@ -5,6 +5,8 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AssemblyName>ChrisKaczor.HomeMonitor.Weather.Models</AssemblyName>
     <RootNamespace>ChrisKaczor.HomeMonitor.Weather.Models</RootNamespace>
+    <Authors>Chris Kaczor</Authors>
+    <Product>Home Monitor</Product>
   </PropertyGroup>
 
   <ItemGroup>
