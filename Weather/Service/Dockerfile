@@ -4,11 +4,10 @@ EXPOSE 80
 
 FROM microsoft/dotnet:2.2-sdk-stretch AS build
 WORKDIR /src
-COPY ["Weather/Service/Service.csproj", "Weather/Service/"]
-COPY ["Weather/Models/Models.csproj", "Weather/Models/"]
-RUN dotnet restore "Weather/Service/Service.csproj"
+COPY ["./Service.csproj", "./"]
+RUN dotnet restore "Service.csproj"
 COPY . .
-WORKDIR "/src/Weather/Service"
+WORKDIR "/src"
 RUN dotnet publish "Service.csproj" -c Release -o /app
 
 FROM base AS final
