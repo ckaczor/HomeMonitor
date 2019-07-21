@@ -1,8 +1,5 @@
 name: 1.0.$(Rev:r)
 
-variables:
-  tag: $(Rev:r)
-
 trigger:
   batch: 'true'
   branches:
@@ -22,7 +19,7 @@ steps:
     containerregistrytype: 'Container Registry'
     dockerRegistryConnection: 'Docker Hub'
     dockerFile: 'Weather/SerialReader/Dockerfile'
-    imageName: ckaczor/home-monitor-weather-serialreader:$(tag)
+    imageName: 'ckaczor/home-monitor-weather-serialreader:$(Build.BuildId)'
     includeLatestTag: true
 
 - task: Docker@0
@@ -31,5 +28,5 @@ steps:
     containerregistrytype: 'Container Registry'
     dockerRegistryConnection: 'Docker Hub'
     action: 'Push an image'
-    imageName: ckaczor/home-monitor-weather-serialreader:$(tag)
+    imageName: 'ckaczor/home-monitor-weather-serialreader:$(Build.BuildId)'
     includeLatestTag: true
