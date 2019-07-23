@@ -30,3 +30,9 @@ steps:
     action: 'Push an image'
     imageName: 'ckaczor/home-monitor-weather-serialreader:$(Build.BuildNumber)'
     includeLatestTag: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'Weather/SerialReader/deploy/service.yaml'
+    ArtifactName: 'service.yaml'
+    publishLocation: 'Container'
