@@ -31,8 +31,13 @@ steps:
     imageName: 'ckaczor/home-monitor-weather-serialreader:$(Build.BuildNumber)'
     includeLatestTag: true
 
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: 'sed -i s/{TAG}/${Build.BuildNumber}/ Weather/SerialReader/deploy/manifest.yaml'
+
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: 'Weather/SerialReader/deploy/service.yaml'
+    PathtoPublish: 'Weather/SerialReader/deploy/manifest.yaml'
     ArtifactName: 'Manifest'
     publishLocation: 'Container'
