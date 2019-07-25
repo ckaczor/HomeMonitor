@@ -86,7 +86,7 @@ spec:
     spec:
       containers:
       - name: weather-serial-reader
-        image: ckaczor/home-monitor-weather-serialreader:{TAG}
+        image: ckaczor/home-monitor-weather-serialreader:#TAG#
         terminationMessagePath: "/dev/termination-log"
         terminationMessagePolicy: File
         imagePullPolicy: Always
