@@ -44,7 +44,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
                 // Switch to the database now that we're sure it exists
                 connection.ChangeDatabase(_configuration["Weather:Database:Name"]);
 
-                var schema = ResourceReader.GetString("Weather.Service.Data.Resources.Schema.sql");
+                var schema = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Weather.Service.Data.Resources.Schema.sql");
 
                 // Make sure the database is up to date
                 command.CommandText = schema;
@@ -72,7 +72,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
         {
             using (var connection = CreateConnection())
             {
-                var query = ResourceReader.GetString("Weather.Service.Data.Resources.CreateReading.sql");
+                var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Weather.Service.Data.Resources.CreateReading.sql");
 
                 connection.Execute(query, weatherMessage);
             }
