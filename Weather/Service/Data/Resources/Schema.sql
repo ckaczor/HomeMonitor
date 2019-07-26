@@ -1,5 +1,7 @@
 ﻿CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
 
+ALTER EXTENSION timescaledb UPDATE;
+
 CREATE TABLE IF NOT EXISTS weather_reading
 (
   timestamp            timestamptz      NOT NULL
