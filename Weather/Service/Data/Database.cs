@@ -2,6 +2,7 @@
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using System;
 
 namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
 {
