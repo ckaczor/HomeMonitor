@@ -70,11 +70,20 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
 
         public void StoreWeatherData(WeatherMessage weatherMessage)
         {
-            using (var connection = CreateConnection())
+            try
             {
-                var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Weather.Service.Data.Resources.CreateReading.sql");
+                using (var connection = CreateConnection())
+                {
+                    var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Weather.Service.Data.Resources.CreateReading.sql");
 
-                connection.Execute(query, weatherMessage);
+                    Console.WriteLine(query);
+
+                    connection.Execute(query, weatherMessage);
+                }
+            }
+            catch (Exception exception)
+            {
+                WriteLog($"Database exception: {exception}");
             }
         }
     }
