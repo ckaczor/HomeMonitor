@@ -39,48 +39,48 @@ namespace ChrisKaczor.HomeMonitor.Weather.Models
     public class WeatherMessage
     {
         [JsonConverter(typeof(StringEnumConverter))]
-        public MessageType Type { get; private set; }
+        public MessageType Type { get; set; }
 
-        public DateTimeOffset Timestamp { get; private set; }
+        public DateTimeOffset Timestamp { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public WindDirection WindDirection { get; private set; }
+        public WindDirection WindDirection { get; set; }
 
-        public double WindSpeed { get; private set; }
+        public double WindSpeed { get; set; }
 
-        public double Humidity { get; private set; }
+        public double Humidity { get; set; }
 
-        public double HumidityTemperature { get; private set; }
+        public double HumidityTemperature { get; set; }
 
-        public double Rain { get; private set; }
+        public double Rain { get; set; }
 
-        public double Pressure { get; private set; }
+        public double Pressure { get; set; }
 
-        public double PressureTemperature { get; private set; }
+        public double PressureTemperature { get; set; }
 
-        public double BatteryLevel { get; private set; }
+        public double BatteryLevel { get; set; }
 
-        public double LightLevel { get; private set; }
+        public double LightLevel { get; set; }
 
-        public double Latitude { get; private set; }
+        public double Latitude { get; set; }
 
-        public double Longitude { get; private set; }
+        public double Longitude { get; set; }
 
-        public double Altitude { get; private set; }
+        public double Altitude { get; set; }
 
-        public int SatelliteCount { get; private set; }
+        public int SatelliteCount { get; set; }
 
-        public DateTimeOffset GpsTimestamp { get; private set; }
+        public DateTimeOffset GpsTimestamp { get; set; }
 
-        public string Message { get; private set; }
+        public string Message { get; set; }
 
-        private WeatherMessage()
+        public WeatherMessage()
         {
             Type = MessageType.Text;
             Timestamp = DateTimeOffset.UtcNow;
         }
 
-        private WeatherMessage(string message)
+        public WeatherMessage(string message)
         {
             Type = MessageType.Data;
             Timestamp = DateTimeOffset.UtcNow;
