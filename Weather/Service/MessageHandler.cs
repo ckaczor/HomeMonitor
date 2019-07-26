@@ -74,32 +74,32 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
         private void DeviceEventHandler(object model, BasicDeliverEventArgs eventArgs)
         {
-            var body = eventArgs.Body;
-            var message = Encoding.UTF8.GetString(body);
-
-            _messageCount++;
-
-            if ((DateTime.Now - _lastLogTime).TotalMinutes >= 1)
-            {
-                WriteLog($"Number of messages received since {_lastLogTime} = {_messageCount}");
-
-                _lastLogTime = DateTime.Now;
-                _messageCount = 0;
-            }
-
-            var weatherMessage = JsonConvert.DeserializeObject<WeatherMessage>(message);
-
-            if (weatherMessage.Type == MessageType.Text)
-            {
-                WriteLog(weatherMessage.Message);
-
-                return;
-            }
-
-            _database.StoreWeatherData(weatherMessage);
-
             try
             {
+                var body = eventArgs.Body;
+                var message = Encoding.UTF8.GetString(body);
+
+                _messageCount++;
+
+                if ((DateTime.Now - _lastLogTime).TotalMinutes >= 1)
+                {
+                    WriteLog($"Number of messages received since {_lastLogTime} = {_messageCount}");
+
+                    _lastLogTime = DateTime.Now;
+                    _messageCount = 0;
+                }
+
+                var weatherMessage = JsonConvert.DeserializeObject<WeatherMessage>(message);
+
+                if (weatherMessage.Type == MessageType.Text)
+                {
+                    WriteLog(weatherMessage.Message);
+
+                    return;
+                }
+
+                _database.StoreWeatherData(weatherMessage);
+
                 if (_hubConnection.State == HubConnectionState.Disconnected)
                     _hubConnection.StartAsync().Wait();
 
@@ -107,7 +107,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
             }
             catch (Exception exception)
             {
-                WriteLog($"Hub exception: {exception}");
+                WriteLog($"Exception: {exception}");
             }
         }
 
