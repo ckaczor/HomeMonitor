@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: hub-service
-        image: ckaczor/home-monitor-hub-service:latest
+        image: ckaczor/home-monitor-hub-service:#BUILD_BUILDNUMBER#
         terminationMessagePath: "/dev/termination-log"
         terminationMessagePolicy: File
         imagePullPolicy: Always

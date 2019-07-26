@@ -30,3 +30,14 @@ steps:
     action: 'Push an image'
     imageName: 'ckaczor/home-monitor-hub-service:$(Build.BuildNumber)'
     includeLatestTag: true
+
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: 'sed -i s/#BUILD_BUILDNUMBER#/$BUILD_BUILDNUMBER/ Hub/Service/deploy/manifest.yaml'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'Hub/Service/deploy/manifest.yaml'
+    ArtifactName: 'Manifest'
+    publishLocation: 'Container'    
