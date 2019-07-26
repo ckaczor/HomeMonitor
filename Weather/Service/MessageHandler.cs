@@ -100,14 +100,23 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
                 _database.StoreWeatherData(weatherMessage);
 
-                if (_hubConnection.State == HubConnectionState.Disconnected)
-                    _hubConnection.StartAsync().Wait();
+                try
+                {
+                    if (_hubConnection.State == HubConnectionState.Disconnected)
+                        _hubConnection.StartAsync().Wait();
 
-                _hubConnection.InvokeAsync("SendLatestReading", message).Wait();
+                    _hubConnection.InvokeAsync("SendLatestReading", message).Wait();                    
+                }
+                catch (Exception exception)
+                {
+                    WriteLog($"Hub exception: {exception}");
+                }
             }
             catch (Exception exception)
             {
                 WriteLog($"Exception: {exception}");
+
+                throw;
             }
         }
 
