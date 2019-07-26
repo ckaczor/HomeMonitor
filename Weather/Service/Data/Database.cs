@@ -84,7 +84,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
             }
             catch (Exception exception)
             {
-                WriteLog($"Database exception: {exception}");
+                Console.WriteLine($"Database exception: {exception}");
             }
         }
     }
