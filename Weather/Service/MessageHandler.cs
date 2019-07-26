@@ -81,8 +81,6 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
                 _messageCount++;
 
-                WriteLog(message);
-
                 if ((DateTime.Now - _lastLogTime).TotalMinutes >= 1)
                 {
                     WriteLog($"Number of messages received since {_lastLogTime} = {_messageCount}");

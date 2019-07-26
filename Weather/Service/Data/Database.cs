@@ -2,7 +2,6 @@
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
-using System;
 
 namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
 {
@@ -71,20 +70,11 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
 
         public void StoreWeatherData(WeatherMessage weatherMessage)
         {
-            try
+            using (var connection = CreateConnection())
             {
-                using (var connection = CreateConnection())
-                {
-                    var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Weather.Service.Data.Resources.CreateReading.sql");
+                var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Weather.Service.Data.Resources.CreateReading.sql");
 
-                    Console.WriteLine(query);
-
-                    connection.Execute(query, weatherMessage);
-                }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine($"Database exception: {exception}");
+                connection.Execute(query, weatherMessage);
             }
         }
     }
