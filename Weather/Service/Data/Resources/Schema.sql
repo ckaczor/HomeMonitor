@@ -1,24 +1,21 @@
-﻿CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
-
-CREATE TABLE IF NOT EXISTS weather_reading
-(
-  timestamp            timestamptz      NOT NULL
-    CONSTRAINT weather_reading_pk
-      PRIMARY KEY,
-  wind_direction       int              NOT NULL,
-  wind_speed           double precision NOT NULL,
-  humidity             double precision NOT NULL,
-  humidity_temperature double precision NOT NULL,
-  rain                 double precision NOT NULL,
-  pressure             double precision NOT NULL,
-  pressure_temperature double precision NOT NULL,
-  battery_level        double precision NOT NULL,
-  light_level          double precision NOT NULL,
-  latitude             double precision NOT NULL,
-  longitude            double precision NOT NULL,
-  altitude             double precision NOT NULL,
-  satellite_count      double precision NOT NULL,
-  gps_timestamp        timestamptz      NOT NULL
-);
-
-SELECT create_hypertable('weather_reading', 'timestamp', if_not_exists => TRUE);
+﻿IF NOT EXISTS(SELECT 1 FROM sys.tables WHERE name = 'Reading')
+	CREATE TABLE Reading
+	(
+		Timestamp           datetimeoffset NOT NULL
+			CONSTRAINT reading_pk
+				PRIMARY KEY,
+		WindDirection       int            NOT NULL,
+		WindSpeed           decimal(4, 1)  NOT NULL,
+		Humidity            decimal(4, 1)  NOT NULL,
+		HumidityTemperature decimal(4, 1)  NOT NULL,
+		Rain                decimal(2, 2)  NOT NULL,
+		Pressure            decimal(8, 2)  NOT NULL,
+		PressureTemperature decimal(4, 1)  NOT NULL,
+		BatteryLevel        decimal(3, 2)  NOT NULL,
+		LightLevel          decimal(3, 2)  NOT NULL,
+		Latitude            decimal(9, 6)  NOT NULL,
+		Longitude           decimal(9, 6)  NOT NULL,
+		Altitude            decimal(5, 1)  NOT NULL,
+		SatelliteCount      int            NOT NULL,
+		GpsTimestamp        datetimeoffset NOT NULL
+	);

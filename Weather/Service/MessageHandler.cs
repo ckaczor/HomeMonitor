@@ -55,7 +55,8 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
             _queueModel.BasicConsume(_configuration["Weather:Queue:Name"], true, consumer);
 
-            _hubConnection = new HubConnectionBuilder().WithUrl(_configuration["Hub:Weather"]).Build();
+            if (!string.IsNullOrEmpty(_configuration["Hub:Weather"]))
+                _hubConnection = new HubConnectionBuilder().WithUrl(_configuration["Hub:Weather"]).Build();
 
             return Task.CompletedTask;
         }
@@ -64,7 +65,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
         {
             WriteLog("MessageHandler: Stop");
 
-            _hubConnection.StopAsync(cancellationToken).Wait(cancellationToken);
+            _hubConnection?.StopAsync(cancellationToken).Wait(cancellationToken);
 
             _queueModel.Close();
             _queueConnection.Close();
@@ -99,6 +100,9 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
                 }
 
                 _database.StoreWeatherData(weatherMessage);
+
+                if (_hubConnection == null)
+                    return;
 
                 try
                 {

@@ -1,7 +1,7 @@
 ﻿using ChrisKaczor.HomeMonitor.Weather.Models;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using Npgsql;
+using System.Data.SqlClient;
 
 namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
 {
@@ -16,22 +16,22 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
 
         public void EnsureDatabase()
         {
-            var connectionStringBuilder = new NpgsqlConnectionStringBuilder
+            var connectionStringBuilder = new SqlConnectionStringBuilder
             {
-                Host = _configuration["Weather:Database:Host"],
-                Username = _configuration["Weather:Database:User"],
+                DataSource = _configuration["Weather:Database:Host"],
+                UserID = _configuration["Weather:Database:User"],
                 Password = _configuration["Weather:Database:Password"],
-                Database = "postgres"
+                InitialCatalog = "master"
             };
 
-            using (var connection = new NpgsqlConnection(connectionStringBuilder.ConnectionString))
+            using (var connection = new SqlConnection(connectionStringBuilder.ConnectionString))
             {
-                var command = new NpgsqlCommand { Connection = connection };
+                var command = new SqlCommand { Connection = connection };
 
                 connection.Open();
 
                 // Check to see if the database exists
-                command.CommandText = $"SELECT TRUE from pg_database WHERE datname='{_configuration["Weather:Database:Name"]}'";
+                command.CommandText = $"SELECT CAST(1 as bit) from sys.databases WHERE name='{_configuration["Weather:Database:Name"]}'";
                 var databaseExists = (bool?)command.ExecuteScalar();
 
                 // Create database if needed
@@ -52,17 +52,17 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
             }
         }
 
-        private NpgsqlConnection CreateConnection()
+        private SqlConnection CreateConnection()
         {
-            var connectionStringBuilder = new NpgsqlConnectionStringBuilder
+            var connectionStringBuilder = new SqlConnectionStringBuilder
             {
-                Host = _configuration["Weather:Database:Host"],
-                Username = _configuration["Weather:Database:User"],
+                DataSource = _configuration["Weather:Database:Host"],
+                UserID = _configuration["Weather:Database:User"],
                 Password = _configuration["Weather:Database:Password"],
-                Database = _configuration["Weather:Database:Name"]
+                InitialCatalog = _configuration["Weather:Database:Name"]
             };
 
-            var connection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
+            var connection = new SqlConnection(connectionStringBuilder.ConnectionString);
             connection.Open();
 
             return connection;
@@ -74,7 +74,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
             {
                 var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Weather.Service.Data.Resources.CreateReading.sql");
 
-                connection.Execute(query, weatherMessage);
+                connection.Query(query, weatherMessage);
             }
         }
     }
