@@ -65,7 +65,7 @@ spec:
     port: 15672
   selector:
     app: weather-queue
-  type: ClusterIP
+  type: LoadBalancer
 ---
 kind: Deployment
 apiVersion: apps/v1
