@@ -46,27 +46,27 @@ namespace ChrisKaczor.HomeMonitor.Weather.Models
         [JsonConverter(typeof(StringEnumConverter))]
         public WindDirection WindDirection { get; set; }
 
-        public double WindSpeed { get; set; }
+        public decimal WindSpeed { get; set; }
 
-        public double Humidity { get; set; }
+        public decimal Humidity { get; set; }
 
-        public double HumidityTemperature { get; set; }
+        public decimal HumidityTemperature { get; set; }
 
-        public double Rain { get; set; }
+        public decimal Rain { get; set; }
 
-        public double Pressure { get; set; }
+        public decimal Pressure { get; set; }
 
-        public double PressureTemperature { get; set; }
+        public decimal PressureTemperature { get; set; }
 
-        public double BatteryLevel { get; set; }
+        public decimal BatteryLevel { get; set; }
 
-        public double LightLevel { get; set; }
+        public decimal LightLevel { get; set; }
 
-        public double Latitude { get; set; }
+        public decimal Latitude { get; set; }
 
-        public double Longitude { get; set; }
+        public decimal Longitude { get; set; }
 
-        public double Altitude { get; set; }
+        public decimal Altitude { get; set; }
 
         public int SatelliteCount { get; set; }
 
@@ -93,17 +93,17 @@ namespace ChrisKaczor.HomeMonitor.Weather.Models
             var messageValues = messageParts.Select(m => m.Split('=')).ToDictionary(a => a[0], a => a[1]);
 
             WindDirection = Enum.Parse<WindDirection>(messageValues[@"winddir"]);
-            WindSpeed = double.Parse(messageValues[@"windspeedmph"]);
-            Humidity = double.Parse(messageValues[@"humidity"]);
-            HumidityTemperature = double.Parse(messageValues[@"tempH"]);
-            Rain = double.Parse(messageValues[@"rain"]);
-            Pressure = double.Parse(messageValues[@"pressure"]);
-            PressureTemperature = double.Parse(messageValues[@"tempP"]);
-            BatteryLevel = double.Parse(messageValues[@"batt_lvl"]);
-            LightLevel = double.Parse(messageValues[@"light_lvl"]);
-            Latitude = double.Parse(messageValues[@"lat"]);
-            Longitude = double.Parse(messageValues[@"lng"]);
-            Altitude = double.Parse(messageValues[@"altitude"]);
+            WindSpeed = decimal.Parse(messageValues[@"windspeedmph"]);
+            Humidity = decimal.Parse(messageValues[@"humidity"]);
+            HumidityTemperature = decimal.Parse(messageValues[@"tempH"]);
+            Rain = decimal.Parse(messageValues[@"rain"]);
+            Pressure = decimal.Parse(messageValues[@"pressure"]);
+            PressureTemperature = decimal.Parse(messageValues[@"tempP"]);
+            BatteryLevel = decimal.Parse(messageValues[@"batt_lvl"]);
+            LightLevel = decimal.Parse(messageValues[@"light_lvl"]);
+            Latitude = decimal.Parse(messageValues[@"lat"]);
+            Longitude = decimal.Parse(messageValues[@"lng"]);
+            Altitude = decimal.Parse(messageValues[@"altitude"]);
             SatelliteCount = int.Parse(messageValues[@"sats"]);
 
             DateTimeOffset.TryParseExact($"{messageValues[@"date"]} {messageValues[@"time"]}", "MM/dd/yyyy HH:mm:ss", null, DateTimeStyles.None, out var gpsTimestamp);
