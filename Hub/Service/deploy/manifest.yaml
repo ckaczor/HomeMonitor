@@ -41,4 +41,25 @@ spec:
     port: 80
   selector:
     app: hub-service
-  type: ClusterIP      
+  type: ClusterIP
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: hub
+  namespace: home-monitor
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    nginx.ingress.kubernetes.io/affinity: cookie
+    nginx.ingress.kubernetes.io/session-cookie-hash: sha1
+    nginx.ingress.kubernetes.io/session-cookie-name: REALTIMESERVERID
+    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    traefik.frontend.rule.type: PathPrefixStrip
+spec:
+  rules:
+  - http:
+      paths:
+      - path: "/hub"
+        backend:
+          serviceName: hub-service
+          servicePort: 80
