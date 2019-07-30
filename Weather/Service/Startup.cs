@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using ChrisKaczor.HomeMonitor.Weather.Service.Data;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using ChrisKaczor.HomeMonitor.Weather.Service.Data;
+using Microsoft.Extensions.Hosting;
 
 namespace ChrisKaczor.HomeMonitor.Weather.Service
 {
@@ -14,18 +15,16 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
             services.AddHostedService<MessageHandler>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
-        public void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment environment)
+        public void Configure(IApplicationBuilder applicationBuilder, IWebHostEnvironment environment)
         {
             if (environment.IsDevelopment())
                 applicationBuilder.UseDeveloperExceptionPage();
 
             var database = applicationBuilder.ApplicationServices.GetService<Database>();
             database.EnsureDatabase();
-
-            applicationBuilder.UseMvc();
         }
     }
 }

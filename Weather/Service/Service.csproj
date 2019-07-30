@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <AssemblyName>ChrisKaczor.HomeMonitor.Weather.Service</AssemblyName>
     <RootNamespace>ChrisKaczor.HomeMonitor.Weather.Service</RootNamespace>
@@ -21,7 +21,6 @@
   <ItemGroup>
     <PackageReference Include="ChrisKaczor.HomeMonitor.Weather.Models" Version="1.0.8" />
     <PackageReference Include="Dapper" Version="1.60.6" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="1.1.0" />
     <PackageReference Include="RabbitMQ.Client" Version="5.1.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.6.1" />
