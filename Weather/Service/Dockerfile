@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0.0-preview7-buster-slim-arm32v7 AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0.0-preview7-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 
