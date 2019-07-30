@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using ChrisKaczor.HomeMonitor.Weather.Models;
+using ChrisKaczor.HomeMonitor.Weather.Service.Data;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -9,8 +11,6 @@ using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ChrisKaczor.HomeMonitor.Weather.Models;
-using ChrisKaczor.HomeMonitor.Weather.Service.Data;
 
 namespace ChrisKaczor.HomeMonitor.Weather.Service
 {
@@ -24,9 +24,6 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
         private IModel _queueModel;
 
         private HubConnection _hubConnection;
-
-        private static DateTime _lastLogTime = DateTime.MinValue;
-        private static long _messageCount;
 
         public MessageHandler(IConfiguration configuration, Database database)
         {
@@ -80,15 +77,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
                 var body = eventArgs.Body;
                 var message = Encoding.UTF8.GetString(body);
 
-                _messageCount++;
-
-                if ((DateTime.Now - _lastLogTime).TotalMinutes >= 1)
-                {
-                    WriteLog($"Number of messages received since {_lastLogTime} = {_messageCount}");
-
-                    _lastLogTime = DateTime.Now;
-                    _messageCount = 0;
-                }
+                WriteLog($"Message received: {message}");
 
                 var weatherMessage = JsonConvert.DeserializeObject<WeatherMessage>(message);
 
@@ -109,7 +98,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
                     if (_hubConnection.State == HubConnectionState.Disconnected)
                         _hubConnection.StartAsync().Wait();
 
-                    _hubConnection.InvokeAsync("SendLatestReading", message).Wait();                    
+                    _hubConnection.InvokeAsync("SendLatestReading", message).Wait();
                 }
                 catch (Exception exception)
                 {
