@@ -92,7 +92,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Models
 
             var messageValues = messageParts.Select(m => m.Split('=')).ToDictionary(a => a[0], a => a[1]);
 
-            WindDirection = Enum.Parse<WindDirection>(messageValues[@"winddir"]);
+            WindDirection = (WindDirection) Enum.Parse(typeof(WindDirection), messageValues[@"winddir"]);
             WindSpeed = decimal.Parse(messageValues[@"windspeedmph"]);
             Humidity = decimal.Parse(messageValues[@"humidity"]);
             HumidityTemperature = decimal.Parse(messageValues[@"tempH"]);

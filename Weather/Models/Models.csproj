@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>ChrisKaczor.HomeMonitor.Weather.Models</AssemblyName>
     <RootNamespace>ChrisKaczor.HomeMonitor.Weather.Models</RootNamespace>
     <Authors>Chris Kaczor</Authors>
