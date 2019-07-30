@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ChrisKaczor.HomeMonitor.Weather.Models;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System;
@@ -6,19 +7,15 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using ChrisKaczor.HomeMonitor.Weather.Models;
 
 namespace ChrisKaczor.HomeMonitor.Weather.SerialReader
 {
     internal static class Program
     {
         private static IConfiguration _configuration;
+        private static bool _boardStarting;
 
         private static readonly CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
-
-        private static DateTime _lastLogTime = DateTime.MinValue;
-        private static long _messageCount;
-        private static bool _boardStarting;
 
         private static void Main()
         {
@@ -105,6 +102,8 @@ namespace ChrisKaczor.HomeMonitor.Weather.SerialReader
                         continue;
                     }
 
+                    WriteLog($"Message received: {message}");
+
                     var weatherMessage = WeatherMessage.Parse(message);
 
                     var messageString = JsonConvert.SerializeObject(weatherMessage);
@@ -116,16 +115,6 @@ namespace ChrisKaczor.HomeMonitor.Weather.SerialReader
                     properties.Persistent = true;
 
                     model.BasicPublish(string.Empty, _configuration["Weather:Queue:Name"], properties, body);
-
-                    _messageCount++;
-
-                    if ((DateTime.Now - _lastLogTime).TotalMinutes < 1)
-                        continue;
-
-                    WriteLog($"Number of messages received since {_lastLogTime} = {_messageCount}");
-
-                    _lastLogTime = DateTime.Now;
-                    _messageCount = 0;
                 }
                 catch (TimeoutException)
                 {
