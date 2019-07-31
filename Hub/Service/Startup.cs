@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace ChrisKaczor.HomeMonitor.Hub.Service
 {
@@ -10,21 +11,25 @@ namespace ChrisKaczor.HomeMonitor.Hub.Service
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
-            services.AddSignalR().AddJsonProtocol(options => { options.PayloadSerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver(); });
+            services.AddSignalR().AddJsonProtocol(options =>
+            {
+                options.WriteIndented = false;
+            });
         }
 
-        public void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment environment)
+        public void Configure(IApplicationBuilder applicationBuilder, IWebHostEnvironment environment)
         {
             if (environment.IsDevelopment())
             {
                 applicationBuilder.UseDeveloperExceptionPage();
             }
 
-            applicationBuilder.UseSignalR(routes => { routes.MapHub<WeatherHub>("/weatherHub"); });
-
-            applicationBuilder.UseMvc();
+            applicationBuilder.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<WeatherHub>("/weatherHub");
+            });
         }
     }
 }
