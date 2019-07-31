@@ -13,10 +13,7 @@ namespace ChrisKaczor.HomeMonitor.Hub.Service
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
-            services.AddSignalR().AddJsonProtocol(options =>
-            {
-                options.WriteIndented = false;
-            });
+            services.AddSignalR().AddJsonProtocol(options => { options.PayloadSerializerOptions.WriteIndented = false; });
         }
 
         public void Configure(IApplicationBuilder applicationBuilder, IWebHostEnvironment environment)
