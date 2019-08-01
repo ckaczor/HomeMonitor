@@ -25,6 +25,13 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
             var database = applicationBuilder.ApplicationServices.GetService<Database>();
             database.EnsureDatabase();
+
+            applicationBuilder.UseRouting();
+
+            applicationBuilder.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
         }
     }
 }
