@@ -124,3 +124,21 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: kubernetes
       schedulerName: default-scheduler
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: weather
+  namespace: home-monitor
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    traefik.frontend.rule.type: PathPrefixStrip
+spec:
+  rules:
+  - http:
+      paths:
+      - path: "/api/weather"
+        backend:
+          serviceName: weather-service
+          servicePort: 80

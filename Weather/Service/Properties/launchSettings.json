@@ -3,7 +3,7 @@
   "profiles": {
     "Service": {
       "commandName": "Project",
-      "launchUrl": "api/values",
+      "launchUrl": "values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

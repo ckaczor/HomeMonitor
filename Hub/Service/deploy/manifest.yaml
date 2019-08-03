@@ -59,7 +59,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: "/hub"
+      - path: "/api/hub"
         backend:
           serviceName: hub-service
           servicePort: 80
