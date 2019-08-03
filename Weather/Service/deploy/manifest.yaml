@@ -117,7 +117,7 @@ spec:
               name: weather-database-credentials
               key: password    
         - name: Hub__Weather
-          value: http://hub-service/weatherHub
+          value: http://hub-service/weather
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
