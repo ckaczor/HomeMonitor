@@ -125,6 +125,18 @@ spec:
         kubernetes.io/hostname: kubernetes
       schedulerName: default-scheduler
 ---
+kind: Service
+apiVersion: v1
+metadata:
+  name: weather-service
+spec:
+  ports:
+  - name: client
+    port: 80
+  selector:
+    app: weather-service
+  type: ClusterIP
+---
 kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
