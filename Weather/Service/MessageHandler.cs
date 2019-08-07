@@ -33,11 +33,16 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            var host = _configuration["Weather:Queue:Host"];
+
+            if (string.IsNullOrEmpty(host))
+                return Task.CompletedTask;
+
             WriteLog("MessageHandler: Start");
 
             var factory = new ConnectionFactory
             {
-                HostName = _configuration["Weather:Queue:Host"],
+                HostName = host,
                 UserName = _configuration["Weather:Queue:User"],
                 Password = _configuration["Weather:Queue:Password"]
             };
@@ -64,8 +69,8 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
             _hubConnection?.StopAsync(cancellationToken).Wait(cancellationToken);
 
-            _queueModel.Close();
-            _queueConnection.Close();
+            _queueModel?.Close();
+            _queueConnection?.Close();
 
             return Task.CompletedTask;
         }
