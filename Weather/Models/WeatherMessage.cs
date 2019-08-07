@@ -7,70 +7,11 @@ using System.Linq;
 
 namespace ChrisKaczor.HomeMonitor.Weather.Models
 {
-    public enum MessageType
-    {
-        Text,
-        Data
-    }
-
     [PublicAPI]
-    public enum WindDirection
-    {
-        None = -1,
-        North = 0,
-        East = 90,
-        South = 180,
-        West = 270,
-        NorthEast = 45,
-        SouthEast = 135,
-        SouthWest = 225,
-        NorthWest = 315,
-        NorthNorthEast = 23,
-        EastNorthEast = 68,
-        EastSouthEast = 113,
-        SouthSouthEast = 158,
-        SouthSouthWest = 203,
-        WestSouthWest = 248,
-        WestNorthWest = 293,
-        NorthNorthWest = 338
-    }
-
-    [PublicAPI]
-    public class WeatherMessage
+    public class WeatherMessage : WeatherReading
     {
         [JsonConverter(typeof(StringEnumConverter))]
         public MessageType Type { get; set; }
-
-        public DateTimeOffset Timestamp { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        public WindDirection WindDirection { get; set; }
-
-        public decimal WindSpeed { get; set; }
-
-        public decimal Humidity { get; set; }
-
-        public decimal HumidityTemperature { get; set; }
-
-        public decimal Rain { get; set; }
-
-        public decimal Pressure { get; set; }
-
-        public decimal PressureTemperature { get; set; }
-
-        public decimal BatteryLevel { get; set; }
-
-        public decimal LightLevel { get; set; }
-
-        public decimal Latitude { get; set; }
-
-        public decimal Longitude { get; set; }
-
-        public decimal Altitude { get; set; }
-
-        public int SatelliteCount { get; set; }
-
-        public DateTimeOffset GpsTimestamp { get; set; }
 
         public string Message { get; set; }
 
@@ -92,7 +33,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Models
 
             var messageValues = messageParts.Select(m => m.Split('=')).ToDictionary(a => a[0], a => a[1]);
 
-            WindDirection = (WindDirection) Enum.Parse(typeof(WindDirection), messageValues[@"winddir"]);
+            WindDirection = (WindDirection)Enum.Parse(typeof(WindDirection), messageValues[@"winddir"]);
             WindSpeed = decimal.Parse(messageValues[@"windspeedmph"]);
             Humidity = decimal.Parse(messageValues[@"humidity"]);
             HumidityTemperature = decimal.Parse(messageValues[@"tempH"]);
