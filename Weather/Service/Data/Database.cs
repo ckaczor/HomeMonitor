@@ -1,6 +1,8 @@
 ﻿using ChrisKaczor.HomeMonitor.Weather.Models;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
@@ -84,6 +86,15 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
             var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Weather.Service.Data.Resources.GetRecentReading.sql");
 
             return await connection.QueryFirstOrDefaultAsync<WeatherReading>(query);
+        }
+
+        public async Task<IEnumerable<WeatherReading>> GetReadingHistory(DateTimeOffset start, DateTimeOffset end)
+        {
+            await using var connection = CreateConnection();
+
+            var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Weather.Service.Data.Resources.GetReadingHistory.sql");
+
+            return await connection.QueryAsync<WeatherReading>(query, new { Start = start, End = end });
         }
     }
 }

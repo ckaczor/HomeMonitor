@@ -1,6 +1,9 @@
-﻿using ChrisKaczor.HomeMonitor.Weather.Models;
+﻿using System;
+using ChrisKaczor.HomeMonitor.Weather.Models;
 using ChrisKaczor.HomeMonitor.Weather.Service.Data;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ChrisKaczor.HomeMonitor.Weather.Service.Controllers
@@ -20,6 +23,12 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Controllers
         public async Task<ActionResult<WeatherReading>> GetRecent()
         {
             return await _database.GetRecentReading();
+        }
+
+        [HttpGet("history")]
+        public async Task<ActionResult<List<WeatherReading>>> GetHistory(DateTimeOffset start, DateTimeOffset end)
+        {
+            return (await _database.GetReadingHistory(start, end)).ToList();
         }
     }
 }
