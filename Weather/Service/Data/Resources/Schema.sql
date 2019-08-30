@@ -19,3 +19,5 @@
 		SatelliteCount      int            NOT NULL,
 		GpsTimestamp        datetimeoffset NOT NULL
 	);
+
+ALTER TABLE Reading ALTER COLUMN Rain decimal(3, 3);
