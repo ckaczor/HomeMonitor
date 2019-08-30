@@ -3,9 +3,9 @@ weather:
 	arduino-cli compile -b arduino:avr:uno Weather.ino -o bin/Weather
 
 install:
-	sudo service weather stop
+	kubectl scale --replicas=0 --namespace=home-monitor deployment/weather-serial-reader
 	arduino-cli upload -b arduino:avr:uno -p /dev/ttyACM0 -i bin/Weather
-	sudo service weather start
+	kubectl scale --replicas=1 --namespace=home-monitor deployment/weather-serial-reader
 
 clean:
 	rm -rf bin/

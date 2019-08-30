@@ -37,43 +37,48 @@ float   humidity = 0;               // Instantaneous humidity [%]
 float   tempH = 0;                  // Instantaneous temperature from humidity sensor [F]
 float   tempP = 0;                  // Instantaneous temperature from pressure sensor [F]
 float   pressure = 0;               // Instantaneous pressure [pascals]
+float   rain = 0;                   // Instantaneous rain [inches]
 
 float   batt_lvl = 0;               // Battery level [Analog value from 0 to 1023]
 float   light_lvl = 0;              // Light level [Analog value from 0 to 1023]
 
 // volatiles are subject to modification by IRQs
-volatile unsigned long raintime, rainlast, raininterval, rain;
+volatile long lastRainIRQ = 0;
+volatile byte rainClicks = 0;
+
 volatile long lastWindIRQ = 0;
 volatile byte windClicks = 0;
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 //Interrupt routines (these are called by the hardware interrupts, not by the main code)
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void rainIRQ()
-// Count rain gauge bucket tips as they occur
-// Activated by the magnet and reed switch in the rain gauge, attached to input D2
-{
-  raintime = millis(); // grab current time
-  raininterval = raintime - rainlast; // calculate interval between this and last event
 
-  if (raininterval > 10) // ignore switch-bounce glitches less than 10mS after initial edge
+void rainIRQ()
+{
+  // Count rain gauge bucket tips as they occur
+  // Activated by the magnet and reed switch in the rain gauge, attached to input D2
+
+  long timeNow = millis();
+
+  if (timeNow - lastRainIRQ > 10)   // Ignore switch-bounce glitches less than 10ms after the reed switch closes
   {
-      rain += 0.011; //Each dump is 0.011" of water
-    rainlast = raintime; // set up for next event
+    lastRainIRQ = timeNow;          // Update to the current time
+    rainClicks++;                   // Each click is 0.011" of water
   }
 }
 
 void wspeedIRQ()
-// Activated by the magnet in the anemometer (2 ticks per rotation), attached to input D3
 {
-  if (millis() - lastWindIRQ > 10) // Ignore switch-bounce glitches less than 10ms (142MPH max reading) after the reed switch closes
+  // Activated by the magnet in the anemometer (2 ticks per rotation), attached to input D3
+
+  long timeNow = millis();
+
+  if (timeNow - lastWindIRQ > 10)   // Ignore switch-bounce glitches less than 10ms (142MPH max reading) after the reed switch closes
   {
-    lastWindIRQ = millis(); //Grab the current time
-    windClicks++; //There is 1.492MPH for each click per second.
+    lastWindIRQ = timeNow;          // Update to the current time
+    windClicks++;                   // There is 1.492MPH for each click per second
   }
 }
-
 
 void setup()
 {
@@ -179,6 +184,9 @@ void calcWeather()
 
   //Calc battery level
   batt_lvl = get_battery_level();
+
+  rain = rainClicks * 0.011;
+  rainClicks = 0;
 }
 
 //Returns the voltage of the light sensor based on the 3.3V rail
@@ -283,7 +291,7 @@ void printWeather()
   Serial.print(",tempP=");
   Serial.print(tempP, 1);
   Serial.print(",rain=");
-  Serial.print(rain, 2);
+  Serial.print(rain, 3);
   Serial.print(",pressure=");
   Serial.print(pressure, 2);
   Serial.print(",batt_lvl=");
