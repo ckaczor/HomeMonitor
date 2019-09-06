@@ -1,4 +1,5 @@
 ﻿using ChrisKaczor.HomeMonitor.Weather.Models;
+using ChrisKaczor.HomeMonitor.Weather.Service.Models;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -95,6 +96,17 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
             var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Weather.Service.Data.Resources.GetReadingHistory.sql");
 
             return await connection.QueryAsync<WeatherReading>(query, new { Start = start, End = end });
+        }
+
+        public async Task<IEnumerable<WeatherValue>> GetReadingValueHistory(WeatherValueType weatherValueType, DateTimeOffset start, DateTimeOffset end, int bucketMinutes)
+        {
+            await using var connection = CreateConnection();
+
+            var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Weather.Service.Data.Resources.GetReadingValueHistory.sql");
+
+            query = query.Replace("@Value", weatherValueType.ToString());
+
+            return await connection.QueryAsync<WeatherValue>(query, new { Start = start, End = end, BucketMinutes = bucketMinutes });
         }
     }
 }

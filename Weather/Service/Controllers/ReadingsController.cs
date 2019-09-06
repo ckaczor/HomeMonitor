@@ -1,7 +1,8 @@
-﻿using System;
-using ChrisKaczor.HomeMonitor.Weather.Models;
+﻿using ChrisKaczor.HomeMonitor.Weather.Models;
 using ChrisKaczor.HomeMonitor.Weather.Service.Data;
+using ChrisKaczor.HomeMonitor.Weather.Service.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,6 +30,12 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Controllers
         public async Task<ActionResult<List<WeatherReading>>> GetHistory(DateTimeOffset start, DateTimeOffset end)
         {
             return (await _database.GetReadingHistory(start, end)).ToList();
+        }
+
+        [HttpGet("value-history")]
+        public async Task<ActionResult<List<WeatherValue>>> GetValueHistory(WeatherValueType weatherValueType, DateTimeOffset start, DateTimeOffset end, int bucketMinutes = 2)
+        {
+            return (await _database.GetReadingValueHistory(weatherValueType, start, end, bucketMinutes)).ToList();
         }
     }
 }
