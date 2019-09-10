@@ -13,7 +13,7 @@ namespace ChrisKaczor.HomeMonitor.Hub.Service
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
-            services.AddCors(o => o.AddPolicy("CorsPolicy", builder => builder.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:4200")));
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder => builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:4200")));
 
             services.AddSignalR().AddJsonProtocol(options => { options.PayloadSerializerOptions.WriteIndented = false; });
         }
