@@ -25,6 +25,8 @@ namespace ChrisKaczor.HomeMonitor.Hub.Service
                 applicationBuilder.UseDeveloperExceptionPage();
             }
 
+            applicationBuilder.UseCors("CorsPolicy");
+
             applicationBuilder.UseRouting();
 
             applicationBuilder.UseEndpoints(endpoints =>
