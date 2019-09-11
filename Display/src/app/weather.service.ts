@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import { WeatherReading } from './weather-reading';
 
