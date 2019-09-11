@@ -1,0 +1,60 @@
+<div style="height: 88vh;">
+    <div class="weather-current">
+        <div *ngIf="latestReading === null">
+            Loading...
+        </div>
+
+        <div *ngIf="latestReading !== null">
+            <table>
+                <tr>
+                    <td class="weather-current-header">
+                        Temperature
+                    </td>
+                    <td>
+                        {{ latestReading.HumidityTemperature.toFixed(2) }}°F
+                    </td>
+                </tr>
+                <tr>
+                    <td class="weather-current-header">
+                        Humidity
+                    </td>
+                    <td>
+                        {{ latestReading.Humidity.toFixed(2) }}%
+                    </td>
+                </tr>
+                <tr>
+                    <td class="weather-current-header">
+                        Pressure
+                    </td>
+                    <td>
+                        {{ (latestReading.Pressure / 100).toFixed(2) }} mbar
+                    </td>
+                </tr>
+                <tr>
+                    <td class="weather-current-header">
+                        Wind
+                    </td>
+                    <td>
+                        {{ latestReading.WindSpeed.toFixed(2) }} {{ latestReading.WindDirection }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="weather-current-header">
+                        Rain
+                    </td>
+                    <td>
+                        {{ latestReading.Rain.toFixed(2) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="weather-current-header">
+                        Light
+                    </td>
+                    <td>
+                        {{ latestReading.LightLevel.toFixed(2) }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

@@ -11,6 +11,7 @@ import { WeatherComponent } from './weather/weather.component';
 import { LaundryComponent } from './laundry/laundry.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { WeatherChartsComponent } from './weather-charts/weather-charts.component';
+import { WeatherCurrentComponent } from './Weather/weather-current/weather-current.component';
 
 const config: SocketIoConfig = { url: 'http://home.kaczorzoo.net:9091', options: {} };
 
@@ -20,7 +21,8 @@ const config: SocketIoConfig = { url: 'http://home.kaczorzoo.net:9091', options:
         WeatherComponent,
         LaundryComponent,
         DashboardComponent,
-        WeatherChartsComponent
+        WeatherChartsComponent,
+        WeatherCurrentComponent
     ],
     imports: [
         BrowserModule,
