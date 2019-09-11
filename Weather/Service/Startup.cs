@@ -1,11 +1,11 @@
-﻿using System.IO.Compression;
-using ChrisKaczor.HomeMonitor.Weather.Service.Data;
+﻿using ChrisKaczor.HomeMonitor.Weather.Service.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IO.Compression;
 
 namespace ChrisKaczor.HomeMonitor.Weather.Service
 {
@@ -17,14 +17,18 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
             services.AddHostedService<MessageHandler>();
 
-            services.Configure<GzipCompressionProviderOptions>(options => {
+            services.Configure<GzipCompressionProviderOptions>(options =>
+            {
                 options.Level = CompressionLevel.Optimal;
             });
 
-            services.AddResponseCompression(options => {
+            services.AddResponseCompression(options =>
+            {
                 options.Providers.Add<GzipCompressionProvider>();
                 options.EnableForHttps = true;
             });
+
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder => builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:4200")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
@@ -36,6 +40,8 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
             var database = applicationBuilder.ApplicationServices.GetService<Database>();
             database.EnsureDatabase();
+
+            applicationBuilder.UseCors("CorsPolicy");
 
             applicationBuilder.UseResponseCompression();
 
