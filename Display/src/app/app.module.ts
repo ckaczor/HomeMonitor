@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule } from '@angular/material';
+import { ChartModule } from 'angular-highcharts';
+import { HttpClientModule } from '@angular/common/http';
+import { ClarityModule } from '@clr/angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,12 +30,10 @@ const config: SocketIoConfig = { url: 'http://home.kaczorzoo.net:9091', options:
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
-        MatToolbarModule,
-        MatSidenavModule,
-        MatListModule,
-        MatButtonModule,
-        MatIconModule,
-        SocketIoModule.forRoot(config)
+        SocketIoModule.forRoot(config),
+        ChartModule,
+        HttpClientModule,
+        ClarityModule
     ],
     providers: [],
     bootstrap: [AppComponent]

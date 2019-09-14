@@ -1,12 +1,51 @@
-<mat-toolbar color="primary">
-    <mat-toolbar-row>
-        <a mat-button [routerLink]="'/'"><h1>Home Status</h1></a>
-        <span class="menu-spacer"></span>
-        <div>
-            <a mat-button [routerLink]="'/weather'">Weather</a>
-            <a mat-button [routerLink]="'/laundry'">Laundry</a>
+<div class="main-container">
+    <header class="header header-3">
+        <div class="branding">
+            <a [routerLink]="['/']">
+                <clr-icon shape="home" class="app-logo"></clr-icon>
+                <span class="title">
+                    Home Status
+                </span>
+            </a>
         </div>
-    </mat-toolbar-row>
-</mat-toolbar>
-
-<router-outlet></router-outlet>
+    </header>
+    <div class="content-container">
+        <nav class="sidenav">
+            <section class="sidenav-content">
+                <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
+                    Dashboard
+                </a>
+                <a routerLink="/laundry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
+                    Laundry
+                </a>
+                <a routerLink="/weather" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
+                    Weather
+                </a>
+                <section class="nav-group">
+                    <input id="nav-weather" type="checkbox">
+                    <label for="nav-weather">Weather Charts</label>
+                    <ul class="nav-list">
+                        <li>
+                            <a routerLink="/weather-charts/temperature" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
+                                Temperature
+                            </a>
+                        </li>
+                        <li>
+                            <a routerLink="/weather-charts/humidity" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
+                                Humidity
+                            </a>
+                        </li>
+                        <li>
+                            <a routerLink="/weather-charts/pressure" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
+                                Pressure
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+            </section>
+        </nav>
+        <div class="content-area">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
