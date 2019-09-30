@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Socket } from 'ngx-socket-io';
-import { LaundryStatus } from './laundry-status';
+import { LaundryStatus } from '../../models/laundry/laundry-status';
 
 @Injectable({
     providedIn: 'root'
@@ -14,11 +14,11 @@ export class LaundryService {
             const newStatus: LaundryStatus = JSON.parse(statusString);
 
             if (newStatus.washer !== undefined) {
-               this.latestStatus.value.washer = newStatus.washer;
+                this.latestStatus.value.washer = newStatus.washer;
             }
 
             if (newStatus.dryer !== undefined) {
-               this.latestStatus.value.dryer = newStatus.dryer;
+                this.latestStatus.value.dryer = newStatus.dryer;
             }
         });
 

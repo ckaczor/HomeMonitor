@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Chart } from 'angular-highcharts';
 import { SeriesLineOptions } from 'highcharts';
 import { HttpClient } from '@angular/common/http';
-import { WeatherValue } from '../../../services/weather/weather-value';
+import { WeatherValue } from '../../../models/weather/weather-value';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import * as moment from 'moment';
 

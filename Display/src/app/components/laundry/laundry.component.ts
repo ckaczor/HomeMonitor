@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LaundryService } from '../../services/laundry/laundry.service';
-import { LaundryStatus } from '../../services/laundry/laundry-status';
+import { LaundryStatus } from '../../models/laundry/laundry-status';
 
 @Component({
     selector: 'app-laundry',

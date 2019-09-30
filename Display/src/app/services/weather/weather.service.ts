@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
-import { WeatherReading } from './weather-reading';
+import { WeatherReading } from '../../models/weather/weather-reading';
 
 @Injectable({
     providedIn: 'root'

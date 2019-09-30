@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WeatherReading } from '../../../services/weather/weather-reading';
+import { WeatherReading } from '../../../models/weather/weather-reading';
 import { WeatherService } from '../../../services/weather/weather.service';
 
 @Component({
