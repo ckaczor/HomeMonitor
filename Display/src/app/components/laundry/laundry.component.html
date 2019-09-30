@@ -1,0 +1,24 @@
+<div class="laundry-current">
+    <div *ngIf="latestStatus === null">
+        Loading...
+    </div>
+    <div *ngIf="latestStatus !== null">
+        <table>
+            <tr>
+                <td class="laundry-current-header">
+                    Washer
+                </td>
+                <td [ngClass]="latestStatus.washer.toString()">
+                    {{ latestStatus.washer ? 'On' : 'Off' }}
+                </td>
+            </tr>
+            <tr>
+                <td class="laundry-current-header">
+                    Dryer
+                </td>
+                <td [ngClass]="latestStatus.dryer.toString()">
+                    {{ latestStatus.dryer ? 'On' : 'Off' }}
+                </td>
+            </tr>
+        </table>
+    </div>

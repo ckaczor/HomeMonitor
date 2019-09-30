@@ -1,0 +1,24 @@
+.chart-content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+#chart {
+    position: absolute;
+    top: 50px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+.chart-header {
+    background-color: rgb(250, 250, 250);
+    height: 50px;
+}
+
+.chart-button-spacer {
+    margin-right: 20px;
+}

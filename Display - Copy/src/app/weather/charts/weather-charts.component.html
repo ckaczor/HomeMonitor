@@ -1,0 +1,28 @@
+<!-- <div [hidden]="!loading" class="page-spinner">
+    <span class="spinner"></span>
+</div>
+<div class="chart-content">
+    <header class="chart-header">
+        <clr-dropdown class="clr-dropdown">
+            <button class="btn btn-outline-primary chart-button-spacer" clrDropdownTrigger>
+                {{ timeSpanItems[selectedTimeSpan] }}
+                <clr-icon shape="caret down"></clr-icon>
+            </button>
+            <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
+                <div *ngFor="let item of timeSpanItems | keyvalue" clrDropdownItem [class.active]="+item.key === selectedTimeSpan" (click)="selectedTimeSpan = +item.key">
+                    {{ item.value }}
+                </div>
+            </clr-dropdown-menu>
+        </clr-dropdown>
+        <button class="btn btn-outline-primary" [hidden]="selectedTimeSpan !== timeSpans.Day" (click)="handleDateArrowClick(-1)">
+            <clr-icon shape="caret left"></clr-icon>
+        </button>
+        <button class="btn btn-outline-primary chart-button-spacer" [hidden]="selectedTimeSpan !== timeSpans.Day || isSelectedDateToday()" (click)="handleDateArrowClick(1)">
+            <clr-icon shape="caret right"></clr-icon>
+        </button>
+        <button class="btn btn-outline-primary" [hidden]="selectedTimeSpan !== timeSpans.Day || isSelectedDateToday()" (click)="resetToToday()">
+            Today
+        </button>
+    </header>
+    <div id="chart" [chart]="chart"></div>
+</div> -->

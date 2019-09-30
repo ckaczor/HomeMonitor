@@ -1,0 +1,35 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.page-spinner {
+    left: 50%;
+    top: 25%;
+    z-index: 999;
+    position: absolute;
+    transform: translateX(-50%);
+}
+
+.spinner {
+    height: 115px;
+    width: 115px;
+}
+
+.sidenav .nav-group .nav-list .nav-link {
+    line-height: 1rem;
+}
+
+.clr-dropdown {
+    margin: 6px;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

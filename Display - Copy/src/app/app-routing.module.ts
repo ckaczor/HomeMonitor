@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { LaundryComponent } from './components/laundry/laundry.component';
-import { WeatherChartsComponent } from './components/weather/charts/weather-charts.component';
-import { WeatherCurrentComponent } from './components/weather/current/weather-current.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { LaundryComponent } from './laundry/laundry.component';
+import { WeatherChartsComponent } from './weather/charts/weather-charts.component';
+import { WeatherCurrentComponent } from './weather/current/weather-current.component';
 
 const routes: Routes = [
     {
@@ -25,7 +25,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
 })
 export class AppRoutingModule { }
