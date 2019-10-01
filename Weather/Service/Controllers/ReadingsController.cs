@@ -37,5 +37,11 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Controllers
         {
             return (await _database.GetReadingValueHistory(weatherValueType, start, end, bucketMinutes)).ToList();
         }
+
+        [HttpGet("history-grouped")]
+        public async Task<ActionResult<List<WeatherReadingGrouped>>> GetHistoryGrouped(DateTimeOffset start, DateTimeOffset end, int bucketMinutes = 2)
+        {
+            return (await _database.GetReadingHistoryGrouped(start, end, bucketMinutes)).ToList();
+        }
     }
 }

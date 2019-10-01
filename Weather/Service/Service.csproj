@@ -11,6 +11,7 @@
   <ItemGroup>
     <None Remove="Data\Resources\CreateReading.sql" />
     <None Remove="Data\Resources\GetReadingHistory.sql" />
+    <None Remove="Data\Resources\GetReadingHistoryGrouped.sql" />
     <None Remove="Data\Resources\GetReadingValueHistory.sql" />
     <None Remove="Data\Resources\GetRecentReading.sql" />
     <None Remove="Data\Resources\Schema.sql" />
@@ -18,6 +19,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Data\Resources\GetReadingHistory.sql" />
+    <EmbeddedResource Include="Data\Resources\GetReadingHistoryGrouped.sql" />
     <EmbeddedResource Include="Data\Resources\GetReadingValueHistory.sql" />
     <EmbeddedResource Include="Data\Resources\GetRecentReading.sql" />
     <EmbeddedResource Include="Data\Resources\CreateReading.sql" />
