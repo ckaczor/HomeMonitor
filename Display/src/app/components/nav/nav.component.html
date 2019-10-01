@@ -7,13 +7,59 @@
 <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #drawer class="sidenav" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) ? false : true">
         <mat-nav-list>
-            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>Dashboard</a>
-            <a routerLink="/laundry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>Laundry</a>
-            <a routerLink="/weather" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>Weather</a>
+            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>
+                <mat-icon matListIcon class="nav-icon">
+                    home
+                </mat-icon>
+                <span class="nav-caption">
+                    Dashboard
+                </span>
+            </a>
 
-            <a routerLink="/weather-charts/temperature" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>Temperature</a>
-            <a routerLink="/weather-charts/humidity" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>Humidity</a>
-            <a routerLink="/weather-charts/pressure" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>Pressure</a>
+            <a routerLink="/laundry" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>
+                <mat-icon matListIcon class="nav-icon">
+                    local_laundry_service
+                </mat-icon>
+                <span class="nav-caption">
+                    Laundry
+                </span>
+            </a>
+
+            <a routerLink="/weather" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>
+                <mat-icon matListIcon class="nav-icon">
+                    cloud
+                </mat-icon>
+                <span class="nav-caption">
+                    Weather
+                </span>
+            </a>
+
+            <mat-list-item>
+                <mat-icon matListIcon class="nav-icon">
+                    multiline_chart
+                </mat-icon>
+                <span class="nav-caption">
+                    Weather Charts
+                </span>
+            </mat-list-item>
+
+            <a routerLink="/weather-charts/temperature" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>
+                <span class="nav-sub-item">
+                    Temperature
+                </span>
+            </a>
+
+            <a routerLink="/weather-charts/humidity" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>
+                <span class="nav-sub-item">
+                    Humidity
+                </span>
+            </a>
+
+            <a routerLink="/weather-charts/pressure" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>
+                <span class="nav-sub-item">
+                    Pressure
+                </span>
+            </a>
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
