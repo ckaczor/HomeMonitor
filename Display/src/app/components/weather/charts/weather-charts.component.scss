@@ -1,22 +1,17 @@
 .chart-content {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  display: flex;
+  flex-flow: column;
+  height: 100%;
 }
 
 #chart {
-  position: absolute;
-  top: 50px;
-  bottom: 50px;
-  left: 0;
-  right: 0;
+  flex: 1 1 auto;
 }
 
 .chart-header {
   background-color: rgb(250, 250, 250);
-  height: 50px;
+  padding: 0 20px;
+  flex: 0 0 auto;
 }
 
 .chart-button-spacer {
