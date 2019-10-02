@@ -8,6 +8,7 @@ import * as moment from 'moment';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
+import { FormControl } from '@angular/forms';
 HC_exporting(Highcharts);
 
 enum TimeSpan {
@@ -29,7 +30,7 @@ export class WeatherChartsComponent implements OnInit {
 
     public timeSpanItems: { [value: number]: string } = {};
     public selectedTimeSpan: TimeSpan = TimeSpan.Last24Hours;
-    public selectedDate: Date = moment().startOf('day').toDate();
+    public selectedDate: FormControl = new FormControl({ value: moment().startOf('day').toDate(), disabled: true });
     public timeSpans: typeof TimeSpan = TimeSpan;
 
     constructor(private route: ActivatedRoute, private httpClient: HttpClient) { }
@@ -46,25 +47,25 @@ export class WeatherChartsComponent implements OnInit {
     }
 
     public handleDateArrowClick(value: number) {
-        this.selectedDate = moment(this.selectedDate).add(value, 'day').toDate();
+        this.selectedDate.setValue(moment(this.selectedDate.value).add(value, 'day').toDate());
 
         this.loadChart();
     }
 
     public isSelectedDateToday(): boolean {
-        const isToday = moment(this.selectedDate).startOf('day').isSame(moment().startOf('day'));
+        const isToday = moment(this.selectedDate.value).startOf('day').isSame(moment().startOf('day'));
 
         return isToday;
     }
 
     public resetToToday() {
-        this.selectedDate = moment().startOf('day').toDate();
+        this.selectedDate.setValue(moment().startOf('day').toDate());
 
         this.loadChart();
     }
 
     public getSelectedDateDisplayString(): string {
-        return moment(this.selectedDate).format('LL');
+        return moment(this.selectedDate.value).format('LL');
     }
 
     private loadChart() {
@@ -80,8 +81,8 @@ export class WeatherChartsComponent implements OnInit {
             }
 
             case TimeSpan.Day: {
-                start = moment(this.selectedDate).startOf('d').toDate();
-                end = moment(this.selectedDate).endOf('d').toDate();
+                start = moment(this.selectedDate.value).startOf('d').toDate();
+                end = moment(this.selectedDate.value).endOf('d').toDate();
 
                 break;
             }

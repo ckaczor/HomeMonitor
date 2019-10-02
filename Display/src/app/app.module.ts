@@ -5,12 +5,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { MatToolbarModule, MatIconModule, MatMenuModule, MatButtonModule, MatExpansionModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatToolbarModule, MatIconModule, MatMenuModule, MatButtonModule, MatExpansionModule, MatSelectModule, MatDatepickerModule, MatInputModule } from '@angular/material';
 import { NavComponent } from './components/nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
@@ -36,7 +37,7 @@ const config: SocketIoConfig = { url: 'http://home.kaczorzoo.net:9091', options:
         BrowserAnimationsModule,
         SocketIoModule.forRoot(config),
         ChartModule,
-        HttpClientModule,	
+        HttpClientModule,
         MatIconModule,
         MatButtonModule,
         MatToolbarModule,
@@ -44,7 +45,13 @@ const config: SocketIoConfig = { url: 'http://home.kaczorzoo.net:9091', options:
         LayoutModule,
         MatSidenavModule,
         MatListModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatInputModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatMomentDateModule
     ],
     providers: [],
     bootstrap: [AppComponent]

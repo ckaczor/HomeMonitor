@@ -2,27 +2,28 @@
     <span class="spinner"></span>
 </div> -->
 <div class="chart-content">
-    <!-- <header class="chart-header">
-        <clr-dropdown class="clr-dropdown">
-            <button class="btn btn-outline-primary chart-button-spacer" clrDropdownTrigger>
-                {{ timeSpanItems[selectedTimeSpan] }}
-                <clr-icon shape="caret down"></clr-icon>
-            </button>
-            <clr-dropdown-menu clrPosition="bottom-left" *clrIfOpen>
-                <div *ngFor="let item of timeSpanItems | keyvalue" clrDropdownItem [class.active]="+item.key === selectedTimeSpan" (click)="selectedTimeSpan = +item.key">
-                    {{ item.value }}
-                </div>
-            </clr-dropdown-menu>
-        </clr-dropdown>
-        <button class="btn btn-outline-primary" [hidden]="selectedTimeSpan !== timeSpans.Day" (click)="handleDateArrowClick(-1)">
-            <clr-icon shape="caret left"></clr-icon>
+    <header class="chart-header">
+        <mat-form-field>
+            <mat-select [(value)]="selectedTimeSpan">
+                <mat-option *ngFor="let item of timeSpanItems | keyvalue" [value]="+item.key">{{ item.value }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button mat-button *ngIf="selectedTimeSpan === timeSpans.Day" (click)="handleDateArrowClick(-1)">
+            <mat-icon>arrow_back</mat-icon>
         </button>
-        <button class="btn btn-outline-primary chart-button-spacer" [hidden]="selectedTimeSpan !== timeSpans.Day || isSelectedDateToday()" (click)="handleDateArrowClick(1)">
-            <clr-icon shape="caret right"></clr-icon>
+        <mat-form-field *ngIf="selectedTimeSpan === timeSpans.Day">
+            <input matInput [matDatepicker]="picker" [(formControl)]="selectedDate">
+            <mat-datepicker-toggle matSuffix [for]="picker">
+                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker disabled="false"></mat-datepicker>
+        </mat-form-field>
+        <button mat-button *ngIf="selectedTimeSpan === timeSpans.Day && !isSelectedDateToday()" (click)="handleDateArrowClick(1)">
+            <mat-icon>arrow_forward</mat-icon>
         </button>
-        <button class="btn btn-outline-primary" [hidden]="selectedTimeSpan !== timeSpans.Day || isSelectedDateToday()" (click)="resetToToday()">
+        <button mat-button *ngIf="selectedTimeSpan === timeSpans.Day && !isSelectedDateToday()" (click)="resetToToday()">
             Today
         </button>
-    </header> -->
+    </header>
     <div id="chart" [chart]="chart"></div>
 </div>
