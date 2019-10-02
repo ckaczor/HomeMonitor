@@ -29,6 +29,7 @@ export class WeatherChartsComponent implements OnInit {
 
     public timeSpanItems: { [value: number]: string } = {};
     public timeSpans: typeof TimeSpan = TimeSpan;
+    public maxDate: moment.Moment = moment().endOf('day');
 
     private selectedTimeSpanValue: TimeSpan = TimeSpan.Last24Hours;
     private selectedDateValue: moment.Moment = moment().startOf('day');

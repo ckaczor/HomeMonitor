@@ -13,7 +13,7 @@
             <mat-icon>arrow_back</mat-icon>
         </button>
         <mat-form-field *ngIf="selectedTimeSpan === timeSpans.Day">
-            <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" disabled>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" disabled [max]="maxDate">
             <mat-datepicker-toggle matSuffix [for]="picker">
                 <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
             </mat-datepicker-toggle>
