@@ -6,6 +6,10 @@ import { WeatherReadingGrouped } from '../../../models/weather/weather-reading-g
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import * as moment from 'moment';
 
+import * as Highcharts from 'highcharts';
+import HC_exporting from 'highcharts/modules/exporting';
+HC_exporting(Highcharts);
+
 enum TimeSpan {
     Last24Hours,
     Day,
@@ -113,7 +117,7 @@ export class WeatherChartsComponent implements OnInit {
                     type: 'line'
                 },
                 title: {
-                    text: ''
+                    text: this.timeSpanItems[TimeSpan.Last24Hours]
                 },
                 credits: {
                     enabled: true
@@ -174,6 +178,9 @@ export class WeatherChartsComponent implements OnInit {
                 },
                 series: seriesData,
                 legend: {
+                    enabled: true
+                },
+                exporting: {
                     enabled: true
                 }
             });
