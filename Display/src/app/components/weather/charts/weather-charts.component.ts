@@ -3,12 +3,11 @@ import { Chart } from 'angular-highcharts';
 import { SeriesLineOptions } from 'highcharts';
 import { HttpClient } from '@angular/common/http';
 import { WeatherReadingGrouped } from '../../../models/weather/weather-reading-grouped';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+
 import * as moment from 'moment';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
-import { FormControl } from '@angular/forms';
 HC_exporting(Highcharts);
 
 enum TimeSpan {
@@ -29,60 +28,73 @@ export class WeatherChartsComponent implements OnInit {
     private loading = true;
 
     public timeSpanItems: { [value: number]: string } = {};
-    public selectedTimeSpan: TimeSpan = TimeSpan.Last24Hours;
-    public selectedDate: FormControl = new FormControl({ value: moment().startOf('day').toDate(), disabled: true });
     public timeSpans: typeof TimeSpan = TimeSpan;
 
-    constructor(private route: ActivatedRoute, private httpClient: HttpClient) { }
+    private selectedTimeSpanValue: TimeSpan = TimeSpan.Last24Hours;
+    private selectedDateValue: moment.Moment = moment().startOf('day');
+
+    constructor(private httpClient: HttpClient) { }
 
     ngOnInit() {
         this.timeSpanItems[TimeSpan.Last24Hours] = 'Last 24 hours';
         this.timeSpanItems[TimeSpan.Day] = 'Day';
 
-        this.route.params.subscribe(params => {
-            this.loading = true;
-
-            this.loadChart();
-        });
+        this.loadChart();
     }
 
-    public handleDateArrowClick(value: number) {
-        this.selectedDate.setValue(moment(this.selectedDate.value).add(value, 'day').toDate());
+    public get selectedTimeSpan() {
+        return this.selectedTimeSpanValue;
+    }
+
+    public set selectedTimeSpan(value) {
+        this.selectedTimeSpanValue = value;
 
         this.loadChart();
     }
 
+    public get selectedDate() {
+        return this.selectedDateValue;
+    }
+
+    public set selectedDate(value) {
+        this.selectedDateValue = value;
+
+        this.loadChart();
+    }
+
+    public handleDateArrowClick(value: number) {
+        this.selectedDate = moment(this.selectedDate).add(value, 'day');
+    }
+
     public isSelectedDateToday(): boolean {
-        const isToday = moment(this.selectedDate.value).startOf('day').isSame(moment().startOf('day'));
+        const isToday = moment(this.selectedDate).startOf('day').isSame(moment().startOf('day'));
 
         return isToday;
     }
 
     public resetToToday() {
-        this.selectedDate.setValue(moment().startOf('day').toDate());
-
-        this.loadChart();
+        this.selectedDate = moment().startOf('day');
     }
 
     public getSelectedDateDisplayString(): string {
-        return moment(this.selectedDate.value).format('LL');
+        return moment(this.selectedDate).format('LL');
     }
 
     private loadChart() {
-        let start: Date;
-        let end: Date;
+        let start: moment.Moment;
+        let end: moment.Moment;
 
         switch (this.selectedTimeSpan) {
             case TimeSpan.Last24Hours: {
-                start = moment().subtract(24, 'h').toDate();
-                end = moment().toDate();
+                start = moment().subtract(24, 'hour');
+                end = moment();
 
                 break;
             }
 
             case TimeSpan.Day: {
-                start = moment(this.selectedDate.value).startOf('d').toDate();
-                end = moment(this.selectedDate.value).endOf('d').toDate();
+                start = moment(this.selectedDate).startOf('day');
+                end = moment(this.selectedDate).endOf('day');
 
                 break;
             }
@@ -92,8 +104,8 @@ export class WeatherChartsComponent implements OnInit {
             }
         }
 
-        const startString = moment(start).toISOString();
-        const endString = moment(end).toISOString();
+        const startString = start.toISOString();
+        const endString = end.toISOString();
 
         const request = this.httpClient.get<WeatherReadingGrouped[]>(`http://172.23.10.3/api/weather/readings/history-grouped?start=${startString}&end=${endString}&bucketMinutes=5`);
 
@@ -113,12 +125,14 @@ export class WeatherChartsComponent implements OnInit {
                 seriesData[3].data.push([date, dataElement.averageLightLevel]);
             });
 
+            const title = this.selectedTimeSpan === TimeSpan.Last24Hours ? this.timeSpanItems[TimeSpan.Last24Hours] : this.getSelectedDateDisplayString();
+
             this.chart = new Chart({
                 chart: {
                     type: 'line'
                 },
                 title: {
-                    text: this.timeSpanItems[TimeSpan.Last24Hours]
+                    text: title
                 },
                 credits: {
                     enabled: true

@@ -8,11 +8,12 @@
                 <mat-option *ngFor="let item of timeSpanItems | keyvalue" [value]="+item.key">{{ item.value }}</mat-option>
             </mat-select>
         </mat-form-field>
+        <span class="chart-button-spacer"></span>
         <button mat-button *ngIf="selectedTimeSpan === timeSpans.Day" (click)="handleDateArrowClick(-1)">
             <mat-icon>arrow_back</mat-icon>
         </button>
         <mat-form-field *ngIf="selectedTimeSpan === timeSpans.Day">
-            <input matInput [matDatepicker]="picker" [(formControl)]="selectedDate">
+            <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" disabled>
             <mat-datepicker-toggle matSuffix [for]="picker">
                 <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
             </mat-datepicker-toggle>
@@ -21,6 +22,7 @@
         <button mat-button *ngIf="selectedTimeSpan === timeSpans.Day && !isSelectedDateToday()" (click)="handleDateArrowClick(1)">
             <mat-icon>arrow_forward</mat-icon>
         </button>
+        <span class="chart-button-spacer"></span>
         <button mat-button *ngIf="selectedTimeSpan === timeSpans.Day && !isSelectedDateToday()" (click)="resetToToday()">
             Today
         </button>
