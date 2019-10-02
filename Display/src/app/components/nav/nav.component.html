@@ -34,30 +34,12 @@
                 </span>
             </a>
 
-            <mat-list-item>
+            <a routerLink="/weather-charts" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>
                 <mat-icon matListIcon class="nav-icon">
                     multiline_chart
                 </mat-icon>
                 <span class="nav-caption">
                     Weather Charts
-                </span>
-            </mat-list-item>
-
-            <a routerLink="/weather-charts/temperature" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>
-                <span class="nav-sub-item">
-                    Temperature
-                </span>
-            </a>
-
-            <a routerLink="/weather-charts/humidity" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>
-                <span class="nav-sub-item">
-                    Humidity
-                </span>
-            </a>
-
-            <a routerLink="/weather-charts/pressure" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>
-                <span class="nav-sub-item">
-                    Pressure
                 </span>
             </a>
         </mat-nav-list>

@@ -15,7 +15,7 @@ const routes: Routes = [
         component: WeatherCurrentComponent
     },
     {
-        path: 'weather-charts/:type',
+        path: 'weather-charts',
         component: WeatherChartsComponent
     },
     {

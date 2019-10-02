@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Chart } from 'angular-highcharts';
 import { SeriesLineOptions } from 'highcharts';
 import { HttpClient } from '@angular/common/http';
-import { WeatherValue } from '../../../models/weather/weather-value';
+import { WeatherReadingGrouped } from '../../../models/weather/weather-reading-grouped';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import * as moment from 'moment';
 
@@ -22,7 +22,6 @@ export class WeatherChartsComponent implements OnInit {
     public chart: Chart;
 
     private loading = true;
-    private chartType: string;
 
     public timeSpanItems: { [value: number]: string } = {};
     public selectedTimeSpan: TimeSpan = TimeSpan.Last24Hours;
@@ -37,22 +36,6 @@ export class WeatherChartsComponent implements OnInit {
 
         this.route.params.subscribe(params => {
             this.loading = true;
-
-            const chartType = params.type;
-
-            switch (chartType) {
-                case 'temperature':
-                    this.chartType = 'PressureTemperature';
-                    break;
-
-                case 'humidity':
-                    this.chartType = 'Humidity';
-                    break;
-
-                case 'pressure':
-                    this.chartType = 'Pressure';
-                    break;
-            }
 
             this.loadChart();
         });
@@ -107,49 +90,92 @@ export class WeatherChartsComponent implements OnInit {
         const startString = moment(start).toISOString();
         const endString = moment(end).toISOString();
 
-        const request = this.httpClient.get<WeatherValue[]>(`http://172.23.10.3/api/weather/readings/value-history?weatherValueType=${this.chartType}&start=${startString}&end=${endString}&bucketMinutes=5`);
+        const request = this.httpClient.get<WeatherReadingGrouped[]>(`http://172.23.10.3/api/weather/readings/history-grouped?start=${startString}&end=${endString}&bucketMinutes=5`);
 
         request.subscribe(data => {
-            const array = [];
+            const seriesData: Array<SeriesLineOptions> = [];
 
-            let divisor = 1;
+            seriesData.push({ name: 'Temperature', data: [], yAxis: 0, tooltip: { valueSuffix: '°F' } } as SeriesLineOptions);
+            seriesData.push({ name: 'Pressure', data: [], yAxis: 1, tooltip: { valueSuffix: '"' } } as SeriesLineOptions);
+            seriesData.push({ name: 'Humidity', data: [], yAxis: 2, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
+            seriesData.push({ name: 'Light', data: [], yAxis: 2, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
 
-            if (this.chartType === 'Pressure') {
-                divisor = 100;
-            }
-
-            data.forEach(dataElement => array.push([Date.parse(dataElement.bucket), dataElement.averageValue / divisor]));
+            data.forEach(dataElement => {
+                const date = Date.parse(dataElement.bucket);
+                seriesData[0].data.push([date, dataElement.averagePressureTemperature]);
+                seriesData[1].data.push([date, dataElement.averagePressure / 33.864]);
+                seriesData[2].data.push([date, dataElement.averageHumidity]);
+                seriesData[3].data.push([date, dataElement.averageLightLevel]);
+            });
 
             this.chart = new Chart({
                 chart: {
                     type: 'line'
                 },
                 title: {
-                    text: 'Linechart'
+                    text: ''
                 },
                 credits: {
                     enabled: true
                 },
                 xAxis: {
                     type: 'datetime',
-                },
-                yAxis: {
-                    labels: {
-                        format: '{value:.2f}'
+                    dateTimeLabelFormats: {
+                        millisecond: '%H:%M:%S.%L',
+                        second: '%H:%M:%S',
+                        minute: '%H:%M',
+                        hour: '%l:%M %P',
+                        day: '%b %e',
+                        week: '%e. %b',
+                        month: '%b \'%y',
+                        year: '%Y'
                     }
                 },
+                yAxis: [
+                    {
+                        labels: {
+                            format: '{value:.2f}°F',
+                        },
+                        title: {
+                            text: ''
+                        }
+                    },
+                    {
+                        labels: {
+                            format: '{value:.2f}"'
+                        },
+                        title: {
+                            text: ''
+                        },
+                        opposite: true
+                    },
+                    {
+                        visible: false,
+                        min: 0,
+                        max: 100
+                    }
+                ],
                 time: {
                     useUTC: false
                 },
                 tooltip: {
-                    valueDecimals: 2
+                    valueDecimals: 2,
+                    shared: true,
+                    dateTimeLabelFormats: {
+                        day: '%A, %b %e, %Y',
+                        hour: '%A, %b %e, %H:%M',
+                        millisecond: '%A, %b %e, %H:%M:%S.%L',
+                        minute: '%A, %b %e, %l:%M %P',
+                        month: '%B %Y',
+                        second: '%A, %b %e, %H:%M:%S',
+                        week: 'Week from %A, %b %e, %Y',
+                        year: '%Y'
+                    }
                 },
-                series: [
-                    {
-                        name: 'Line 1',
-                        data: array
-                    } as SeriesLineOptions
-                ]
+                series: seriesData,
+                legend: {
+                    enabled: true
+                }
             });
 
             this.loading = false;
