@@ -1,15 +1,13 @@
-<!-- <div [hidden]="!loading" class="page-spinner">
-    <span class="spinner"></span>
-</div> -->
+<mat-spinner *ngIf="loading && !chart" class="content-spinner" strokeWidth="5"></mat-spinner>
 <div class="chart-content">
     <header class="chart-header">
         <mat-form-field>
-            <mat-select [(value)]="selectedTimeSpan">
+            <mat-select [(value)]="selectedTimeSpan" [disabled]="loading">
                 <mat-option *ngFor="let item of timeSpanItems | keyvalue" [value]="+item.key">{{ item.value }}</mat-option>
             </mat-select>
         </mat-form-field>
         <span class="chart-button-spacer"></span>
-        <button mat-button *ngIf="selectedTimeSpan === timeSpans.Day" (click)="handleDateArrowClick(-1)">
+        <button mat-button *ngIf="selectedTimeSpan === timeSpans.Day" (click)="handleDateArrowClick(-1)" [disabled]="loading">
             <mat-icon>arrow_back</mat-icon>
         </button>
         <mat-form-field *ngIf="selectedTimeSpan === timeSpans.Day">
@@ -17,13 +15,13 @@
             <mat-datepicker-toggle matSuffix [for]="picker">
                 <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
             </mat-datepicker-toggle>
-            <mat-datepicker #picker disabled="false"></mat-datepicker>
+            <mat-datepicker #picker [disabled]="loading"></mat-datepicker>
         </mat-form-field>
-        <button mat-button *ngIf="selectedTimeSpan === timeSpans.Day && !isSelectedDateToday()" (click)="handleDateArrowClick(1)">
+        <button mat-button *ngIf="selectedTimeSpan === timeSpans.Day && !isSelectedDateToday()" (click)="handleDateArrowClick(1)" [disabled]="loading">
             <mat-icon>arrow_forward</mat-icon>
         </button>
         <span class="chart-button-spacer"></span>
-        <button mat-button *ngIf="selectedTimeSpan === timeSpans.Day && !isSelectedDateToday()" (click)="resetToToday()">
+        <button mat-button *ngIf="selectedTimeSpan === timeSpans.Day && !isSelectedDateToday()" (click)="resetToToday()" [disabled]="loading">
             Today
         </button>
     </header>

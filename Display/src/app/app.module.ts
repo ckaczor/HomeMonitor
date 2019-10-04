@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatToolbarModule, MatIconModule, MatMenuModule, MatButtonModule, MatExpansionModule, MatSelectModule, MatDatepickerModule, MatInputModule } from '@angular/material';
+import { MatToolbarModule, MatIconModule, MatMenuModule, MatButtonModule, MatExpansionModule, MatSelectModule, MatDatepickerModule, MatInputModule, MatProgressSpinnerModule } from '@angular/material';
 import { NavComponent } from './components/nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -51,7 +51,8 @@ const config: SocketIoConfig = { url: 'http://home.kaczorzoo.net:9091', options:
         MatInputModule,
         FormsModule,
         ReactiveFormsModule,
-        MatMomentDateModule
+        MatMomentDateModule,
+        MatProgressSpinnerModule
     ],
     providers: [],
     bootstrap: [AppComponent]

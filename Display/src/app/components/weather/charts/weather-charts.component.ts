@@ -85,6 +85,12 @@ export class WeatherChartsComponent implements OnInit {
         let start: moment.Moment;
         let end: moment.Moment;
 
+        this.loading = true;
+
+        if (this.chart) {
+            this.chart.ref$.subscribe(o => o.showLoading());
+        }
+
         switch (this.selectedTimeSpan) {
             case TimeSpan.Last24Hours: {
                 start = moment().subtract(24, 'hour');
