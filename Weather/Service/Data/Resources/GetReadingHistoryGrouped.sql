@@ -2,7 +2,7 @@ SELECT bucket,
 	   AVG(HumidityTemperature) AS AverageHumidityTemperature,
 	   AVG(Humidity) AS AverageHumidity,
        AVG(PressureTemperature) AS AveragePressureTemperature,
-       AVG(Pressure) / 100 AS AveragePressure,
+       AVG(Pressure) AS AveragePressure,
 	   AVG(LightLevel) AS AverageLightLevel
 FROM (
          SELECT CAST(FORMAT(Timestamp, 'yyyy-MM-ddTHH:') +
@@ -12,7 +12,7 @@ FROM (
 				Humidity,
 				PressureTemperature,
 				Pressure,
-				LightLevel
+				LightLevel / BatteryLevel
          FROM Reading
          WHERE Timestamp BETWEEN @Start AND @End
      ) AS Data
