@@ -12,7 +12,7 @@ FROM (
 				Humidity,
 				PressureTemperature,
 				Pressure,
-				LightLevel / BatteryLevel
+				LightLevel / BatteryLevel AS LightLevel
          FROM Reading
          WHERE Timestamp BETWEEN @Start AND @End
      ) AS Data
