@@ -1,0 +1,22 @@
+#pressure-arrow {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(3);
+}
+
+.down-high {
+  transform: translate(-50%, -50%) scale(3) rotate(60deg) !important;
+}
+
+.down-low {
+  transform: translate(-50%, -50%) scale(3) rotate(25deg) !important;
+}
+
+.up-high {
+  transform: translate(-50%, -50%) scale(3) rotate(-60deg) !important;
+}
+
+.up-low {
+  transform: translate(-50%, -50%) scale(3) rotate(-25deg) !important;
+}

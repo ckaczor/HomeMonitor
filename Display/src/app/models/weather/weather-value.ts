@@ -1,4 +1,4 @@
 export class WeatherValue {
-    bucket: string;
-    averageValue: number;
+    timestamp: string;
+    value: number;
 }

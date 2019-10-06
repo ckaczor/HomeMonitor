@@ -20,6 +20,7 @@ import { LaundryComponent } from './components/laundry/laundry.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { WeatherChartsComponent } from './components/weather/charts/weather-charts.component';
 import { WeatherCurrentComponent } from './components/weather/current/weather-current.component';
+import { PressureTrendComponent } from './components/weather/pressure-trend/pressure-trend.component';
 
 const config: SocketIoConfig = { url: '/api/laundry', options: {} };
 
@@ -30,7 +31,8 @@ const config: SocketIoConfig = { url: '/api/laundry', options: {} };
         LaundryComponent,
         DashboardComponent,
         WeatherChartsComponent,
-        WeatherCurrentComponent
+        WeatherCurrentComponent,
+        PressureTrendComponent
     ],
     imports: [
         BrowserModule,

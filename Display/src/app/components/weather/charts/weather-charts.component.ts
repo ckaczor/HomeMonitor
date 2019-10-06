@@ -135,7 +135,7 @@ export class WeatherChartsComponent implements OnInit {
             this.chart = new Chart({
                 chart: {
                     type: 'line',
-                    zoomType: "x"
+                    zoomType: 'x'
                 },
                 title: {
                     text: title

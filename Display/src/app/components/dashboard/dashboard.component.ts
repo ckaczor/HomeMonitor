@@ -62,7 +62,8 @@ export class DashboardComponent implements OnInit {
 
         const defaultLayout = [
             { cols: 3, rows: 2, y: 0, x: 0 },
-            { cols: 2, rows: 1, y: 0, x: 3 }
+            { cols: 2, rows: 1, y: 0, x: 3 },
+            { cols: 1, rows: 1, y: 0, x: 5 }
         ];
 
         if (savedLayout == null) {
