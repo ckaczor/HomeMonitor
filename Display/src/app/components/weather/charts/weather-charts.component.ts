@@ -24,9 +24,7 @@ enum TimeSpan {
 export class WeatherChartsComponent implements OnInit {
 
     public chart: Chart;
-
-    private loading = true;
-
+    public loading = true;
     public timeSpanItems: { [value: number]: string } = {};
     public timeSpans: typeof TimeSpan = TimeSpan;
     public maxDate: moment.Moment = moment().endOf('day');
