@@ -12,7 +12,7 @@ export class WeatherService {
 
     constructor() {
         this.connection = new HubConnectionBuilder()
-            .withUrl('http://172.23.10.3:80/api/hub/weather')
+            .withUrl('/api/hub/weather')
             .build();
 
         this.connection.on('LatestReading', (message: string) => {

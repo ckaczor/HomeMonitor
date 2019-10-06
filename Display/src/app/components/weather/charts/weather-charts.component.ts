@@ -114,7 +114,7 @@ export class WeatherChartsComponent implements OnInit {
         const startString = start.toISOString();
         const endString = end.toISOString();
 
-        const request = this.httpClient.get<WeatherReadingGrouped[]>(`http://172.23.10.3/api/weather/readings/history-grouped?start=${startString}&end=${endString}&bucketMinutes=5`);
+        const request = this.httpClient.get<WeatherReadingGrouped[]>(`/api/weather/readings/history-grouped?start=${startString}&end=${endString}&bucketMinutes=5`);
 
         request.subscribe(data => {
             const seriesData: Array<SeriesLineOptions> = [];
@@ -127,16 +127,17 @@ export class WeatherChartsComponent implements OnInit {
             data.forEach(dataElement => {
                 const date = Date.parse(dataElement.bucket);
                 seriesData[0].data.push([date, dataElement.averagePressureTemperature]);
-                seriesData[1].data.push([date, dataElement.averagePressure / 33.864]);
+                seriesData[1].data.push([date, dataElement.averagePressure / 33.864 / 100]);
                 seriesData[2].data.push([date, dataElement.averageHumidity]);
-                seriesData[3].data.push([date, dataElement.averageLightLevel]);
+                seriesData[3].data.push([date, dataElement.averageLightLevel * 100]);
             });
 
             const title = this.selectedTimeSpan === TimeSpan.Last24Hours ? this.timeSpanItems[TimeSpan.Last24Hours] : this.getSelectedDateDisplayString();
 
             this.chart = new Chart({
                 chart: {
-                    type: 'line'
+                    type: 'line',
+                    zoomType: "x"
                 },
                 title: {
                     text: title

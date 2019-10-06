@@ -1,0 +1,16 @@
+{
+    "/api/weather": {
+        "target": "http://172.23.10.3",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    },
+    "/api/hub": {
+        "target": "ws://172.23.10.3:80",
+        "ws": true
+    },
+    "/socket.io": {
+        "target": "http://172.23.10.30:80",
+        "ws": true
+    }
+}

@@ -20,7 +20,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { WeatherChartsComponent } from './components/weather/charts/weather-charts.component';
 import { WeatherCurrentComponent } from './components/weather/current/weather-current.component';
 
-const config: SocketIoConfig = { url: 'http://home.kaczorzoo.net:9091', options: {} };
+const config: SocketIoConfig = { url: '/api/laundry', options: {} };
 
 @NgModule({
     declarations: [

@@ -50,7 +50,7 @@
                     Light
                 </td>
                 <td>
-                    {{ latestReading.LightLevel.toFixed(2) }}
+                    {{ ((latestReading.LightLevel / latestReading.BatteryLevel) * 100).toFixed(2) }}%
                 </td>
             </tr>
         </table>
