@@ -1,0 +1,65 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: display
+  namespace: home-monitor
+  labels:
+    app: display
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: display
+  template:
+    metadata:
+      labels:
+        app: display
+    spec:
+      containers:
+      - name: display
+        image: ckaczor/home-monitor-display:#BUILD_BUILDNUMBER#
+        terminationMessagePath: "/dev/termination-log"
+        terminationMessagePolicy: File
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        kubernetes.io/hostname: kubernetes
+      schedulerName: default-scheduler
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: display
+spec:
+  ports:
+  - name: client
+    port: 80
+  selector:
+    app: display
+  type: ClusterIP
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: hub
+  namespace: home-monitor
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    nginx.ingress.kubernetes.io/affinity: cookie
+    nginx.ingress.kubernetes.io/session-cookie-hash: sha1
+    nginx.ingress.kubernetes.io/session-cookie-name: REALTIMESERVERID
+    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    traefik.frontend.rule.type: PathPrefixStrip
+spec:
+  rules:
+  - http:
+      paths:
+      - path: "/"
+        backend:
+          serviceName: display
+          servicePort: 80

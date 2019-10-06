@@ -1,0 +1,43 @@
+name: $(Rev:r)
+
+trigger:
+  batch: 'true'
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - Display
+
+pool:
+  name: Hosted Ubuntu 1604
+
+steps:
+- task: Docker@0
+  displayName: 'Build an image'
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryConnection: 'Docker Hub'
+    dockerFile: 'Display/Dockerfile'
+    imageName: 'ckaczor/home-monitor-display:$(Build.BuildNumber)'
+    includeLatestTag: true
+
+- task: Docker@0
+  displayName: 'Push an image'
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryConnection: 'Docker Hub'
+    action: 'Push an image'
+    imageName: 'ckaczor/home-monitor-display:$(Build.BuildNumber)'
+    includeLatestTag: true
+
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: 'sed -i s/#BUILD_BUILDNUMBER#/$BUILD_BUILDNUMBER/ Display/deploy/manifest.yaml'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'Display/deploy/manifest.yaml'
+    ArtifactName: 'Manifest'
+    publishLocation: 'Container'
