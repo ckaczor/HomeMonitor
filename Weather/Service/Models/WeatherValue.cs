@@ -6,8 +6,8 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
     [PublicAPI]
     public class WeatherValue
     {
-        public DateTimeOffset Bucket { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
 
-        public decimal AverageValue { get; set; }
+        public decimal Value { get; set; }
     }
 }

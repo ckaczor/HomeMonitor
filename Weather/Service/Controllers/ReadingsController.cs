@@ -33,9 +33,9 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Controllers
         }
 
         [HttpGet("value-history")]
-        public async Task<ActionResult<List<WeatherValue>>> GetValueHistory(WeatherValueType weatherValueType, DateTimeOffset start, DateTimeOffset end, int bucketMinutes = 2)
+        public async Task<ActionResult<List<WeatherValue>>> GetValueHistory(WeatherValueType weatherValueType, DateTimeOffset start, DateTimeOffset end)
         {
-            return (await _database.GetReadingValueHistory(weatherValueType, start, end, bucketMinutes)).ToList();
+            return (await _database.GetReadingValueHistory(weatherValueType, start, end)).ToList();
         }
 
         [HttpGet("history-grouped")]
