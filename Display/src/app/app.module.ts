@@ -14,6 +14,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { GridsterModule } from 'angular-gridster2';
 
 import { LaundryComponent } from './components/laundry/laundry.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -52,7 +53,8 @@ const config: SocketIoConfig = { url: '/api/laundry', options: {} };
         FormsModule,
         ReactiveFormsModule,
         MatMomentDateModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        GridsterModule
     ],
     providers: [],
     bootstrap: [AppComponent]
