@@ -15,3 +15,14 @@ gridster {
   flex: 0 0 auto;
   text-align: right;
 }
+
+.dashboard-item-header {
+  color: white;
+  background-color: #673ab7;
+  padding: 10px;
+}
+
+.dashboard-item-content {
+    border: 1px solid lightgray;
+    height: calc(100% - 41px);
+}

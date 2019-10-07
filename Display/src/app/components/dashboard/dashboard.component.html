@@ -11,13 +11,22 @@
     </header>
     <gridster [options]="options">
         <gridster-item [item]="dashboard[0]">
-            <app-weather-current></app-weather-current>
+            <div class="dashboard-item-header">Weather</div>
+            <div class="dashboard-item-content">
+                <app-weather-current></app-weather-current>
+            </div>
         </gridster-item>
         <gridster-item [item]="dashboard[1]">
-            <app-laundry></app-laundry>
+            <div class="dashboard-item-header">Laundry</div>
+            <div class="dashboard-item-content">
+                <app-laundry></app-laundry>
+            </div>
         </gridster-item>
         <gridster-item [item]="dashboard[2]">
-            <app-pressure-trend></app-pressure-trend>
+            <div class="dashboard-item-header">Pressure Trend</div>
+            <div class="dashboard-item-content">
+                <app-pressure-trend></app-pressure-trend>
+            </div>
         </gridster-item>
     </gridster>
 </div>
