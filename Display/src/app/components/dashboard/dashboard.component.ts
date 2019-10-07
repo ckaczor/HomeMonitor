@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GridsterConfig, GridsterItem, GridsterItemComponentInterface } from 'angular-gridster2';
+import { DashboardLayout } from 'src/app/models/dashboard/dashboard-layout';
 
 @Component({
     selector: 'app-dashboard',
@@ -8,8 +9,17 @@ import { GridsterConfig, GridsterItem, GridsterItemComponentInterface } from 'an
 })
 export class DashboardComponent implements OnInit {
     public options: GridsterConfig;
-    public dashboard: Array<GridsterItem>;
+    public dashboardLayout: DashboardLayout;
     public locked = true;
+
+    private defaultLayout: DashboardLayout = {
+        version: 1,
+        layout: [
+            { cols: 3, rows: 2, y: 0, x: 0 },
+            { cols: 2, rows: 2, y: 0, x: 3 },
+            { cols: 2, rows: 2, y: 0, x: 5 }
+        ]
+    };
 
     constructor() { }
 
@@ -36,14 +46,6 @@ export class DashboardComponent implements OnInit {
         this.options.api.optionsChanged();
     }
 
-    removeItem(item: GridsterItem) {
-        this.dashboard.splice(this.dashboard.indexOf(item), 1);
-    }
-
-    addItem() {
-        this.dashboard.push({} as GridsterItem);
-    }
-
     toggleLocked() {
         this.locked = !this.locked;
 
@@ -54,27 +56,27 @@ export class DashboardComponent implements OnInit {
     }
 
     saveOptions() {
-        localStorage.setItem('dashboard-layout', JSON.stringify(this.dashboard));
+        localStorage.setItem('dashboard-layout', JSON.stringify(this.dashboardLayout));
     }
 
     loadOptions() {
-        const savedLayout = localStorage.getItem('dashboard-layout');
+        const savedLayoutString = localStorage.getItem('dashboard-layout');
 
-        const defaultLayout = [
-            { cols: 3, rows: 2, y: 0, x: 0 },
-            { cols: 2, rows: 1, y: 0, x: 3 },
-            { cols: 1, rows: 1, y: 0, x: 5 }
-        ];
-
-        if (savedLayout == null) {
-            this.dashboard = defaultLayout;
+        if (savedLayoutString == null) {
+            this.dashboardLayout = this.defaultLayout;
             return;
         }
 
         try {
-            this.dashboard = JSON.parse(savedLayout);
+            const savedLayout = JSON.parse(savedLayoutString) as DashboardLayout;
+
+            if (savedLayout.version === this.defaultLayout.version) {
+                this.dashboardLayout = savedLayout;
+            } else {
+                this.dashboardLayout = this.defaultLayout;
+            }
         } catch (error) {
-            this.dashboard = defaultLayout;
+            this.dashboardLayout = this.defaultLayout;
         }
     }
 }
