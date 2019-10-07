@@ -19,10 +19,12 @@ export class PressureTrendComponent implements OnInit {
     ngOnInit() {
         this.update();
 
-        setInterval(this.update, 60000);
+        setInterval(() => this.update(), 60000);
     }
 
     async update() {
+        this.pressureDifference = null;
+
         const end: moment.Moment = moment();
         const start: moment.Moment = moment(end).subtract(3, 'hours');
 
