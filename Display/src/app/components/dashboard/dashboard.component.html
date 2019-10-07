@@ -1,4 +1,4 @@
-<div class="content">
+<div class="main">
     <header class="header">
         <button mat-stroked-button (click)="toggleLocked()" *ngIf="!locked">
             <mat-icon>lock_open</mat-icon>
@@ -9,23 +9,35 @@
             Locked
         </button>
     </header>
-    <gridster [options]="options">
+    <gridster class="content" [options]="options">
         <gridster-item [item]="dashboard[0]">
-            <div class="dashboard-item-header">Weather</div>
-            <div class="dashboard-item-content">
-                <app-weather-current></app-weather-current>
+            <div class="dashboard-item">
+                <div class="dashboard-item-header">
+                    Weather
+                </div>
+                <div class="dashboard-item-content">
+                    <app-weather-current></app-weather-current>
+                </div>
             </div>
         </gridster-item>
         <gridster-item [item]="dashboard[1]">
-            <div class="dashboard-item-header">Laundry</div>
-            <div class="dashboard-item-content">
-                <app-laundry></app-laundry>
+            <div class="dashboard-item">
+                <div class="dashboard-item-header">
+                    Laundry
+                </div>
+                <div class="dashboard-item-content">
+                    <app-laundry></app-laundry>
+                </div>
             </div>
         </gridster-item>
         <gridster-item [item]="dashboard[2]">
-            <div class="dashboard-item-header">Pressure Trend</div>
-            <div class="dashboard-item-content">
-                <app-pressure-trend></app-pressure-trend>
+            <div class="dashboard-item">
+                <div class="dashboard-item-header">
+                    Pressure Trend
+                </div>
+                <div class="dashboard-item-content">
+                    <app-pressure-trend></app-pressure-trend>
+                </div>
             </div>
         </gridster-item>
     </gridster>

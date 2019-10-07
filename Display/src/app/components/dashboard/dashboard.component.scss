@@ -1,9 +1,4 @@
-gridster {
-  background: #fafafa;
-  flex: 1 1 auto;
-}
-
-.content {
+.main {
   display: flex;
   flex-flow: column;
   height: 100%;
@@ -16,13 +11,25 @@ gridster {
   text-align: right;
 }
 
+.content {
+  background: #fafafa;
+  flex: 1 1 auto;
+}
+
+.dashboard-item {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .dashboard-item-header {
   color: white;
   background-color: #673ab7;
   padding: 10px;
+  flex: 0 0 auto;
 }
 
 .dashboard-item-content {
-    border: 1px solid lightgray;
-    height: calc(100% - 41px);
+  border: 1px solid lightgray;
+  flex: 1 1 auto;
 }
