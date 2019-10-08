@@ -27,6 +27,8 @@
                 </td>
                 <td>
                     {{ (latestReading.Pressure / 33.864 / 100).toFixed(2) }}"
+
+                    <span *ngIf="pressureDifference !== null" class="pressure-trend-arrow" [ngClass]="rotationClass()">➜</span>
                 </td>
             </tr>
             <tr>

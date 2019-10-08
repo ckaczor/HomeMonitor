@@ -8,3 +8,26 @@
   text-align: right;
   padding-right: 10px;
 }
+
+.pressure-trend-arrow {
+  display: inline-block;
+  position: relative;
+  left: 6px;
+  transform: scale(1.25);
+}
+
+.down-high {
+  transform: rotate(60deg) scale(1.25);
+}
+
+.down-low {
+  transform: rotate(25deg) scale(1.25);
+}
+
+.up-high {
+  transform: rotate(-60deg) scale(1.25);
+}
+
+.up-low {
+  transform: rotate(-25deg) scale(1.25);
+}
