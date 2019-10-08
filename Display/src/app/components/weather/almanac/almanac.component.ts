@@ -4,6 +4,8 @@ import { WeatherService } from 'src/app/services/weather/weather.service';
 import { first } from 'rxjs/operators';
 
 import * as SunCalc from 'suncalc';
+import * as moment from 'moment';
+import 'moment-duration-format';
 
 @Component({
     selector: 'app-almanac',
@@ -13,7 +15,8 @@ import * as SunCalc from 'suncalc';
 export class AlmanacComponent implements OnInit {
     public loaded = false;
     public latestReading: WeatherReading;
-    public sun: SunCalc.GetTimesResult;
+    public sunTimes: SunCalc.GetTimesResult;
+    public moonTimes: SunCalc.GetMoonTimes;
     public moon: SunCalc.GetMoonIlluminationResult;
 
     constructor(private weatherService: WeatherService) { }
@@ -30,7 +33,8 @@ export class AlmanacComponent implements OnInit {
 
             const date = new Date();
 
-            this.sun = SunCalc.getTimes(date, this.latestReading.Latitude, this.latestReading.Longitude);
+            this.sunTimes = SunCalc.getTimes(date, this.latestReading.Latitude, this.latestReading.Longitude);
+            this.moonTimes = SunCalc.getMoonTimes(date, this.latestReading.Latitude, this.latestReading.Longitude);
             this.moon = SunCalc.getMoonIllumination(date);
 
             this.loaded = true;
@@ -55,5 +59,30 @@ export class AlmanacComponent implements OnInit {
         } else if (phase < 1.0) {
             return 'Waning Crescent';
         }
+    }
+
+    moonPhaseLetter(phase: number): string {
+        if (phase === 0) {
+            return '0';
+        } else if (phase < 0.25) {
+            return 'D';
+        } else if (phase === 0.25) {
+            return 'G';
+        } else if (phase < 0.5) {
+            return 'I';
+        } else if (phase === 0.5) {
+            return '1';
+        } else if (phase < 0.75) {
+            return 'Q';
+        } else if (phase === 0.75) {
+            return 'T';
+        } else if (phase < 1.0) {
+            return 'W';
+        }
+    }
+
+    dayLength(): string {
+        const duration = moment.duration((this.sunTimes.sunset.valueOf() - this.sunTimes.sunrise.valueOf()));
+        return duration.format('hh [hours] mm [minutes]');
     }
 }

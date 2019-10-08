@@ -13,3 +13,8 @@ body {
   top: 150px;
   left: calc(50% - 50px);
 }
+
+@font-face {
+  font-family: moon;
+  src: url(assets/moon_phases.ttf) format("opentype");
+}

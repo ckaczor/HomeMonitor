@@ -8,16 +8,40 @@
                 <td class="almanac-table-header">
                     Sunrise
                 </td>
-                <td>
-                    {{ sun.sunrise | amLocal | amDateFormat: 'hh:mm:ss A' }}
+                <td colspan="2">
+                    {{ sunTimes.sunrise | amLocal | amDateFormat: 'hh:mm:ss A' }}
                 </td>
             </tr>
             <tr>
                 <td class="almanac-table-header">
                     Sunset
                 </td>
-                <td>
-                    {{ sun.sunset | amLocal | amDateFormat: 'hh:mm:ss A' }}
+                <td colspan="2">
+                    {{ sunTimes.sunset | amLocal | amDateFormat: 'hh:mm:ss A' }}
+                </td>
+            </tr>
+            <tr>
+                <td class="almanac-table-header">
+                    Day length
+                </td>
+                <td colspan="2">
+                    {{ dayLength() }}
+                </td>
+            </tr>
+            <tr>
+                <td class="almanac-table-header">
+                    Moonrise
+                </td>
+                <td colspan="2">
+                    {{ moonTimes.rise | amLocal | amDateFormat: 'hh:mm:ss A' }}
+                </td>
+            </tr>
+            <tr>
+                <td class="almanac-table-header">
+                    Moonset
+                </td>
+                <td colspan="2">
+                    {{ moonTimes.set | amLocal | amDateFormat: 'hh:mm:ss A' }}
                 </td>
             </tr>
             <tr>
@@ -25,7 +49,14 @@
                     Moon
                 </td>
                 <td>
-                    {{ moonPhaseName(moon.phase) }} - {{ (moon.fraction * 100).toFixed(0) }}% illuminated
+                    {{ moonPhaseName(moon.phase) }}
+                    <br>
+                    {{ (moon.fraction * 100).toFixed(1) }}% illuminated
+                </td>
+                <td>
+                    <div class="moon-phase">
+                        {{ moonPhaseLetter(moon.phase) }}
+                    </div>
                 </td>
             </tr>
         </table>
