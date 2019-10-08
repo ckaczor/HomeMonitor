@@ -121,6 +121,9 @@ export class WeatherChartsComponent implements OnInit {
             seriesData.push({ name: 'Pressure', data: [], yAxis: 1, tooltip: { valueSuffix: '"' } } as SeriesLineOptions);
             seriesData.push({ name: 'Humidity', data: [], yAxis: 2, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
             seriesData.push({ name: 'Light', data: [], yAxis: 2, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
+            seriesData.push({ name: 'Rain', data: [], yAxis: 3, tooltip: { valueSuffix: '"' } } as SeriesLineOptions);
+
+            let rainTotal = 0;
 
             data.forEach(dataElement => {
                 const date = Date.parse(dataElement.bucket);
@@ -128,6 +131,10 @@ export class WeatherChartsComponent implements OnInit {
                 seriesData[1].data.push([date, dataElement.averagePressure / 33.864 / 100]);
                 seriesData[2].data.push([date, dataElement.averageHumidity]);
                 seriesData[3].data.push([date, dataElement.averageLightLevel * 100]);
+
+                rainTotal += dataElement.rainTotal;
+
+                seriesData[4].data.push([date, rainTotal]);
             });
 
             const title = this.selectedTimeSpan === TimeSpan.Last24Hours ? this.timeSpanItems[TimeSpan.Last24Hours] : this.getSelectedDateDisplayString();
@@ -162,7 +169,7 @@ export class WeatherChartsComponent implements OnInit {
                             format: '{value:.2f}°F',
                         },
                         title: {
-                            text: ''
+                            text: 'Temperature'
                         }
                     },
                     {
@@ -170,14 +177,30 @@ export class WeatherChartsComponent implements OnInit {
                             format: '{value:.2f}"'
                         },
                         title: {
-                            text: ''
+                            text: 'Pressure'
                         },
                         opposite: true
                     },
                     {
-                        visible: false,
+                        visible: true,
+                        labels: {
+                            format: '{value:.2f}%'
+                        },
+                        title: {
+                            text: 'Percentage'
+                        },
                         min: 0,
                         max: 100
+                    },
+                    {
+                        labels: {
+                            format: '{value:.2f}"'
+                        },
+                        title: {
+                            text: 'Rain'
+                        },
+                        visible: true,
+                        opposite: true
                     }
                 ],
                 time: {

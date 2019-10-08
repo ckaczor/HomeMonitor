@@ -5,4 +5,5 @@ export class WeatherReadingGrouped {
     averageLightLevel: number;
     averageHumidity: number;
     averageHumidityTemperature: number;
+    rainTotal: number;
 }
