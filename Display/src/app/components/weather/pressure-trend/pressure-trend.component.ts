@@ -34,10 +34,10 @@ export class PressureTrendComponent implements OnInit {
             return;
         }
 
-        const points: Array<Array<number>> = [];
+        const points: [number, number][] = [];
 
         weatherData.forEach((weatherValue: WeatherValue) => {
-            const point = [moment(weatherValue.timestamp).unix(), weatherValue.value / 100];
+            const point: [number, number] = [moment(weatherValue.timestamp).unix(), weatherValue.value / 100];
             points.push(point);
         });
 
