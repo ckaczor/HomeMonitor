@@ -24,7 +24,7 @@ import { WeatherCurrentComponent } from './components/weather/current/weather-cu
 import { PressureTrendComponent } from './components/weather/pressure-trend/pressure-trend.component';
 import { AlmanacComponent } from './components/weather/almanac/almanac.component';
 
-const config: SocketIoConfig = { url: '/api/laundry', options: {} };
+const config: SocketIoConfig = { url: '/', options: {} };
 
 @NgModule({
     declarations: [
