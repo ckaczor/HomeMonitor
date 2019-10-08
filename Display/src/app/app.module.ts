@@ -12,6 +12,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MomentModule } from 'ngx-moment';
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { GridsterModule } from 'angular-gridster2';
@@ -21,6 +22,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { WeatherChartsComponent } from './components/weather/charts/weather-charts.component';
 import { WeatherCurrentComponent } from './components/weather/current/weather-current.component';
 import { PressureTrendComponent } from './components/weather/pressure-trend/pressure-trend.component';
+import { AlmanacComponent } from './components/weather/almanac/almanac.component';
 
 const config: SocketIoConfig = { url: '/api/laundry', options: {} };
 
@@ -32,7 +34,8 @@ const config: SocketIoConfig = { url: '/api/laundry', options: {} };
         DashboardComponent,
         WeatherChartsComponent,
         WeatherCurrentComponent,
-        PressureTrendComponent
+        PressureTrendComponent,
+        AlmanacComponent
     ],
     imports: [
         BrowserModule,
@@ -56,7 +59,8 @@ const config: SocketIoConfig = { url: '/api/laundry', options: {} };
         ReactiveFormsModule,
         MatMomentDateModule,
         MatProgressSpinnerModule,
-        GridsterModule
+        GridsterModule,
+        MomentModule
     ],
     providers: [],
     bootstrap: [AppComponent]

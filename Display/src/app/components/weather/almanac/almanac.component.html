@@ -1,0 +1,33 @@
+<div class="almanac-content">
+    <div *ngIf="!loaded">
+        Loading...
+    </div>
+    <div *ngIf="loaded">
+        <table>
+            <tr>
+                <td class="almanac-table-header">
+                    Sunrise
+                </td>
+                <td>
+                    {{ sun.sunrise | amLocal | amDateFormat: 'hh:mm:ss A' }}
+                </td>
+            </tr>
+            <tr>
+                <td class="almanac-table-header">
+                    Sunset
+                </td>
+                <td>
+                    {{ sun.sunset | amLocal | amDateFormat: 'hh:mm:ss A' }}
+                </td>
+            </tr>
+            <tr>
+                <td class="almanac-table-header">
+                    Moon
+                </td>
+                <td>
+                    {{ moonPhaseName(moon.phase) }} - {{ (moon.fraction * 100).toFixed(0) }}% illuminated
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

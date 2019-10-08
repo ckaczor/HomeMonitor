@@ -13,11 +13,12 @@ export class DashboardComponent implements OnInit {
     public locked = true;
 
     private defaultLayout: DashboardLayout = {
-        version: 1,
+        version: 2,
         layout: [
             { cols: 3, rows: 2, y: 0, x: 0 },
             { cols: 2, rows: 2, y: 0, x: 3 },
-            { cols: 2, rows: 2, y: 0, x: 5 }
+            { cols: 2, rows: 2, y: 0, x: 5 },
+            { cols: 3, rows: 2, y: 0, x: 7 }
         ]
     };
 
