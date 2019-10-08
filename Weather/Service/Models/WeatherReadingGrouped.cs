@@ -17,5 +17,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
         public decimal AveragePressure { get; set; }
 
         public decimal AverageLightLevel { get; set; }
+
+        public decimal RainTotal { get; set; }
     }
 }
