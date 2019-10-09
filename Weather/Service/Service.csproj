@@ -15,6 +15,8 @@
     <None Remove="Data\Resources\GetReadingValueHistory.sql" />
     <None Remove="Data\Resources\GetRecentReading.sql" />
     <None Remove="Data\Resources\Schema.sql" />
+    <None Remove="Data\Resources\GetWindDirectionHistory.sql" />
+    <None Remove="Data\Resources\GetWindSpeedHistory.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +26,8 @@
     <EmbeddedResource Include="Data\Resources\GetRecentReading.sql" />
     <EmbeddedResource Include="Data\Resources\CreateReading.sql" />
     <EmbeddedResource Include="Data\Resources\Schema.sql" />
+    <EmbeddedResource Include="Data\Resources\GetWindDirectionHistory.sql" />
+    <EmbeddedResource Include="Data\Resources\GetWindSpeedHistory.sql" />
   </ItemGroup>
 
   <ItemGroup>

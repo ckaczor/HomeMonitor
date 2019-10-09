@@ -43,5 +43,17 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Controllers
         {
             return (await _database.GetReadingHistoryGrouped(start, end, bucketMinutes)).ToList();
         }
+
+        [HttpGet("wind-speed-history-grouped")]
+        public async Task<ActionResult<List<WindSpeedReadingGrouped>>> GetWindSpeedHistoryGrouped(DateTimeOffset start, DateTimeOffset end, int bucketMinutes = 2)
+        {
+            return (await _database.GetWindSpeedHistoryGrouped(start, end, bucketMinutes)).ToList();
+        }
+
+        [HttpGet("wind-direction-history-grouped")]
+        public async Task<ActionResult<List<WindDirectionReadingGrouped>>> GetWindDirectionHistoryGrouped(DateTimeOffset start, DateTimeOffset end)
+        {
+            return (await _database.GetWindDirectionHistoryGrouped(start, end)).ToList();
+        }
     }
 }

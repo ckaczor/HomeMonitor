@@ -1,4 +1,4 @@
-SELECT bucket,
+SELECT Bucket,
 	   AVG(HumidityTemperature) AS AverageHumidityTemperature,
 	   AVG(Humidity) AS AverageHumidity,
        AVG(PressureTemperature) AS AveragePressureTemperature,
