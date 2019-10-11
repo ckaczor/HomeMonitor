@@ -1,19 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'angular-highcharts';
-import { SeriesLineOptions } from 'highcharts';
+import { SeriesLineOptions, SeriesWindbarbOptions } from 'highcharts';
 import { HttpClient } from '@angular/common/http';
 import { WeatherReadingGrouped } from '../../../models/weather/weather-reading-grouped';
+import { WindHistoryGrouped } from '../../../models/weather/wind-history-grouped';
 
 import * as moment from 'moment';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
+import HC_windbarb from 'highcharts/modules/windbarb';
 HC_exporting(Highcharts);
+HC_windbarb(Highcharts);
 
 enum TimeSpan {
     Last24Hours,
     Day,
     Custom
+}
+
+enum ChartType {
+    Weather,
+    Wind
 }
 
 @Component({
@@ -28,6 +36,8 @@ export class WeatherChartsComponent implements OnInit {
     public timeSpanItems: { [value: number]: string } = {};
     public timeSpans: typeof TimeSpan = TimeSpan;
     public maxDate: moment.Moment = moment().endOf('day');
+    public selectedChartType: ChartType = ChartType.Weather;
+    public ChartType = ChartType;
 
     private selectedTimeSpanValue: TimeSpan = TimeSpan.Last24Hours;
     private selectedDateValue: moment.Moment = moment().startOf('day');
@@ -79,36 +89,17 @@ export class WeatherChartsComponent implements OnInit {
         return moment(this.selectedDate).format('LL');
     }
 
-    private loadChart() {
-        let start: moment.Moment;
-        let end: moment.Moment;
-
-        this.loading = true;
-
-        if (this.chart) {
-            this.chart.ref$.subscribe(o => o.showLoading());
+    public chartTypeChange(value: ChartType) {
+        if (this.selectedChartType === value) {
+            return;
         }
 
-        switch (this.selectedTimeSpan) {
-            case TimeSpan.Last24Hours: {
-                start = moment().subtract(24, 'hour');
-                end = moment();
+        this.selectedChartType = value;
 
-                break;
-            }
+        this.loadChart();
+    }
 
-            case TimeSpan.Day: {
-                start = moment(this.selectedDate).startOf('day');
-                end = moment(this.selectedDate).endOf('day');
-
-                break;
-            }
-
-            default: {
-                return;
-            }
-        }
-
+    private loadWeatherChart(start: moment.Moment, end: moment.Moment) {
         const startString = start.toISOString();
         const endString = end.toISOString();
 
@@ -117,11 +108,11 @@ export class WeatherChartsComponent implements OnInit {
         request.subscribe(data => {
             const seriesData: Array<SeriesLineOptions> = [];
 
-            seriesData.push({ name: 'Temperature', data: [], yAxis: 0, tooltip: { valueSuffix: '°F' } } as SeriesLineOptions);
-            seriesData.push({ name: 'Pressure', data: [], yAxis: 1, tooltip: { valueSuffix: '"' } } as SeriesLineOptions);
-            seriesData.push({ name: 'Humidity', data: [], yAxis: 2, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
-            seriesData.push({ name: 'Light', data: [], yAxis: 2, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
-            seriesData.push({ name: 'Rain', data: [], yAxis: 3, tooltip: { valueSuffix: '"' } } as SeriesLineOptions);
+            seriesData.push({ name: 'Temperature', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: '°F' } } as SeriesLineOptions);
+            seriesData.push({ name: 'Pressure', data: [], yAxis: 1, marker: { enabled: false }, tooltip: { valueSuffix: '"' } } as SeriesLineOptions);
+            seriesData.push({ name: 'Humidity', data: [], yAxis: 2, marker: { enabled: false }, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
+            seriesData.push({ name: 'Light', data: [], yAxis: 2, marker: { enabled: false }, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
+            seriesData.push({ name: 'Rain', data: [], yAxis: 3, marker: { enabled: false }, tooltip: { valueSuffix: '"' } } as SeriesLineOptions);
 
             let rainTotal = 0;
 
@@ -231,5 +222,134 @@ export class WeatherChartsComponent implements OnInit {
 
             this.loading = false;
         });
+    }
+
+    private loadWindChart(start: moment.Moment, end: moment.Moment) {
+        const startString = start.toISOString();
+        const endString = end.toISOString();
+
+        const request = this.httpClient.get<WindHistoryGrouped[]>(`/api/weather/readings/wind-history-grouped?start=${startString}&end=${endString}&bucketMinutes=30`);
+
+        request.subscribe(data => {
+            const seriesData: Array<SeriesLineOptions | SeriesWindbarbOptions> = [];
+
+            seriesData.push({ type: 'line', name: 'Minimum', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: ' MPH' } } as SeriesLineOptions);
+            seriesData.push({ type: 'line', name: 'Average', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: ' MPH' } } as SeriesLineOptions);
+            seriesData.push({ type: 'line', name: 'Maximum', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: ' MPH' } } as SeriesLineOptions);
+            seriesData.push({ type: 'windbarb', name: 'Direction', data: [], marker: { enabled: false }, tooltip: { valueSuffix: ' MPH' } } as SeriesWindbarbOptions);
+
+            data.forEach(dataElement => {
+                const date = Date.parse(dataElement.bucket);
+                seriesData[0].data.push([date, dataElement.minimumSpeed]);
+                seriesData[1].data.push([date, dataElement.averageSpeed]);
+                seriesData[2].data.push([date, dataElement.maximumSpeed]);
+                seriesData[3].data.push([date, dataElement.averageSpeed, dataElement.averageDirection]);
+            });
+
+            const title = this.selectedTimeSpan === TimeSpan.Last24Hours ? this.timeSpanItems[TimeSpan.Last24Hours] : this.getSelectedDateDisplayString();
+
+            this.chart = new Chart({
+                chart: {
+                    zoomType: 'x'
+                },
+                title: {
+                    text: title
+                },
+                credits: {
+                    enabled: true
+                },
+                xAxis: {
+                    type: 'datetime',
+                    dateTimeLabelFormats: {
+                        millisecond: '%H:%M:%S.%L',
+                        second: '%H:%M:%S',
+                        minute: '%H:%M',
+                        hour: '%l:%M %P',
+                        day: '%b %e',
+                        week: '%e. %b',
+                        month: '%b \'%y',
+                        year: '%Y'
+                    },
+                    offset: 50
+                },
+                yAxis: [
+                    {
+                        labels: {
+                            format: '{value:.2f} MPH',
+                        },
+                        title: {
+                            text: 'Wind Speed'
+                        }
+                    }
+                ],
+                time: {
+                    useUTC: false
+                },
+                tooltip: {
+                    valueDecimals: 2,
+                    shared: true,
+                    dateTimeLabelFormats: {
+                        day: '%A, %b %e, %Y',
+                        hour: '%A, %b %e, %H:%M',
+                        millisecond: '%A, %b %e, %H:%M:%S.%L',
+                        minute: '%A, %b %e, %l:%M %P',
+                        month: '%B %Y',
+                        second: '%A, %b %e, %H:%M:%S',
+                        week: 'Week from %A, %b %e, %Y',
+                        year: '%Y'
+                    }
+                },
+                series: seriesData,
+                legend: {
+                    enabled: true
+                },
+                exporting: {
+                    enabled: true
+                }
+            });
+
+            this.loading = false;
+        });
+    }
+
+    private loadChart() {
+        let start: moment.Moment;
+        let end: moment.Moment;
+
+        this.loading = true;
+
+        if (this.chart) {
+            this.chart.ref$.subscribe(o => o.showLoading());
+        }
+
+        switch (this.selectedTimeSpan) {
+            case TimeSpan.Last24Hours: {
+                start = moment().subtract(24, 'hour');
+                end = moment();
+
+                break;
+            }
+
+            case TimeSpan.Day: {
+                start = moment(this.selectedDate).startOf('day');
+                end = moment(this.selectedDate).endOf('day');
+
+                break;
+            }
+
+            default: {
+                return;
+            }
+        }
+
+        switch (this.selectedChartType) {
+            case ChartType.Weather:
+                this.loadWeatherChart(start, end);
+                break;
+
+            case ChartType.Wind:
+                this.loadWindChart(start, end);
+                break;
+        }
     }
 }

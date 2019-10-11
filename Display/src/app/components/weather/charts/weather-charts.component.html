@@ -1,6 +1,14 @@
 <mat-spinner *ngIf="loading && !chart" class="content-spinner" strokeWidth="5"></mat-spinner>
 <div class="chart-content">
     <header class="chart-header">
+        <button mat-button (click)="chartTypeChange(ChartType.Weather)" [class.selected]="selectedChartType === ChartType.Weather" [disabled]="loading">
+            Common
+        </button>
+        <button mat-button (click)="chartTypeChange(ChartType.Wind)" [class.selected]="selectedChartType === ChartType.Wind" [disabled]="loading">
+            Wind
+        </button>
+        <span class="chart-button-spacer"></span>
+        <span class="chart-button-spacer"></span>
         <mat-form-field>
             <mat-select [(value)]="selectedTimeSpan" [disabled]="loading">
                 <mat-option *ngFor="let item of timeSpanItems | keyvalue" [value]="+item.key">{{ item.value }}</mat-option>

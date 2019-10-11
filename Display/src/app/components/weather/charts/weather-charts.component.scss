@@ -17,3 +17,11 @@
 .chart-button-spacer {
   margin-right: 20px;
 }
+
+.selected:after {
+  content: "";
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  border-bottom: 1px solid #673ab7;
+}
