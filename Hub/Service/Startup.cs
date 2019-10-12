@@ -32,6 +32,7 @@ namespace ChrisKaczor.HomeMonitor.Hub.Service
             applicationBuilder.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<WeatherHub>("/weather");
+                endpoints.MapHub<PowerHub>("/power");
                 endpoints.MapDefaultControllerRoute();
             });
         }
