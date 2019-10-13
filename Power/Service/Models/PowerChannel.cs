@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace ChrisKaczor.HomeMonitor.Power.Service.Models
 {
-    [UsedImplicitly]
+    [PublicAPI]
     public class PowerChannel
     {
         [JsonPropertyName("type")]

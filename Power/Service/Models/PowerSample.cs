@@ -1,9 +1,11 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace ChrisKaczor.HomeMonitor.Power.Service.Models
 {
+    [PublicAPI]
     public class PowerSample
     {
         [JsonPropertyName("sensorId")]
