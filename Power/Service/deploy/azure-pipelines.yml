@@ -50,6 +50,7 @@ stages:
     steps:
     - task: DownloadBuildArtifacts@0
       inputs:
+        artifactName: 'Manifest'
         buildType: 'current'
         downloadType: 'single'
         downloadPath: '$(System.ArtifactsDirectory)'
