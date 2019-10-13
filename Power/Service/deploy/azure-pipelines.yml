@@ -48,6 +48,11 @@ stages:
     pool:
       name: Hosted Ubuntu 1604
     steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        downloadPath: '$(System.ArtifactsDirectory)'
     - task: Kubernetes@1
       inputs:
         connectionType: 'Kubernetes Service Connection'
@@ -55,6 +60,6 @@ stages:
         namespace: 'home-monitor'
         command: 'apply'
         useConfigurationFile: true
-        configuration: '$(System.DefaultWorkingDirectory)/Manifest/Manifest/manifest.yaml'
+        configuration: '$(System.ArtifactsDirectory)/Manifest/Manifest/manifest.yaml'
         secretType: 'dockerRegistry'
         containerRegistryType: 'Azure Container Registry'
