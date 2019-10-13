@@ -106,6 +106,16 @@ spec:
               key: password    
         - name: Hub__Power
           value: http://hub-service/power
+        - name: Power__Host
+          valueFrom:
+            secretKeyRef:
+              name: power-neurio-connection
+              key: host               
+        - name: Power__AuthorizationHeader
+          valueFrom:
+            secretKeyRef:
+              name: power-neurio-connection
+              key: authorization
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
