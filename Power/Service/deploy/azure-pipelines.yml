@@ -61,6 +61,6 @@ stages:
         namespace: 'home-monitor'
         command: 'apply'
         useConfigurationFile: true
-        configuration: '$(System.ArtifactsDirectory)/Manifest/Manifest/manifest.yaml'
+        configuration: '$(System.ArtifactsDirectory)/Manifest/manifest.yaml'
         secretType: 'dockerRegistry'
         containerRegistryType: 'Azure Container Registry'
