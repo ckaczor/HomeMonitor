@@ -13,4 +13,6 @@ RUN dotnet publish "Service.csproj" -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app .
+RUN apk add --no-cache icu-libs
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 ENTRYPOINT ["dotnet", "ChrisKaczor.HomeMonitor.Power.Service.dll"]
