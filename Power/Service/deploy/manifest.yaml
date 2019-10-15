@@ -33,6 +33,8 @@ spec:
           value: "Y"
         - name: MSSQL_PID
           value: Express
+        - name: MSSQL_TCP_PORT
+          value: 1434
         - name: TZ
           value: America/New_York
         volumeMounts:
@@ -61,7 +63,7 @@ metadata:
 spec:
   ports:
   - name: client
-    port: 1433
+    port: 1434
   selector:
     app: power-database
   type: LoadBalancer
