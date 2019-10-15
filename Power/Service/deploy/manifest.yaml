@@ -31,8 +31,6 @@ spec:
               key: password
         - name: ACCEPT_EULA
           value: "Y"
-        - name: MSSQL_TCP_PORT
-          value: 1434
         - name: MSSQL_PID
           value: Express
         - name: TZ
@@ -63,7 +61,7 @@ metadata:
 spec:
   ports:
   - name: client
-    port: 1434
+    port: 1433
   selector:
     app: power-database
   type: LoadBalancer
