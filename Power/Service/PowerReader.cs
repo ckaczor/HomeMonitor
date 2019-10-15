@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using RestSharp;
 using System;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,8 +46,17 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
 
             var sample = JsonSerializer.Deserialize<PowerSample>(response.Content);
 
-            Console.WriteLine(sample.Channels[2].Type + " " + sample.Channels[2].RealPower);
-            Console.WriteLine(sample.Channels[3].Type + " " + sample.Channels[3].RealPower);
+            var generation = sample.Channels.FirstOrDefault(c => c.Type == "GENERATION");
+            var consumption = sample.Channels.FirstOrDefault(c => c.Type == "CONSUMPTION");
+
+            if (generation == null || consumption == null)
+                return;
+
+            var status = new PowerStatus { Generation = generation.RealPower, Consumption = consumption.RealPower };
+
+            var json = JsonSerializer.Serialize(status);
+
+            Console.WriteLine(json);
 
             if (_hubConnection == null)
                 return;
@@ -56,7 +66,7 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
                 if (_hubConnection.State == HubConnectionState.Disconnected)
                     _hubConnection.StartAsync().Wait();
 
-                _hubConnection.InvokeAsync("SendLatestSample", response.Content).Wait();
+                _hubConnection.InvokeAsync("SendLatestSample", json).Wait();
             }
             catch (Exception exception)
             {
