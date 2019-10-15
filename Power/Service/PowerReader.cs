@@ -1,4 +1,5 @@
-﻿using ChrisKaczor.HomeMonitor.Power.Service.Models;
+﻿using ChrisKaczor.HomeMonitor.Power.Service.Data;
+using ChrisKaczor.HomeMonitor.Power.Service.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
@@ -16,13 +17,15 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
     public class PowerReader : IHostedService
     {
         private readonly IConfiguration _configuration;
+        private readonly Database _database;
 
         private HubConnection _hubConnection;
         private Timer _readTimer;
 
-        public PowerReader(IConfiguration configuration)
+        public PowerReader(IConfiguration configuration, Database database)
         {
             _configuration = configuration;
+            _database = database;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -53,6 +56,8 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
                 return;
 
             var status = new PowerStatus { Generation = generation.RealPower, Consumption = consumption.RealPower };
+
+            _database.StorePowerData(status);
 
             var json = JsonSerializer.Serialize(status);
 

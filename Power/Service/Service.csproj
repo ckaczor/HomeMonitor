@@ -8,8 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\Resources\CreateStatus.sql" />
+    <None Remove="Data\Resources\GetStatusHistoryGrouped.sql" />
+    <None Remove="Data\Resources\Schema.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Resources\CreateStatus.sql" />
+    <EmbeddedResource Include="Data\Resources\GetStatusHistoryGrouped.sql" />
+    <EmbeddedResource Include="Data\Resources\Schema.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="1.0.19269.1" />
     <PackageReference Include="RestSharp" Version="106.6.10" />
   </ItemGroup>
 

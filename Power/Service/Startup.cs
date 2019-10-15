@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using ChrisKaczor.HomeMonitor.Power.Service.Data;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -12,6 +13,8 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<Database>();
+
             services.AddHostedService<PowerReader>();
 
             services.Configure<GzipCompressionProviderOptions>(options =>
@@ -34,6 +37,9 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
         {
             if (environment.IsDevelopment())
                 applicationBuilder.UseDeveloperExceptionPage();
+
+            var database = applicationBuilder.ApplicationServices.GetService<Database>();
+            database.EnsureDatabase();
 
             applicationBuilder.UseCors("CorsPolicy");
 
