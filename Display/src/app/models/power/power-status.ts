@@ -1,4 +1,4 @@
 export class PowerStatus {
-    generation = 0;
-    consumption = 0;
+    Generation = 0;
+    Consumption = 0;
 }
