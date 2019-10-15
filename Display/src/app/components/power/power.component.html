@@ -1,0 +1,25 @@
+<div class="power-current">
+    <div *ngIf="latestStatus === null">
+        Loading...
+    </div>
+    <div *ngIf="latestStatus !== null">
+        <table>
+            <tr>
+                <td class="power-current-header">
+                    Generation
+                </td>
+                <td>
+                    {{ latestStatus.Generation < 0 ? 0 : latestStatus.Generation }}
+                </td>
+            </tr>
+            <tr>
+                <td class="power-current-header">
+                    Consumption
+                </td>
+                <td>
+                    {{ latestStatus.Consumption < 0 ? 0 : latestStatus.Consumption }}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

@@ -13,11 +13,12 @@ export class DashboardComponent implements OnInit {
     public locked = true;
 
     private defaultLayout: DashboardLayout = {
-        version: 3,
+        version: 1,
         layout: [
-            { cols: 3, rows: 2, y: 0, x: 0 },
-            { cols: 2, rows: 2, y: 0, x: 3 },
-            { cols: 3, rows: 2, y: 0, x: 5 }
+            { cols: 5, rows: 4, y: 0, x: 0 },
+            { cols: 3, rows: 2, y: 0, x: 5 },
+            { cols: 5, rows: 4, y: 0, x: 8 },
+            { cols: 3, rows: 2, y: 2, x: 5 }
         ]
     };
 
@@ -34,9 +35,11 @@ export class DashboardComponent implements OnInit {
                 enabled: !this.locked
             },
             gridType: 'fixed',
-            fixedColWidth: 105,
-            fixedRowHeight: 105,
-            displayGrid: 'none'
+            fixedColWidth: 55,
+            fixedRowHeight: 55,
+            displayGrid: 'none',
+            minCols: 50,
+            minRows: 50
         };
 
         this.loadOptions();
