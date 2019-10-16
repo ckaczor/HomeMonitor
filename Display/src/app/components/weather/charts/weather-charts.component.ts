@@ -312,7 +312,7 @@ export class WeatherChartsComponent implements OnInit {
         });
     }
 
-    private loadChart() {
+    public loadChart() {
         let start: moment.Moment;
         let end: moment.Moment;
 
