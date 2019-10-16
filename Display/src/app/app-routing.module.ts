@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { WeatherChartsComponent } from './components/weather/charts/weather-charts.component';
+import { PowerChartsComponent } from './components/power/charts/power-charts.component';
 
 const routes: Routes = [
     {
@@ -11,6 +12,10 @@ const routes: Routes = [
     {
         path: 'weather-charts',
         component: WeatherChartsComponent
+    },
+    {
+        path: 'power-charts',
+        component: PowerChartsComponent
     }
 ];
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PowerService } from '../../services/power/power.service';
-import { PowerStatus } from '../../models/power/power-status';
+import { PowerService } from 'src/app/services/power/power.service';
+import { PowerStatus } from 'src/app/models/power/power-status';
 
 @Component({
     selector: 'app-power',

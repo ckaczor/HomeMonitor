@@ -5,6 +5,12 @@
         "logLevel": "debug",
         "changeOrigin": true
     },
+    "/api/power": {
+        "target": "http://172.23.10.3",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    },
     "/api/hub": {
         "target": "ws://172.23.10.3:80",
         "ws": true

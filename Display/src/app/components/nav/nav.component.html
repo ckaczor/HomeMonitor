@@ -24,6 +24,15 @@
                     Weather Charts
                 </span>
             </a>
+
+            <a routerLink="/power-charts" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>
+                <mat-icon matListIcon class="nav-icon">
+                    settings_power
+                </mat-icon>
+                <span class="nav-caption">
+                    Power Charts
+                </span>
+            </a>
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
