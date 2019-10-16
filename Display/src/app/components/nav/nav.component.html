@@ -1,11 +1,11 @@
 <mat-toolbar color="primary">
-    <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+    <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="sidenav.toggle()" *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
     </button>
     <span>Home Monitor</span>
 </mat-toolbar>
 <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #drawer (click)="drawer.toggle()" class="sidenav" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) ? false : true">
+    <mat-sidenav #sidenav (click)="toggleSidenav()" class="sidenav" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) ? false : true">
         <mat-nav-list>
             <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>
                 <mat-icon matListIcon class="nav-icon">
