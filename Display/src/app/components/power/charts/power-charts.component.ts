@@ -2,12 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Chart } from 'angular-highcharts';
 import { SeriesLineOptions, SeriesWindbarbOptions } from 'highcharts';
 import { HttpClient } from '@angular/common/http';
-import { PowerStatusGrouped } from '../../../models/power/power-status-grouped';
+import { forkJoin } from 'rxjs';
+import { WeatherValueGrouped } from 'src/app/models/weather/weather-value-grouped';
+import { PowerStatusGrouped } from 'src/app/models/power/power-status-grouped';
 
 import * as moment from 'moment';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
+
 HC_exporting(Highcharts);
 
 enum TimeSpan {
@@ -79,22 +82,29 @@ export class PowerChartsComponent implements OnInit {
         return moment(this.selectedDate).format('LL');
     }
 
-    private loadPowerChart(start: moment.Moment, end: moment.Moment) {
+    private async loadPowerChart(start: moment.Moment, end: moment.Moment) {
         const startString = start.toISOString();
         const endString = end.toISOString();
 
-        const request = this.httpClient.get<PowerStatusGrouped[]>(`/api/power/status/history-grouped?start=${startString}&end=${endString}&bucketMinutes=5`);
-
-        request.subscribe(data => {
+        forkJoin([
+            this.httpClient.get<PowerStatusGrouped[]>(`/api/power/status/history-grouped?start=${startString}&end=${endString}&bucketMinutes=5`),
+            this.httpClient.get<WeatherValueGrouped[]>(`/api/weather/readings/value-history-grouped?weatherValueType=LightLevel&start=${startString}&end=${endString}&bucketMinutes=5`)
+        ]).subscribe(data => {
             const seriesData: Array<SeriesLineOptions> = [];
 
             seriesData.push({ name: 'Generation', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: ' W' } } as SeriesLineOptions);
             seriesData.push({ name: 'Consumption', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: ' W' } } as SeriesLineOptions);
+            seriesData.push({ name: 'Light', data: [], yAxis: 1, marker: { enabled: false }, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
 
-            data.forEach(dataElement => {
+            data[0].forEach(dataElement => {
                 const date = Date.parse(dataElement.bucket);
                 seriesData[0].data.push([date, dataElement.averageGeneration < 0 ? 0 : dataElement.averageGeneration]);
                 seriesData[1].data.push([date, dataElement.averageConsumption < 0 ? 0 : dataElement.averageConsumption]);
+            });
+
+            data[1].forEach(dataElement => {
+                const date = Date.parse(dataElement.bucket);
+                seriesData[2].data.push([date, dataElement.averageValue * 100]);
             });
 
             const title = this.selectedTimeSpan === TimeSpan.Last24Hours ? this.timeSpanItems[TimeSpan.Last24Hours] : this.getSelectedDateDisplayString();
@@ -131,6 +141,18 @@ export class PowerChartsComponent implements OnInit {
                         title: {
                             text: 'Power'
                         }
+                    },
+                    {
+                        visible: true,
+                        labels: {
+                            format: '{value:.2f}%'
+                        },
+                        title: {
+                            text: 'Light'
+                        },
+                        min: 0,
+                        max: 100,
+                        opposite: true
                     }
                 ],
                 time: {
