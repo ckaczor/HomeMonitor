@@ -109,6 +109,17 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
             return await connection.QueryAsync<WeatherValue>(query, new { Start = start, End = end });
         }
 
+        public async Task<IEnumerable<WeatherValueGrouped>> GetReadingValueHistoryGrouped(WeatherValueType weatherValueType, DateTimeOffset start, DateTimeOffset end, int bucketMinutes)
+        {
+            await using var connection = CreateConnection();
+
+            var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Weather.Service.Data.Resources.GetReadingValueHistoryGrouped.sql");
+
+            query = query.Replace("@Value", weatherValueType.ToString());
+
+            return await connection.QueryAsync<WeatherValueGrouped>(query, new { Start = start, End = end, BucketMinutes = bucketMinutes });
+        }
+
         public async Task<IEnumerable<WeatherReadingGrouped>> GetReadingHistoryGrouped(DateTimeOffset start, DateTimeOffset end, int bucketMinutes)
         {
             await using var connection = CreateConnection();
