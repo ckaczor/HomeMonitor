@@ -9,35 +9,58 @@ trigger:
     include:
     - Display
 
-pool:
-  name: Hosted Ubuntu 1604
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      name: Hosted Ubuntu 1604
+    steps:
+    - task: Docker@0
+      displayName: 'Build an image'
+      inputs:
+        containerregistrytype: 'Container Registry'
+        dockerRegistryConnection: 'Docker Hub'
+        dockerFile: 'Display/Dockerfile'
+        imageName: 'ckaczor/home-monitor-display:$(Build.BuildNumber)'
+        includeLatestTag: true
+    - task: Docker@0
+      displayName: 'Push an image'
+      inputs:
+        containerregistrytype: 'Container Registry'
+        dockerRegistryConnection: 'Docker Hub'
+        action: 'Push an image'
+        imageName: 'ckaczor/home-monitor-display:$(Build.BuildNumber)'
+        includeLatestTag: true
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: 'sed -i s/#BUILD_BUILDNUMBER#/$BUILD_BUILDNUMBER/ Display/deploy/manifest.yaml'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'Display/deploy/manifest.yaml'
+        ArtifactName: 'Manifest'
+        publishLocation: 'Container'
 
-steps:
-- task: Docker@0
-  displayName: 'Build an image'
-  inputs:
-    containerregistrytype: 'Container Registry'
-    dockerRegistryConnection: 'Docker Hub'
-    dockerFile: 'Display/Dockerfile'
-    imageName: 'ckaczor/home-monitor-display:$(Build.BuildNumber)'
-    includeLatestTag: true
-
-- task: Docker@0
-  displayName: 'Push an image'
-  inputs:
-    containerregistrytype: 'Container Registry'
-    dockerRegistryConnection: 'Docker Hub'
-    action: 'Push an image'
-    imageName: 'ckaczor/home-monitor-display:$(Build.BuildNumber)'
-    includeLatestTag: true
-
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: 'sed -i s/#BUILD_BUILDNUMBER#/$BUILD_BUILDNUMBER/ Display/deploy/manifest.yaml'
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: 'Display/deploy/manifest.yaml'
-    ArtifactName: 'Manifest'
-    publishLocation: 'Container'
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    pool:
+      name: Hosted Ubuntu 1604
+    steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        artifactName: 'Manifest'
+        buildType: 'current'
+        downloadType: 'single'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'Kubernetes'
+        namespace: 'home-monitor'
+        command: 'apply'
+        useConfigurationFile: true
+        configuration: '$(System.ArtifactsDirectory)/Manifest/manifest.yaml'
+        secretType: 'dockerRegistry'
+        containerRegistryType: 'Container Registry'
