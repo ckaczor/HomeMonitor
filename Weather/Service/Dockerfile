@@ -1,8 +1,8 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0.0-preview7-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0.0-alpine AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0.100-preview7-buster AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0.100-alpine AS build
 WORKDIR /src
 COPY ["./Service.csproj", "./"]
 RUN dotnet restore "Service.csproj"

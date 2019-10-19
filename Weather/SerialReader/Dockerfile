@@ -1,7 +1,7 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0.0-preview7-buster-slim-arm32v7 AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0.0-buster-slim-arm32v7 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0.100-preview7-buster AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0.100-buster AS build
 WORKDIR /src
 COPY ["./SerialReader.csproj", "./"]
 RUN dotnet restore -r linux-arm "SerialReader.csproj"
