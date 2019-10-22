@@ -11,12 +11,14 @@
     <None Remove="Data\Resources\CreateStatus.sql" />
     <None Remove="Data\Resources\GetStatusHistoryGrouped.sql" />
     <None Remove="Data\Resources\Schema.sql" />
+    <None Remove="Data\Resources\GetRecentStatus.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Data\Resources\CreateStatus.sql" />
     <EmbeddedResource Include="Data\Resources\GetStatusHistoryGrouped.sql" />
     <EmbeddedResource Include="Data\Resources\Schema.sql" />
+    <EmbeddedResource Include="Data\Resources\GetRecentStatus.sql" />
   </ItemGroup>
 
   <ItemGroup>

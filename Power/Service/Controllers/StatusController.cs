@@ -19,6 +19,12 @@ namespace ChrisKaczor.HomeMonitor.Power.Service.Controllers
             _database = database;
         }
 
+        [HttpGet("recent")]
+        public async Task<ActionResult<PowerStatus>> GetRecent()
+        {
+            return await _database.GetRecentStatus();
+        }
+
         [HttpGet("history-grouped")]
         public async Task<ActionResult<List<PowerStatusGrouped>>> GetHistoryGrouped(DateTimeOffset start, DateTimeOffset end, int bucketMinutes = 2)
         {

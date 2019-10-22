@@ -79,6 +79,15 @@ namespace ChrisKaczor.HomeMonitor.Power.Service.Data
             connection.Query(query, powerStatus);
         }
 
+        public async Task<PowerStatus> GetRecentStatus()
+        {
+            await using var connection = CreateConnection();
+
+            var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Power.Service.Data.Resources.GetRecentStatus.sql");
+
+            return await connection.QueryFirstOrDefaultAsync<PowerStatus>(query);
+        }
+
         public async Task<IEnumerable<PowerStatusGrouped>> GetStatusHistoryGrouped(DateTimeOffset start, DateTimeOffset end, int bucketMinutes)
         {
             await using var connection = CreateConnection();
