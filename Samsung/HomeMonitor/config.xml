@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://yourdomain/HomeMonitor" version="1.0.0">
     <tizen:app-widget id="M5aPw28OEp.HomeMonitor.Power" primary="true">
-        <tizen:widget-label>Power</tizen:widget-label>
+        <tizen:widget-label>Home Power</tizen:widget-label>
         <tizen:widget-content src="widget/Power/index.html">
             <tizen:widget-size preview="widget/Power/preview.png">2x2</tizen:widget-size>
         </tizen:widget-content>
     </tizen:app-widget>
     <tizen:app-widget id="M5aPw28OEp.HomeMonitor.Weather" primary="false">
-        <tizen:widget-label>Weather</tizen:widget-label>
+        <tizen:widget-label>Home Weather</tizen:widget-label>
         <tizen:widget-content src="widget/Weather/index.html">
             <tizen:widget-size preview="widget/Weather/preview.png">2x2</tizen:widget-size>
         </tizen:widget-content>
