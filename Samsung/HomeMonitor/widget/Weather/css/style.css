@@ -1,0 +1,33 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+  color: #fff;
+  position: relative;
+  margin-top: 15px;
+}
+
+.row {
+  text-align: center;
+  height: 80px;
+}
+
+.image {
+  display: inline-block;
+  vertical-align: middle;
+  height: 80px;
+}
+
+.text {
+  font-size: 40px;
+  display: inline-block;
+  vertical-align: middle;
+  height: 80px;
+}
+
+.left-text {
+  padding-right: 10px;
+}
