@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'angular-highcharts';
-import { SeriesLineOptions, SeriesWindbarbOptions } from 'highcharts';
+import { SeriesLineOptions, SeriesWindbarbOptions, SeriesColumnOptions } from 'highcharts';
 import { HttpClient } from '@angular/common/http';
 import { WeatherReadingGrouped } from '../../../models/weather/weather-reading-grouped';
 import { WindHistoryGrouped } from '../../../models/weather/wind-history-grouped';
@@ -103,18 +103,16 @@ export class WeatherChartsComponent implements OnInit {
         const startString = start.toISOString();
         const endString = end.toISOString();
 
-        const request = this.httpClient.get<WeatherReadingGrouped[]>(`/api/weather/readings/history-grouped?start=${startString}&end=${endString}&bucketMinutes=5`);
+        const request = this.httpClient.get<WeatherReadingGrouped[]>(`/api/weather/readings/history-grouped?start=${startString}&end=${endString}&bucketMinutes=30`);
 
         request.subscribe(data => {
-            const seriesData: Array<SeriesLineOptions> = [];
+            const seriesData: Array<SeriesLineOptions | SeriesColumnOptions> = [];
 
-            seriesData.push({ name: 'Temperature', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: '°F' } } as SeriesLineOptions);
-            seriesData.push({ name: 'Pressure', data: [], yAxis: 1, marker: { enabled: false }, tooltip: { valueSuffix: '"' } } as SeriesLineOptions);
-            seriesData.push({ name: 'Humidity', data: [], yAxis: 2, marker: { enabled: false }, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
-            seriesData.push({ name: 'Light', data: [], yAxis: 2, marker: { enabled: false }, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
-            seriesData.push({ name: 'Rain', data: [], yAxis: 3, marker: { enabled: false }, tooltip: { valueSuffix: '"' } } as SeriesLineOptions);
-
-            let rainTotal = 0;
+            seriesData.push({ type: 'line', name: 'Temperature', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: '°F' } } as SeriesLineOptions);
+            seriesData.push({ type: 'line', name: 'Pressure', data: [], yAxis: 1, marker: { enabled: false }, tooltip: { valueSuffix: '"' } } as SeriesLineOptions);
+            seriesData.push({ type: 'line', name: 'Humidity', data: [], yAxis: 2, marker: { enabled: false }, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
+            seriesData.push({ type: 'line', name: 'Light', data: [], yAxis: 2, marker: { enabled: false }, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
+            seriesData.push({ type: 'column', name: 'Rain', data: [], yAxis: 3, marker: { enabled: false }, tooltip: { valueSuffix: '"' } } as SeriesColumnOptions);
 
             data.forEach(dataElement => {
                 const date = Date.parse(dataElement.bucket);
@@ -122,17 +120,13 @@ export class WeatherChartsComponent implements OnInit {
                 seriesData[1].data.push([date, dataElement.averagePressure / 33.864 / 100]);
                 seriesData[2].data.push([date, dataElement.averageHumidity]);
                 seriesData[3].data.push([date, dataElement.averageLightLevel * 100]);
-
-                rainTotal += dataElement.rainTotal;
-
-                seriesData[4].data.push([date, rainTotal]);
+                seriesData[4].data.push([date, dataElement.rainTotal]);
             });
 
             const title = this.selectedTimeSpan === TimeSpan.Last24Hours ? this.timeSpanItems[TimeSpan.Last24Hours] : this.getSelectedDateDisplayString();
 
             this.chart = new Chart({
                 chart: {
-                    type: 'line',
                     zoomType: 'x'
                 },
                 title: {
@@ -190,6 +184,8 @@ export class WeatherChartsComponent implements OnInit {
                         title: {
                             text: 'Rain'
                         },
+                        min: 0,
+                        max: 0.25,
                         visible: true,
                         opposite: true
                     }
