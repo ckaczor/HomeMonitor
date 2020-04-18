@@ -42,6 +42,8 @@ export class WeatherChartsComponent implements OnInit {
     private selectedTimeSpanValue: TimeSpan = TimeSpan.Last24Hours;
     private selectedDateValue: moment.Moment = moment().startOf('day');
 
+    private timeInterval = 5;
+
     constructor(private httpClient: HttpClient) { }
 
     ngOnInit() {
@@ -103,7 +105,7 @@ export class WeatherChartsComponent implements OnInit {
         const startString = start.toISOString();
         const endString = end.toISOString();
 
-        const request = this.httpClient.get<WeatherReadingGrouped[]>(`/api/weather/readings/history-grouped?start=${startString}&end=${endString}&bucketMinutes=30`);
+        const request = this.httpClient.get<WeatherReadingGrouped[]>(`/api/weather/readings/history-grouped?start=${startString}&end=${endString}&bucketMinutes=${this.timeInterval}`);
 
         request.subscribe(data => {
             const seriesData: Array<SeriesLineOptions | SeriesColumnOptions> = [];
@@ -224,7 +226,7 @@ export class WeatherChartsComponent implements OnInit {
         const startString = start.toISOString();
         const endString = end.toISOString();
 
-        const request = this.httpClient.get<WindHistoryGrouped[]>(`/api/weather/readings/wind-history-grouped?start=${startString}&end=${endString}&bucketMinutes=30`);
+        const request = this.httpClient.get<WindHistoryGrouped[]>(`/api/weather/readings/wind-history-grouped?start=${startString}&end=${endString}&bucketMinutes=${this.timeInterval}`);
 
         request.subscribe(data => {
             const seriesData: Array<SeriesLineOptions | SeriesWindbarbOptions> = [];

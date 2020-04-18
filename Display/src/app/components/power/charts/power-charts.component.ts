@@ -35,6 +35,8 @@ export class PowerChartsComponent implements OnInit {
     private selectedTimeSpanValue: TimeSpan = TimeSpan.Last24Hours;
     private selectedDateValue: moment.Moment = moment().startOf('day');
 
+    private timeInterval = 5;
+
     constructor(private httpClient: HttpClient) { }
 
     ngOnInit() {
@@ -87,8 +89,8 @@ export class PowerChartsComponent implements OnInit {
         const endString = end.toISOString();
 
         forkJoin([
-            this.httpClient.get<PowerStatusGrouped[]>(`/api/power/status/history-grouped?start=${startString}&end=${endString}&bucketMinutes=5`),
-            this.httpClient.get<WeatherValueGrouped[]>(`/api/weather/readings/value-history-grouped?weatherValueType=LightLevel&start=${startString}&end=${endString}&bucketMinutes=5`)
+            this.httpClient.get<PowerStatusGrouped[]>(`/api/power/status/history-grouped?start=${startString}&end=${endString}&bucketMinutes=${this.timeInterval}`),
+            this.httpClient.get<WeatherValueGrouped[]>(`/api/weather/readings/value-history-grouped?weatherValueType=LightLevel&start=${startString}&end=${endString}&bucketMinutes=${this.timeInterval}`)
         ]).subscribe(data => {
             const seriesData: Array<SeriesLineOptions> = [];
 
