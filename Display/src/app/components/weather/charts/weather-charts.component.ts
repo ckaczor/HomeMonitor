@@ -42,7 +42,7 @@ export class WeatherChartsComponent implements OnInit {
     private selectedTimeSpanValue: TimeSpan = TimeSpan.Last24Hours;
     private selectedDateValue: moment.Moment = moment().startOf('day');
 
-    private timeInterval = 5;
+    private timeInterval = 15;
 
     constructor(private httpClient: HttpClient) { }
 
