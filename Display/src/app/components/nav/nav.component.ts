@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
     selector: 'app-nav',
@@ -10,7 +10,7 @@ import { MatSidenav } from '@angular/material';
     styleUrls: ['./nav.component.scss']
 })
 export class NavComponent {
-    @ViewChild('sidenav', null) sidenav: MatSidenav;
+    @ViewChild('sidenav', {}) sidenav: MatSidenav;
 
     isHandset$: Observable<boolean> = this.breakpointObserver.observe([
         Breakpoints.HandsetLandscape,

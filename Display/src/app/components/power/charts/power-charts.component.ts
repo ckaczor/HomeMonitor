@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'angular-highcharts';
-import { SeriesLineOptions, SeriesWindbarbOptions } from 'highcharts';
+import { SeriesLineOptions } from 'highcharts';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import { WeatherValueGrouped } from 'src/app/models/weather/weather-value-grouped';
