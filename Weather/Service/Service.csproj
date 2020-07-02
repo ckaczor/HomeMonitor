@@ -13,6 +13,7 @@
     <None Remove="Data\Resources\GetReadingHistoryGrouped.sql" />
     <None Remove="Data\Resources\GetReadingValueHistory.sql" />
     <None Remove="Data\Resources\GetReadingValueHistoryGrouped.sql" />
+    <None Remove="Data\Resources\GetReadingValueSum.sql" />
     <None Remove="Data\Resources\GetRecentReading.sql" />
     <None Remove="Data\Resources\GetWindHistoryGrouped.sql" />
     <None Remove="Data\Resources\Schema.sql" />
@@ -21,6 +22,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\Resources\GetReadingHistory.sql" />
     <EmbeddedResource Include="Data\Resources\GetReadingHistoryGrouped.sql" />
+    <EmbeddedResource Include="Data\Resources\GetReadingValueSum.sql" />
     <EmbeddedResource Include="Data\Resources\GetReadingValueHistoryGrouped.sql" />
     <EmbeddedResource Include="Data\Resources\GetReadingValueHistory.sql" />
     <EmbeddedResource Include="Data\Resources\GetRecentReading.sql" />

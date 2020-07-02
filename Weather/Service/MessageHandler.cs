@@ -8,9 +8,11 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ChrisKaczor.HomeMonitor.Weather.Service.Models;
 
 namespace ChrisKaczor.HomeMonitor.Weather.Service
 {
@@ -95,6 +97,8 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
                 _database.StoreWeatherData(weatherMessage);
 
+                weatherMessage.Rain = _database.GetReadingValueSum(WeatherValueType.Rain, weatherMessage.Timestamp.AddHours(1), weatherMessage.Timestamp).Result;
+
                 if (_hubConnection == null)
                     return;
 
@@ -103,7 +107,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
                     if (_hubConnection.State == HubConnectionState.Disconnected)
                         _hubConnection.StartAsync().Wait();
 
-                    _hubConnection.InvokeAsync("SendLatestReading", message).Wait();
+                    _hubConnection.InvokeAsync("SendLatestReading", JsonConvert.SerializeObject(weatherMessage)).Wait();
                 }
                 catch (Exception exception)
                 {
