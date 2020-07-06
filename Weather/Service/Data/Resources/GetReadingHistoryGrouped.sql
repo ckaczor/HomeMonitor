@@ -13,7 +13,7 @@ FROM (
 				Humidity,
 				PressureTemperature,
 				Pressure,
-				LightLevel / BatteryLevel AS LightLevel,
+				LightLevel / 3.3 AS LightLevel,
                 Rain
          FROM Reading
          WHERE Timestamp BETWEEN @Start AND @End

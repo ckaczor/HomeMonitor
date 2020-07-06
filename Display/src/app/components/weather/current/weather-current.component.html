@@ -52,7 +52,7 @@
                     Light
                 </td>
                 <td>
-                    {{ ((latestReading.LightLevel / latestReading.BatteryLevel) * 100).toFixed(2) }}%
+                    {{ ((latestReading.LightLevel / 3.3) * 100).toFixed(2) }}%
                 </td>
             </tr>
         </table>

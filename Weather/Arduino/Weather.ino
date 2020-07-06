@@ -193,7 +193,7 @@ void calcWeather()
 //This allows us to ignore what VCC might be (an Arduino plugged into USB has VCC of 4.5 to 5.2V)
 float get_light_level()
 {
-  float operatingVoltage = analogRead(REFERENCE_3V3);
+  float operatingVoltage = 1023.0; // analogRead(REFERENCE_3V3);
 
   float lightSensor = analogRead(LIGHT);
 
@@ -210,7 +210,7 @@ float get_light_level()
 //3.9K on the high side (R1), and 1K on the low side (R2)
 float get_battery_level()
 {
-  float operatingVoltage = analogRead(REFERENCE_3V3);
+  float operatingVoltage = 1023.0; // analogRead(REFERENCE_3V3);
 
   float rawVoltage = analogRead(BATT);
 
