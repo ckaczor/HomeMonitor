@@ -97,7 +97,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
                 _database.StoreWeatherData(weatherMessage);
 
-                weatherMessage.Rain = _database.GetReadingValueSum(WeatherValueType.Rain, weatherMessage.Timestamp.AddHours(1), weatherMessage.Timestamp).Result;
+                weatherMessage.Rain = _database.GetReadingValueSum(WeatherValueType.Rain, weatherMessage.Timestamp.AddHours(-1), weatherMessage.Timestamp).Result;
 
                 if (_hubConnection == null)
                     return;
