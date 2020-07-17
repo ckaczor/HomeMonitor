@@ -40,7 +40,6 @@
                 "highcharts/modules/exporting",
                 "highcharts/modules/windbarb",
                 "moment-duration-format",
-                "regression",
                 "socket.io-client",
                 "socket.io-parser"
             ]

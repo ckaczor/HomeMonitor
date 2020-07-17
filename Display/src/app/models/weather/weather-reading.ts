@@ -16,4 +16,8 @@ export class WeatherReading {
     Altitude: number;
     SatelliteCount: number;
     GpsTimestamp: Date;
+    WindChill: number;
+    HeatIndex: number;
+    DewPoint: number;
+    PressureTrend: number;
 }
