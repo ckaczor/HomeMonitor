@@ -1,5 +1,6 @@
 ﻿using ChrisKaczor.HomeMonitor.Weather.Models;
 using ChrisKaczor.HomeMonitor.Weather.Service.Data;
+using ChrisKaczor.HomeMonitor.Weather.Service.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
@@ -8,11 +9,9 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ChrisKaczor.HomeMonitor.Weather.Service.Models;
 
 namespace ChrisKaczor.HomeMonitor.Weather.Service
 {
@@ -97,17 +96,19 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
                 _database.StoreWeatherData(weatherMessage);
 
-                weatherMessage.Rain = _database.GetReadingValueSum(WeatherValueType.Rain, weatherMessage.Timestamp.AddHours(-1), weatherMessage.Timestamp).Result;
-
                 if (_hubConnection == null)
                     return;
+
+                var weatherUpdate = new WeatherUpdate(weatherMessage, _database);
 
                 try
                 {
                     if (_hubConnection.State == HubConnectionState.Disconnected)
                         _hubConnection.StartAsync().Wait();
 
-                    _hubConnection.InvokeAsync("SendLatestReading", JsonConvert.SerializeObject(weatherMessage)).Wait();
+                    var json = JsonConvert.SerializeObject(weatherUpdate);
+
+                    _hubConnection.InvokeAsync("SendLatestReading", json).Wait();
                 }
                 catch (Exception exception)
                 {
