@@ -38,7 +38,7 @@ namespace ChrisKaczor.HomeMonitor.Power.Service.Data
             var databaseExists = (bool?)command.ExecuteScalar();
 
             // Create database if needed
-            if (!databaseExists.GetValueOrDefault(false))
+            if (!(databaseExists ?? false))
             {
                 command.CommandText = $"CREATE DATABASE {_configuration["Power:Database:Name"]}";
                 command.ExecuteNonQuery();

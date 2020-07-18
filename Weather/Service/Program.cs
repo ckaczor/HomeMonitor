@@ -13,10 +13,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
         private static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args).ConfigureAppConfiguration((hostingContext, config) =>
-            {
-                config.AddEnvironmentVariables();
-            }).UseStartup<Startup>();
+            return WebHost.CreateDefaultBuilder(args).ConfigureAppConfiguration((_, config) => config.AddEnvironmentVariables()).UseStartup<Startup>();
         }
     }
 }

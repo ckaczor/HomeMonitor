@@ -49,8 +49,8 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
 
             var sample = JsonSerializer.Deserialize<PowerSample>(response.Content);
 
-            var generation = sample.Channels.FirstOrDefault(c => c.Type == "GENERATION");
-            var consumption = sample.Channels.FirstOrDefault(c => c.Type == "CONSUMPTION");
+            var generation = Array.Find(sample.Channels, c => c.Type == "GENERATION");
+            var consumption = Array.Find(sample.Channels, c => c.Type == "CONSUMPTION");
 
             if (generation == null || consumption == null)
                 return;

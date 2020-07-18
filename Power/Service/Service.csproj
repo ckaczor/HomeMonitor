@@ -1,10 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <AssemblyName>ChrisKaczor.HomeMonitor.Power.Service</AssemblyName>
     <RootNamespace>ChrisKaczor.HomeMonitor.Power.Service</RootNamespace>
+    <CodeAnalysisRuleSet>../../ChrisKaczor.ruleset</CodeAnalysisRuleSet>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>  
   </PropertyGroup>
 
   <ItemGroup>

@@ -15,7 +15,7 @@ namespace ChrisKaczor.HomeMonitor.Hub.Service
 
             services.AddCors(o => o.AddPolicy("CorsPolicy", builder => builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:4200")));
 
-            services.AddSignalR().AddJsonProtocol(options => { options.PayloadSerializerOptions.WriteIndented = false; });
+            services.AddSignalR().AddJsonProtocol(options => options.PayloadSerializerOptions.WriteIndented = false);
         }
 
         public void Configure(IApplicationBuilder applicationBuilder, IWebHostEnvironment environment)

@@ -1,30 +1,30 @@
 {
-    // Use IntelliSense to find out which attributes exist for C# debugging
-    // Use hover for the description of the existing attributes
-    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (remote console)",
+            "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "publish",
-            "program": "dotnet",
-            "args": [
-                "/home/ckaczor/Weather/SerialReader/SerialReader.dll"
-            ],
-            "cwd": "/home/ckaczor/Weather/SerialReader",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/ChrisKaczor.HomeMonitor.Weather.SerialReader.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
-            "console": "internalConsole",
-            "pipeTransport": {
-                "pipeCwd": "${workspaceFolder}",
-                "pipeProgram": "C:\\Program Files (x86)\\PuTTY\\PLINK.EXE",
-                "pipeArgs": [
-                    "root@172.23.10.6"
-                ],
-                "debuggerPath": "/home/ckaczor/vsdbg/vsdbg"
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
             },
-            "internalConsoleOptions": "openOnSessionStart"
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickProcess}"
         }
     ]
 }

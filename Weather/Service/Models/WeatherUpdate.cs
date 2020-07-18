@@ -10,7 +10,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
     [PublicAPI]
     public class WeatherUpdate : WeatherMessage
     {
-        private Database _database;
+        private readonly Database _database;
 
         public decimal? WindChill { get; set; }
 

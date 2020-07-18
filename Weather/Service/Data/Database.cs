@@ -39,7 +39,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
             var databaseExists = (bool?)command.ExecuteScalar();
 
             // Create database if needed
-            if (!databaseExists.GetValueOrDefault(false))
+            if (!(databaseExists ?? false))
             {
                 command.CommandText = $"CREATE DATABASE {_configuration["Weather:Database:Name"]}";
                 command.ExecuteNonQuery();
@@ -86,7 +86,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
 
             var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Weather.Service.Data.Resources.GetRecentReading.sql");
 
-            return await connection.QueryFirstOrDefaultAsync<WeatherReading>(query);
+            return await connection.QueryFirstOrDefaultAsync<WeatherReading>(query).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<WeatherReading>> GetReadingHistory(DateTimeOffset start, DateTimeOffset end)

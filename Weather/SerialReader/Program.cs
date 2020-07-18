@@ -139,7 +139,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.SerialReader
 
                 var ports = SerialPort.GetPortNames();
 
-                var port = ports.FirstOrDefault(p => p.StartsWith(portPrefix));
+                var port = Array.Find(ports, p => p.StartsWith(portPrefix));
 
                 if (port != null)
                 {

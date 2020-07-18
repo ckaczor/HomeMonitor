@@ -17,10 +17,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
             services.AddHostedService<MessageHandler>();
 
-            services.Configure<GzipCompressionProviderOptions>(options =>
-            {
-                options.Level = CompressionLevel.Optimal;
-            });
+            services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
 
             services.AddResponseCompression(options =>
             {
@@ -47,10 +44,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
 
             applicationBuilder.UseRouting();
 
-            applicationBuilder.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-            });
+            applicationBuilder.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
         }
     }
 }

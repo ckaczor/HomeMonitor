@@ -9,13 +9,10 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.0/Service.dll",
+            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/ChrisKaczor.HomeMonitor.Hub.Service.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
-            "launchBrowser": {
-                "enabled": false
-            },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
