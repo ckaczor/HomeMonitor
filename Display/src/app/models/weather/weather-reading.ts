@@ -19,5 +19,8 @@ export class WeatherReading {
     WindChill: number;
     HeatIndex: number;
     DewPoint: number;
-    PressureTrend: number;
+    PressureDifferenceThreeHour: number;
+    PressureSlope: number;
+    PressureAngle: number;
+    RainLastHour: number;
 }

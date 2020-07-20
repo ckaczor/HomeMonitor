@@ -17,7 +17,7 @@ export class WeatherCurrentComponent implements OnInit {
     }
 
     rotationClass(): string {
-        const pressureDifference = this.latestReading.PressureTrend;
+        const pressureDifference = this.latestReading.PressureDifferenceThreeHour;
 
         if (!pressureDifference) {
             return '';

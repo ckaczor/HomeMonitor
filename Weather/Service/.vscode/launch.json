@@ -9,8 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.0/ChrisKaczor.HomeMonitor.Weather.Service.dll",
+            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/ChrisKaczor.HomeMonitor.Weather.Service.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,

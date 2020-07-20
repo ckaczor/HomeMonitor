@@ -52,7 +52,7 @@
                 <td>
                     {{ (latestReading.Pressure / 33.864 / 100).toFixed(2) }}"
 
-                    <span class="pressure-trend-arrow" [ngClass]="rotationClass()" title="Trend: {{ latestReading.PressureTrend.toFixed(1) }}">➜</span>
+                    <span class="pressure-trend-arrow" [ngClass]="rotationClass()" title="Trend: {{ latestReading.PressureDifferenceThreeHour.toFixed(1) }}">➜</span>
                 </td>
             </tr>
             <tr>
@@ -68,7 +68,7 @@
                     Rain
                 </td>
                 <td>
-                    {{ latestReading.Rain.toFixed(2) }}" (last hour)
+                    {{ latestReading.RainLastHour.toFixed(2) }}" (last hour)
                 </td>
             </tr>
             <tr>

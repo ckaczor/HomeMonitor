@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using ChrisKaczor.HomeMonitor.Weather.Models;
 using ChrisKaczor.HomeMonitor.Weather.Service.Data;
@@ -18,7 +19,13 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
 
         public decimal DewPoint { get; set; }
 
-        public decimal PressureTrend { get; set; }
+        public decimal PressureDifferenceThreeHour { get; set; }
+
+        public decimal PressureSlope { get; set; }
+
+        public decimal PressureAngle { get; set; }
+
+        public decimal RainLastHour { get; set; }
 
         public WeatherUpdate(WeatherMessage weatherMessage, Database database)
         {
@@ -42,15 +49,19 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
             SatelliteCount = weatherMessage.SatelliteCount;
             GpsTimestamp = weatherMessage.GpsTimestamp;
 
-            HeatIndex = CalculateHeatIndex();
-            WindChill = CalculateWindChill();
-            DewPoint = CalculateDewPoint();
-            PressureTrend = CalculatePressureTrend();
-
-            Rain = database.GetReadingValueSum(WeatherValueType.Rain, Timestamp.AddHours(-1), Timestamp).Result;
+            CalculateHeatIndex();
+            CalculateWindChill();
+            CalculateDewPoint();
+            CalculatePressureTrend();
+            CalculateRainLastHour();
         }
 
-        private decimal CalculatePressureTrend()
+        private void CalculateRainLastHour()
+        {
+            RainLastHour = _database.GetReadingValueSum(WeatherValueType.Rain, Timestamp.AddHours(-1), Timestamp).Result;
+        }
+
+        private void CalculatePressureTrend()
         {
             var pressureData = _database.GetReadingValueHistory(WeatherValueType.Pressure, Timestamp.AddHours(-3), Timestamp).Result;
 
@@ -59,44 +70,40 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
 
             var lineFunction = Fit.LineFunc(xData, yData);
 
-            var difference = (decimal) (lineFunction(yData.Length - 1) - lineFunction(0));
+            var pressureSlope = (lineFunction(xData[0]) - lineFunction(xData.Last())) / (xData[0] - xData.Last());
 
-            return difference;
+            PressureSlope = (decimal)pressureSlope;
+
+            PressureAngle = (decimal)Math.Atan(pressureSlope);
+
+            PressureDifferenceThreeHour = (decimal)(lineFunction(xData.Last()) - lineFunction(xData[0]));
         }
 
-        private decimal? CalculateHeatIndex()
+        private void CalculateHeatIndex()
         {
             var temperature = PressureTemperature;
             var humidity = Humidity;
 
             if (temperature.IsBetween(80, 100) && humidity.IsBetween(40, 100))
             {
-                var heatIndex = -42.379m + 2.04901523m * temperature + 10.14333127m * humidity - .22475541m * temperature * humidity - .00683783m * temperature * temperature -
-                                .05481717m * humidity * humidity + .00122874m * temperature * temperature * humidity + .00085282m * temperature * humidity * humidity -
-                                .00000199m * temperature * temperature * humidity * humidity;
-
-                return heatIndex;
+                HeatIndex = -42.379m + 2.04901523m * temperature + 10.14333127m * humidity - .22475541m * temperature * humidity - .00683783m * temperature * temperature -
+                            .05481717m * humidity * humidity + .00122874m * temperature * temperature * humidity + .00085282m * temperature * humidity * humidity -
+                            .00000199m * temperature * temperature * humidity * humidity;
             }
-
-            return null;
         }
 
-        private decimal? CalculateWindChill()
+        private void CalculateWindChill()
         {
             var temperatureInF = PressureTemperature;
             var windSpeedInMph = WindSpeed;
 
             if (temperatureInF.IsBetween(-45, 45) && windSpeedInMph.IsBetween(3, 60))
             {
-                var windChill = 35.74m + 0.6215m * temperatureInF - 35.75m * DecimalEx.Pow(windSpeedInMph, 0.16m) + 0.4275m * temperatureInF * DecimalEx.Pow(windSpeedInMph, 0.16m);
-
-                return windChill;
+                WindChill = 35.74m + 0.6215m * temperatureInF - 35.75m * DecimalEx.Pow(windSpeedInMph, 0.16m) + 0.4275m * temperatureInF * DecimalEx.Pow(windSpeedInMph, 0.16m);
             }
-
-            return null;
         }
 
-        private decimal CalculateDewPoint()
+        private void CalculateDewPoint()
         {
             var relativeHumidity = Humidity;
             var temperatureInF = PressureTemperature;
@@ -108,7 +115,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
             var denominator = 19.43m - DecimalEx.Log(vaporPressure);
             var dewPointInC = numerator / denominator;
 
-            return dewPointInC * 9.0m / 5.0m + 32.0m;
+            DewPoint = dewPointInC * 9.0m / 5.0m + 32.0m;
         }
     }
 }
