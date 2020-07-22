@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using ChrisKaczor.HomeMonitor.Weather.Models;
 using ChrisKaczor.HomeMonitor.Weather.Service.Data;
@@ -20,10 +19,6 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
         public decimal DewPoint { get; set; }
 
         public decimal PressureDifferenceThreeHour { get; set; }
-
-        public decimal PressureSlope { get; set; }
-
-        public decimal PressureAngle { get; set; }
 
         public decimal RainLastHour { get; set; }
 
@@ -69,12 +64,6 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
             var yData = pressureData.Select(p => (double)p.Value / 100.0).ToArray();
 
             var lineFunction = Fit.LineFunc(xData, yData);
-
-            var pressureSlope = (lineFunction(xData[0]) - lineFunction(xData.Last())) / (xData[0] - xData.Last());
-
-            PressureSlope = (decimal)pressureSlope;
-
-            PressureAngle = (decimal)Math.Atan(pressureSlope);
 
             PressureDifferenceThreeHour = (decimal)(lineFunction(xData.Last()) - lineFunction(xData[0]));
         }
