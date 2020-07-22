@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "Hub/Service",
+			"name": "Hub/Service"
+		},
+		{
+			"path": "Power/Service",
+			"name": "Power/Service"
+		},
+		{
+			"path": "Weather/Models",
+			"name": "Weather/Models"
+		},
+		{
+			"path": "Weather/SerialReader",
+			"name": "Weather/SerialReader"
+		},
+		{
+			"path": "Weather/Service",
+			"name": "Weather/Service"
+		}
+	],
+	"settings": {}
+}
