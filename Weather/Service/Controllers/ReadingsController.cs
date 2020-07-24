@@ -32,6 +32,14 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Controllers
             return (await _database.GetReadingHistory(start, end)).ToList();
         }
 
+        [HttpGet("aggregate")]
+        public async Task<ActionResult<WeatherAggregate>> GetHistoryAggregate(DateTimeOffset start, DateTimeOffset end)
+        {
+            var readings = await _database.GetReadingHistory(start, end);
+
+            return new WeatherAggregate(readings);
+        }
+
         [HttpGet("value-history")]
         public async Task<ActionResult<List<WeatherValue>>> GetValueHistory(WeatherValueType weatherValueType, DateTimeOffset start, DateTimeOffset end)
         {
