@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WeatherReading } from 'src/app/models/weather/weather-reading';
+import { WeatherUpdate } from 'src/app/models/weather/weather-update';
 import { WeatherService } from 'src/app/services/weather/weather.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { WeatherService } from 'src/app/services/weather/weather.service';
     styleUrls: ['./weather-current.component.scss']
 })
 export class WeatherCurrentComponent implements OnInit {
-    public latestReading: WeatherReading;
+    public latestReading: WeatherUpdate;
 
     constructor(private weatherService: WeatherService) { }
 

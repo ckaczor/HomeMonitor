@@ -1,7 +1,7 @@
-import { WeatherReading } from './weather-reading';
+import { WeatherUpdate } from './weather-update';
 
-describe('WeatherReading', () => {
+describe('WeatherUpdate', () => {
     it('should create an instance', () => {
-        expect(new WeatherReading()).toBeTruthy();
+        expect(new WeatherUpdate()).toBeTruthy();
     });
 });

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WeatherReading } from 'src/app/models/weather/weather-reading';
+import { WeatherUpdate } from 'src/app/models/weather/weather-update';
 import { WeatherService } from 'src/app/services/weather/weather.service';
 import { first } from 'rxjs/operators';
 
@@ -14,7 +14,7 @@ import 'moment-duration-format';
 })
 export class AlmanacComponent implements OnInit {
     public loaded = false;
-    public latestReading: WeatherReading;
+    public latestReading: WeatherUpdate;
     public sunTimes: SunCalc.GetTimesResult;
     public moonTimes: SunCalc.GetMoonTimes;
     public moon: SunCalc.GetMoonIlluminationResult;

@@ -1,9 +1,8 @@
 export class WeatherReadingGrouped {
     bucket: string;
-    averagePressureTemperature: number;
+    averageTemperature: number;
     averagePressure: number;
     averageLightLevel: number;
     averageHumidity: number;
-    averageHumidityTemperature: number;
     rainTotal: number;
 }

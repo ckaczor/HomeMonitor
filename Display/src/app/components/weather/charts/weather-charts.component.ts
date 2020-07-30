@@ -118,10 +118,10 @@ export class WeatherChartsComponent implements OnInit {
 
             data.forEach(dataElement => {
                 const date = Date.parse(dataElement.bucket);
-                seriesData[0].data.push([date, dataElement.averagePressureTemperature]);
+                seriesData[0].data.push([date, dataElement.averageTemperature]);
                 seriesData[1].data.push([date, dataElement.averagePressure / 33.864 / 100]);
                 seriesData[2].data.push([date, dataElement.averageHumidity]);
-                seriesData[3].data.push([date, dataElement.averageLightLevel * 100]);
+                seriesData[3].data.push([date, dataElement.averageLightLevel]);
                 seriesData[4].data.push([date, dataElement.rainTotal]);
             });
 

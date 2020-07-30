@@ -129,7 +129,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
             switch (weatherValueType)
             {
                 case WeatherValueType.LightLevel:
-                    query = query.Replace("@Value", "LightLevel / 3.3");
+                    query = query.Replace("@Value", "LightLevel / 3.3 * 100");
                     break;
                 default:
                     query = query.Replace("@Value", weatherValueType.ToString());

@@ -1,14 +1,13 @@
-export class WeatherReading {
+export class WeatherUpdate {
     Type: string;
     Message: null;
     Timestamp: Date;
     WindDirection: string;
     WindSpeed: number;
     Humidity: number;
-    HumidityTemperature: number;
     Rain: number;
     Pressure: number;
-    PressureTemperature: number;
+    Temperature: number;
     BatteryLevel: number;
     LightLevel: number;
     Latitude: number;

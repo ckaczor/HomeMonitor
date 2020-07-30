@@ -1,16 +1,51 @@
+using System;
 using System.Linq;
 using ChrisKaczor.HomeMonitor.Weather.Models;
 using ChrisKaczor.HomeMonitor.Weather.Service.Data;
 using DecimalMath;
 using JetBrains.Annotations;
 using MathNet.Numerics;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
 {
     [PublicAPI]
-    public class WeatherUpdate : WeatherMessage
+    public class WeatherUpdate
     {
         private readonly Database _database;
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public MessageType Type { get; set; }
+
+        public string Message { get; set; }
+
+        public DateTimeOffset Timestamp { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public WindDirection WindDirection { get; set; }
+
+        public decimal WindSpeed { get; set; }
+
+        public decimal Humidity { get; set; }
+
+        public decimal Rain { get; set; }
+
+        public decimal Pressure { get; set; }
+
+        public decimal Temperature { get; set; }
+
+        public decimal LightLevel { get; set; }
+
+        public decimal Latitude { get; set; }
+
+        public decimal Longitude { get; set; }
+
+        public decimal Altitude { get; set; }
+
+        public int SatelliteCount { get; set; }
+
+        public DateTimeOffset GpsTimestamp { get; set; }
 
         public decimal? WindChill { get; set; }
 
@@ -32,12 +67,10 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
             WindDirection = weatherMessage.WindDirection;
             WindSpeed = weatherMessage.WindSpeed;
             Humidity = weatherMessage.Humidity;
-            HumidityTemperature = weatherMessage.HumidityTemperature;
             Rain = weatherMessage.Rain;
             Pressure = weatherMessage.Pressure;
-            PressureTemperature = weatherMessage.PressureTemperature;
-            BatteryLevel = weatherMessage.BatteryLevel;
-            LightLevel = weatherMessage.LightLevel;
+            Temperature = weatherMessage.PressureTemperature;
+            LightLevel = weatherMessage.LightLevel / 3.3m * 100;
             Latitude = weatherMessage.Latitude;
             Longitude = weatherMessage.Longitude;
             Altitude = weatherMessage.Altitude;
@@ -70,7 +103,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
 
         private void CalculateHeatIndex()
         {
-            var temperature = PressureTemperature;
+            var temperature = Temperature;
             var humidity = Humidity;
 
             if (temperature.IsBetween(80, 100) && humidity.IsBetween(40, 100))
@@ -83,7 +116,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
 
         private void CalculateWindChill()
         {
-            var temperatureInF = PressureTemperature;
+            var temperatureInF = Temperature;
             var windSpeedInMph = WindSpeed;
 
             if (temperatureInF.IsBetween(-45, 45) && windSpeedInMph.IsBetween(3, 60))
@@ -95,7 +128,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
         private void CalculateDewPoint()
         {
             var relativeHumidity = Humidity;
-            var temperatureInF = PressureTemperature;
+            var temperatureInF = Temperature;
 
             var temperatureInC = (temperatureInF - 32.0m) * 5.0m / 9.0m;
 

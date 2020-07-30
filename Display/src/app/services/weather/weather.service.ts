@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
-import { WeatherReading } from 'src/app/models/weather/weather-reading';
+import { WeatherUpdate } from 'src/app/models/weather/weather-update';
 import { WeatherValue } from 'src/app/models/weather/weather-value';
 import { HttpClient } from '@angular/common/http';
 
@@ -13,7 +13,7 @@ import { WeatherValueType } from 'src/app/models/weather/weather-value-type';
 })
 export class WeatherService {
     private connection: HubConnection;
-    private latestReading: BehaviorSubject<WeatherReading> = new BehaviorSubject<WeatherReading>(null);
+    private latestReading: BehaviorSubject<WeatherUpdate> = new BehaviorSubject<WeatherUpdate>(null);
 
     constructor(private httpClient: HttpClient) {
         this.connection = new HubConnectionBuilder()
@@ -27,7 +27,7 @@ export class WeatherService {
         this.connection.start();
     }
 
-    getLatestReading(): Observable<WeatherReading> {
+    getLatestReading(): Observable<WeatherUpdate> {
         return this.latestReading.asObservable();
     }
 

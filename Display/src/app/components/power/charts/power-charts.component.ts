@@ -106,7 +106,7 @@ export class PowerChartsComponent implements OnInit {
 
             data[1].forEach(dataElement => {
                 const date = Date.parse(dataElement.bucket);
-                seriesData[2].data.push([date, dataElement.averageValue * 100]);
+                seriesData[2].data.push([date, dataElement.averageValue]);
             });
 
             const title = this.selectedTimeSpan === TimeSpan.Last24Hours ? this.timeSpanItems[TimeSpan.Last24Hours] : this.getSelectedDateDisplayString();
