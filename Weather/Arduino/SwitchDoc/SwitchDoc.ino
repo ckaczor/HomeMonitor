@@ -20,19 +20,21 @@ Adafruit_BMP280 bmp280;
 #include "Adafruit_TSL2591.h"
 Adafruit_TSL2591 tsl2591 = Adafruit_TSL2591();
 
-elapsedMillis timeElapsed;
+// SHT31 Temp/Humidity sensor
+#include "Adafruit_SHT31.h"
+Adafruit_SHT31 sht31 = Adafruit_SHT31();
 
-bool bmp280_Found;
-bool tsl2591_Found;
+// GPS board
+#include <Adafruit_GPS.h>
+Adafruit_GPS GPS(&Wire);
+
+elapsedMillis timeElapsed;
 
 void setup()
 {
     Serial.begin(115200);
 
     Serial.println("Board starting");
-
-    bmp280_Found = false;
-    tsl2591_Found = false;
 
     randomSeed(analogRead(0));
 
@@ -42,19 +44,26 @@ void setup()
 
     char buffer[50];
 
-    bmp280_Found = bmp280.begin();
+    bmp280.begin();
 
-    sprintf(buffer, "BMP280 present: %s", bmp280_Found ? "true" : "false");
-    Serial.println(buffer);
+    tsl2591.begin();
+    tsl2591.setGain(TSL2591_GAIN_LOW);
+    tsl2591.setTiming(TSL2591_INTEGRATIONTIME_100MS);
 
-    tsl2591_Found = tsl2591.begin();
+    sht31.begin(0x44);
 
-    sprintf(buffer, "TSL2591 present: %s", tsl2591_Found ? "true" : "false");
-    Serial.println(buffer);
+    GPS.begin(0x10);
+    GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+    GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
 }
 
 void loop()
 {
+    char c = GPS.read();
+
+    if (GPS.newNMEAreceived())
+        GPS.parse(GPS.lastNMEA());
+
     if (timeElapsed > ReadInterval)
     {
         timeElapsed = 0;
@@ -66,22 +75,22 @@ void loop()
         float bmp280_Temperature = 0.0;
         float bmp280_Pressure = 0.0;
 
-        if (bmp280_Found)
-        {
-            bmp280_Pressure = bmp280.readPressure();
-            bmp280_Temperature = bmp280.readTemperature();
-        }
+        bmp280_Pressure = bmp280.readPressure();
+        bmp280_Temperature = bmp280.readTemperature();
 
         uint32_t tsl2591_Luminosity = 0;
         uint16_t tsl2591_IR = 0;
         uint16_t tsl2591_Full = 0;
 
-        if (tsl2591_Found)
-        {
-            tsl2591_Luminosity = tsl2591.getFullLuminosity();
-            tsl2591_IR = tsl2591_Luminosity >> 16;
-            tsl2591_Full = tsl2591_Luminosity & 0xFFFF;
-        }
+        tsl2591_Luminosity = tsl2591.getFullLuminosity();
+        tsl2591_IR = tsl2591_Luminosity >> 16;
+        tsl2591_Full = tsl2591_Luminosity & 0xFFFF;
+
+        float sht31_Temperature = 0.0;
+        float sht31_Humidity = 0.0;
+
+        sht31_Temperature = sht31.readTemperature();
+        sht31_Humidity = sht31.readHumidity();
 
         char returnString[200];
         returnString[0] = '\0';
@@ -89,56 +98,134 @@ void loop()
         char tempString[15];
 
         tempString[0] = '\0';
-        strcat(returnString, "wind_speed=");
+        strcat(returnString, "ws=");
         dtostrf(currentWindSpeed, 0, 2, tempString);
         strcat(returnString, tempString);
         strcat(returnString, ",");
 
         tempString[0] = '\0';
-        strcat(returnString, "wind_gust=");
+        strcat(returnString, "wg=");
         dtostrf(currentWindGust, 0, 2, tempString);
         strcat(returnString, tempString);
         strcat(returnString, ",");
 
         tempString[0] = '\0';
-        strcat(returnString, "wind_dir=");
+        strcat(returnString, "wd=");
         dtostrf(weatherStation.current_wind_direction(), 0, 2, tempString);
         strcat(returnString, tempString);
         strcat(returnString, ",");
 
         tempString[0] = '\0';
-        strcat(returnString, "rain=");
+        strcat(returnString, "r=");
         dtostrf(currentRain, 0, 2, tempString);
         strcat(returnString, tempString);
         strcat(returnString, ",");
 
         tempString[0] = '\0';
-        strcat(returnString, "internal_temp=");
+        strcat(returnString, "bt=");
         dtostrf(bmp280_Temperature, 0, 2, tempString);
         strcat(returnString, tempString);
         strcat(returnString, ",");
 
         tempString[0] = '\0';
-        strcat(returnString, "pressure=");
+        strcat(returnString, "bp=");
         dtostrf(bmp280_Pressure / 100, 0, 2, tempString);
         strcat(returnString, tempString);
         strcat(returnString, ",");
 
         tempString[0] = '\0';
-        strcat(returnString, "ir=");
-        itoa(tsl2591_IR, tempString, 10);
+        strcat(returnString, "ti=");
+        utoa(tsl2591_IR, tempString, 10);
         strcat(returnString, tempString);
         strcat(returnString, ",");
 
         tempString[0] = '\0';
-        strcat(returnString, "visible=");
-        itoa(tsl2591_Full - tsl2591_IR, tempString, 10);
+        strcat(returnString, "tv=");
+        utoa(tsl2591_Full - tsl2591_IR, tempString, 10);
         strcat(returnString, tempString);
         strcat(returnString, ",");
 
         tempString[0] = '\0';
-        strcat(returnString, "lux=");
+        strcat(returnString, "tl=");
         dtostrf(tsl2591.calculateLux(tsl2591_Full, tsl2591_IR), 0, 2, tempString);
+        strcat(returnString, tempString);
+        strcat(returnString, ",");
+
+        tempString[0] = '\0';
+        strcat(returnString, "st=");
+        dtostrf(sht31_Temperature, 0, 2, tempString);
+        strcat(returnString, tempString);
+        strcat(returnString, ",");
+
+        tempString[0] = '\0';
+        strcat(returnString, "sh=");
+        dtostrf(sht31_Humidity, 0, 2, tempString);
+        strcat(returnString, tempString);
+        strcat(returnString, ",");
+
+        tempString[0] = '\0';
+        strcat(returnString, "gf=");
+        itoa(GPS.fix, tempString, 10);
+        strcat(returnString, tempString);
+        strcat(returnString, ",");
+
+        tempString[0] = '\0';
+        strcat(returnString, "gs=");
+        itoa(GPS.satellites, tempString, 10);
+        strcat(returnString, tempString);
+        strcat(returnString, ",");
+
+        tempString[0] = '\0';
+        strcat(returnString, "glt=");
+        dtostrf(GPS.latitudeDegrees, 0, 6, tempString);
+        strcat(returnString, tempString);
+        strcat(returnString, ",");
+
+        tempString[0] = '\0';
+        strcat(returnString, "gln=");
+        dtostrf(GPS.longitudeDegrees, 0, 6, tempString);
+        strcat(returnString, tempString);
+        strcat(returnString, ",");
+
+        tempString[0] = '\0';
+        strcat(returnString, "ga=");
+        dtostrf(GPS.altitude, 0, 2, tempString);
+        strcat(returnString, tempString);
+        strcat(returnString, ",");
+
+        tempString[0] = '\0';
+        strcat(returnString, "gth=");
+        itoa(GPS.hour, tempString, 10);
+        strcat(returnString, tempString);
+        strcat(returnString, ",");
+
+        tempString[0] = '\0';
+        strcat(returnString, "gtm=");
+        itoa(GPS.minute, tempString, 10);
+        strcat(returnString, tempString);
+        strcat(returnString, ",");
+
+        tempString[0] = '\0';
+        strcat(returnString, "gts=");
+        itoa(GPS.seconds, tempString, 10);
+        strcat(returnString, tempString);
+        strcat(returnString, ",");
+
+        tempString[0] = '\0';
+        strcat(returnString, "gdy=");
+        itoa(GPS.year, tempString, 10);
+        strcat(returnString, tempString);
+        strcat(returnString, ",");
+
+        tempString[0] = '\0';
+        strcat(returnString, "gdm=");
+        itoa(GPS.month, tempString, 10);
+        strcat(returnString, tempString);
+        strcat(returnString, ",");
+
+        tempString[0] = '\0';
+        strcat(returnString, "gdd=");
+        itoa(GPS.day, tempString, 10);
         strcat(returnString, tempString);
 
         Serial.println(returnString);

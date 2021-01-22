@@ -17,6 +17,7 @@
                 "/home/ckaczor/Arduino/libraries/Adafruit_BMP280_Library",
                 "/home/ckaczor/Arduino/libraries/Adafruit_TSL2591_Library",
                 "/home/ckaczor/Arduino/libraries/Adafruit_SHT31",
+                "/home/ckaczor/Arduino/libraries/Adafruit_GPS_Library/src",
                 "/home/ckaczor/Arduino/libraries/SparkFun_AS3935_Lightning_Detector_Arduino_Library/src"
             ],
             "browse": {
