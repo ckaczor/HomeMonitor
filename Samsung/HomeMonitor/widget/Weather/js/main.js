@@ -18,10 +18,10 @@
 
                         var data = JSON.parse(xmlDoc);
 
-                        document.getElementById("temperature-value").textContent = data.humidityTemperature.toFixed(1) + '°F';
+                        document.getElementById("temperature-value").textContent = data.temperature.toFixed(1) + '°F';
                         document.getElementById("humidity-value").textContent = data.humidity.toFixed(1) + '%';
                         document.getElementById("pressure-value").textContent = (data.pressure / 33.864 / 100.0).toFixed(1) + '"';
-                        document.getElementById("light-value").textContent = ((data.lightLevel / 3.3) * 100.0).toFixed(1) + '%';
+                        document.getElementById("light-value").textContent = data.lightLevel.toFixed(1) + '%';
 
                         xmlhttp = null;
                     } else {
