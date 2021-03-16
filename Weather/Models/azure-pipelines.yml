@@ -1,5 +1,7 @@
 name: 1.1.$(Rev:r)
 
+pr: none
+
 trigger:
   batch: 'true'
   branches:

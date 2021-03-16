@@ -1,5 +1,7 @@
 name: $(Rev:r)
 
+pr: none
+
 trigger:
   batch: 'true'
   branches:
