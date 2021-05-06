@@ -27,7 +27,7 @@
     "@types/suncalc": "^1.8.0",
     "angular-gridster2": "^10.0.1",
     "angular-highcharts": "^9.0.11",
-    "highcharts": "^8.1.2",
+    "highcharts": "^9.0.0",
     "moment": "^2.27.0",
     "moment-duration-format": "^2.3.2",
     "ngx-moment": "^4.0.1",
