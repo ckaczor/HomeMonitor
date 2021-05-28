@@ -42,6 +42,12 @@ namespace ChrisKaczor.HomeMonitor.Weather.Models
             LightLevel = decimal.Parse(messageValues[@"tl"]);
             Latitude = decimal.Parse(messageValues[@"glt"]);
             Longitude = decimal.Parse(messageValues[@"gln"]);
+
+            var gpsFix = int.Parse(messageValues[@"gf"]);
+
+            if (gpsFix == 0)
+                return;
+
             Altitude = decimal.Parse(messageValues[@"ga"]);
             SatelliteCount = int.Parse(messageValues[@"gs"]);
 
