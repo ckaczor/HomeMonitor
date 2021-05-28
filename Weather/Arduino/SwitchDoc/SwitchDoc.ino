@@ -3,11 +3,11 @@
 #define ReadInterval 1000
 
 // Weather
-#define WpinAnem 3
-#define WpinRain 2
+#define WpinAnem 2
+#define WpinRain 3
 
-#define WintAnem 1
-#define WintRain 0
+#define WintAnem 0
+#define WintRain 1
 
 #include "SDL_Weather_80422.h"
 SDL_Weather_80422 weatherStation(WpinAnem, WpinRain, WintAnem, WintRain, A0, SDL_MODE_INTERNAL_AD);
@@ -95,6 +95,8 @@ void loop()
 
         char returnString[200];
         returnString[0] = '\0';
+
+        strcat(returnString, "$,");
 
         char tempString[15];
 
@@ -219,6 +221,8 @@ void loop()
         strcat(returnString, "gdd=");
         itoa(GPS.day, tempString, 10);
         strcat(returnString, tempString);
+
+        strcat(returnString, ",#");
 
         Serial.println(returnString);
     }
