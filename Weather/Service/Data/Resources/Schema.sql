@@ -11,7 +11,6 @@
 		Rain                decimal(2, 2)  NOT NULL,
 		Pressure            decimal(8, 2)  NOT NULL,
 		PressureTemperature decimal(4, 1)  NOT NULL,
-		BatteryLevel        decimal(4, 2)  NOT NULL,
 		LightLevel          decimal(3, 2)  NOT NULL,
 		Latitude            decimal(9, 6)  NOT NULL,
 		Longitude           decimal(9, 6)  NOT NULL,
@@ -22,4 +21,7 @@
 
 ALTER TABLE Reading ALTER COLUMN Rain decimal(3, 3);
 
-ALTER TABLE Reading ALTER COLUMN BatteryLevel decimal(4, 2);
+IF COL_LENGTH('Reading', 'BatteryLevel') IS NOT NULL
+	ALTER TABLE Reading DROP COLUMN BatteryLevel;
+
+ALTER TABLE Reading ALTER COLUMN LightLevel decimal(8, 2);
