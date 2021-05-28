@@ -25,8 +25,6 @@ namespace ChrisKaczor.HomeMonitor.Weather.Models
 
         public decimal PressureTemperature { get; set; }
 
-        public decimal BatteryLevel { get; set; }
-
         public decimal LightLevel { get; set; }
 
         public decimal Latitude { get; set; }
