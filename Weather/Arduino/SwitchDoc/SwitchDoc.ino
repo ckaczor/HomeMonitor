@@ -85,6 +85,7 @@ void loop()
         tsl2591_Luminosity = tsl2591.getFullLuminosity();
         tsl2591_IR = tsl2591_Luminosity >> 16;
         tsl2591_Full = tsl2591_Luminosity & 0xFFFF;
+        float tsl2591_Lux = tsl2591.calculateLux(tsl2591_Full, tsl2591_IR);
 
         float sht31_Temperature = 0.0;
         float sht31_Humidity = 0.0;
@@ -132,22 +133,13 @@ void loop()
         dtostrf(bmp280_Pressure / 100, 0, 2, tempString);
         strcat(returnString, tempString);
         strcat(returnString, ",");
-
-        tempString[0] = '\0';
-        strcat(returnString, "ti=");
-        utoa(tsl2591_IR, tempString, 10);
-        strcat(returnString, tempString);
-        strcat(returnString, ",");
-
-        tempString[0] = '\0';
-        strcat(returnString, "tv=");
-        utoa(tsl2591_Full - tsl2591_IR, tempString, 10);
-        strcat(returnString, tempString);
-        strcat(returnString, ",");
-
+        
         tempString[0] = '\0';
         strcat(returnString, "tl=");
-        dtostrf(tsl2591.calculateLux(tsl2591_Full, tsl2591_IR), 0, 2, tempString);
+        if (isnanf(tsl2591_Lux) || isinff(tsl2591_Lux))
+            strcat(returnString, "0.00");
+        else
+            dtostrf(tsl2591_Lux, 0, 2, tempString);
         strcat(returnString, tempString);
         strcat(returnString, ",");
 
