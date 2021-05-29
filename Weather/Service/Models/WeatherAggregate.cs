@@ -36,7 +36,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
 
             Pressure = new ReadingAggregate(readings, r => r.Pressure, 2);
 
-            Light = new ReadingAggregate(readings, r => (r.LightLevel / 3.3m * 100).Truncate(1), 1);
+            Light = new ReadingAggregate(readings, r => r.LightLevel, 2);
 
             WindSpeed = new ReadingAggregate(readings, r => r.WindSpeed, 1);
 

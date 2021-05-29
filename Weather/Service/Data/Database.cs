@@ -126,15 +126,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Data
 
             var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Weather.Service.Data.Resources.GetReadingValueHistoryGrouped.sql");
 
-            switch (weatherValueType)
-            {
-                case WeatherValueType.LightLevel:
-                    query = query.Replace("@Value", "LightLevel / 3.3 * 100");
-                    break;
-                default:
-                    query = query.Replace("@Value", weatherValueType.ToString());
-                    break;
-            }
+            query = query.Replace("@Value", weatherValueType.ToString());
 
             return await connection.QueryAsync<WeatherValueGrouped>(query, new { Start = start, End = end, BucketMinutes = bucketMinutes });
         }

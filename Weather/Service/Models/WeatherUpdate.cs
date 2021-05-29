@@ -25,7 +25,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
             Rain = weatherMessage.Rain;
             Pressure = weatherMessage.Pressure;
             Temperature = weatherMessage.PressureTemperature;
-            LightLevel = weatherMessage.LightLevel / 3.3m * 100;
+            LightLevel = weatherMessage.LightLevel;
             Latitude = weatherMessage.Latitude;
             Longitude = weatherMessage.Longitude;
             Altitude = weatherMessage.Altitude;

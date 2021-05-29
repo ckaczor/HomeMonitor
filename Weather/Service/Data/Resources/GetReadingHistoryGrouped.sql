@@ -11,7 +11,7 @@ FROM (
 				Humidity,
 				PressureTemperature AS Temperature,
 				Pressure,
-				LightLevel / 3.3 * 100 AS LightLevel,
+				LightLevel,
                 Rain
          FROM Reading
          WHERE Timestamp BETWEEN @Start AND @End
