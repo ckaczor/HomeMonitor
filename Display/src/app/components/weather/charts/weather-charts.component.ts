@@ -113,7 +113,7 @@ export class WeatherChartsComponent implements OnInit {
             seriesData.push({ type: 'line', name: 'Temperature', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: '°F' } } as SeriesLineOptions);
             seriesData.push({ type: 'line', name: 'Pressure', data: [], yAxis: 1, marker: { enabled: false }, tooltip: { valueSuffix: '"' } } as SeriesLineOptions);
             seriesData.push({ type: 'line', name: 'Humidity', data: [], yAxis: 2, marker: { enabled: false }, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
-            seriesData.push({ type: 'line', name: 'Light', data: [], yAxis: 2, marker: { enabled: false }, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
+            seriesData.push({ type: 'line', name: 'Light', data: [], yAxis: 4, marker: { enabled: false }, tooltip: { valueSuffix: ' lx' } } as SeriesLineOptions);
             seriesData.push({ type: 'column', name: 'Rain', data: [], yAxis: 3, marker: { enabled: false }, tooltip: { valueSuffix: '"' } } as SeriesColumnOptions);
 
             data.forEach(dataElement => {
@@ -165,8 +165,7 @@ export class WeatherChartsComponent implements OnInit {
                         },
                         title: {
                             text: 'Pressure'
-                        },
-                        opposite: true
+                        }
                     },
                     {
                         visible: true,
@@ -177,7 +176,8 @@ export class WeatherChartsComponent implements OnInit {
                             text: 'Percentage'
                         },
                         min: 0,
-                        max: 100
+                        max: 100,
+                        opposite: true
                     },
                     {
                         labels: {
@@ -190,7 +190,16 @@ export class WeatherChartsComponent implements OnInit {
                         max: 0.25,
                         visible: true,
                         opposite: true
-                    }
+                    },
+                    {
+                        labels: {
+                            format: '{value:.2f} lx',
+                        },
+                        title: {
+                            text: 'Light'
+                        },
+                        opposite: true
+                    },
                 ],
                 time: {
                     useUTC: false

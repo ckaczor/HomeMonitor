@@ -96,7 +96,7 @@ export class PowerChartsComponent implements OnInit {
 
             seriesData.push({ name: 'Generation', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: ' W' } } as SeriesLineOptions);
             seriesData.push({ name: 'Consumption', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: ' W' } } as SeriesLineOptions);
-            seriesData.push({ name: 'Light', data: [], yAxis: 1, marker: { enabled: false }, tooltip: { valueSuffix: '%' } } as SeriesLineOptions);
+            seriesData.push({ name: 'Light', data: [], yAxis: 1, marker: { enabled: false }, tooltip: { valueSuffix: ' lx' } } as SeriesLineOptions);
 
             data[0].forEach(dataElement => {
                 const date = Date.parse(dataElement.bucket);
