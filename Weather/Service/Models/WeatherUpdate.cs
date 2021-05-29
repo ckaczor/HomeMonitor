@@ -24,7 +24,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
             Humidity = weatherMessage.Humidity;
             Rain = weatherMessage.Rain;
             Pressure = weatherMessage.Pressure;
-            Temperature = weatherMessage.PressureTemperature;
+            Temperature = weatherMessage.HumidityTemperature;
             LightLevel = weatherMessage.LightLevel;
             Latitude = weatherMessage.Latitude;
             Longitude = weatherMessage.Longitude;
