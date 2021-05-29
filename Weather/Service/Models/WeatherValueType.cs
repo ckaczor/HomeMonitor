@@ -11,7 +11,6 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
         Rain,
         Pressure,
         PressureTemperature,
-        BatteryLevel,
         LightLevel,
         Altitude,
         SatelliteCount
