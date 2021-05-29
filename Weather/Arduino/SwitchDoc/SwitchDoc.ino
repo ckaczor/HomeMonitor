@@ -76,7 +76,7 @@ void loop()
         float bmp280_Pressure = 0.0;
 
         bmp280_Pressure = bmp280.readPressure();
-        bmp280_Temperature = bmp280.readTemperature();
+        bmp280_Temperature = (bmp280.readTemperature() * 9.0 / 5.0) + 32.0;
 
         uint32_t tsl2591_Luminosity = 0;
         uint16_t tsl2591_IR = 0;
@@ -90,7 +90,7 @@ void loop()
         float sht31_Temperature = 0.0;
         float sht31_Humidity = 0.0;
 
-        sht31_Temperature = sht31.readTemperature();
+        sht31_Temperature = (sht31.readTemperature() * 9.0 / 5.0) + 32.0;
         sht31_Humidity = sht31.readHumidity();
 
         char returnString[200];
@@ -132,7 +132,7 @@ void loop()
 
         tempString[0] = '\0';
         strcat(returnString, "bp=");
-        dtostrf(bmp280_Pressure / 100, 0, 2, tempString);
+        dtostrf(bmp280_Pressure, 0, 2, tempString);
         strcat(returnString, tempString);
         strcat(returnString, ",");
         
