@@ -81,7 +81,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service
             try
             {
                 var body = eventArgs.Body;
-                var message = Encoding.UTF8.GetString(body);
+                var message = Encoding.UTF8.GetString(body.ToArray());
 
                 WriteLog($"Message received: {message}");
 
