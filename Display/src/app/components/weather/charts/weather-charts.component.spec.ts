@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { WeatherChartsComponent } from './weather-charts.component';
 
@@ -6,7 +6,7 @@ describe('WeatherChartsComponent', () => {
     let component: WeatherChartsComponent;
     let fixture: ComponentFixture<WeatherChartsComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [WeatherChartsComponent]
         })
