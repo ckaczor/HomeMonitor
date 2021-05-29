@@ -1,6 +1,6 @@
 ### STAGE 1: Build ###
 
-FROM node:12.11.0-alpine as builder
+FROM node:16.2-alpine as builder
 
 COPY package.json package-lock.json ./
 
@@ -14,7 +14,7 @@ RUN npm run ng build -- --prod --output-path=dist
 
 ### STAGE 2: Setup ###
 
-FROM nginx:1.17.4-alpine
+FROM nginx:1.21.0-alpine
 
 COPY nginx/default.conf /etc/nginx/conf.d/
 
