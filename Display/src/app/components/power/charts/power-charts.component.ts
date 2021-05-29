@@ -147,13 +147,11 @@ export class PowerChartsComponent implements OnInit {
                     {
                         visible: true,
                         labels: {
-                            format: '{value:.2f}%'
+                            format: '{value} lx'
                         },
                         title: {
                             text: 'Light'
                         },
-                        min: 0,
-                        max: 100,
                         opposite: true
                     }
                 ],
