@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { WeatherChartsComponent } from './components/weather/charts/weather-charts.component';
 import { PowerChartsComponent } from './components/power/charts/power-charts.component';
+import { WeatherSummaryComponent } from './components/weather/summary/weather-summary.component';
 
 const routes: Routes = [
     {
@@ -16,6 +17,10 @@ const routes: Routes = [
     {
         path: 'power-charts',
         component: PowerChartsComponent
+    },
+    {
+        path: 'weather-summary',
+        component: WeatherSummaryComponent
     }
 ];
 

@@ -1,0 +1,38 @@
+#refresh {
+    height: 36px;
+    top: 13px;
+}
+
+.content {
+    height: 100%;
+}
+
+.header {
+    display: flex;
+    padding: 0 20px;
+}
+
+.body {
+    padding: 0 20px;
+    font-size: 14px;
+}
+
+.button-spacer {
+    margin-right: 20px;
+}
+
+.weather-summary-header {
+    font-weight: 500;
+    text-align: right;
+    padding-right: 20px;
+}
+
+td {
+    padding-bottom: 4px;
+}
+
+th {
+    font-weight: 500;
+    padding-right: 30px;
+    padding-bottom: 4px;
+}

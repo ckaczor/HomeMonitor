@@ -1,0 +1,27 @@
+<div class="content">
+    <header class="header">
+        <mat-form-field>
+            <mat-select [(value)]="timeSpan" [disabled]="loading">
+                <mat-option *ngFor="let item of timeSpanItems | keyvalue" [value]="+item.key">{{ item.value }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <span class="button-spacer"></span>
+        <button mat-button *ngIf="timeSpan === timeSpans.Day" (click)="handleDateArrowClick(-1)" [disabled]="loading">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <mat-form-field *ngIf="timeSpan === timeSpans.Day">
+            <input matInput [matDatepicker]="picker" [(ngModel)]="date" disabled [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="picker">
+                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker [disabled]="loading"></mat-datepicker>
+        </mat-form-field>
+        <button mat-button *ngIf="timeSpan === timeSpans.Day && !isSelectedDateToday()" (click)="handleDateArrowClick(1)" [disabled]="loading">
+            <mat-icon>arrow_forward</mat-icon>
+        </button>
+        <span class="button-spacer"></span>
+        <button mat-button *ngIf="timeSpan === timeSpans.Day && !isSelectedDateToday()" (click)="resetToToday()" [disabled]="loading">
+            Today
+        </button>
+    </header>
+</div>

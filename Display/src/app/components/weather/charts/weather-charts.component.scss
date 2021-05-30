@@ -1,27 +1,31 @@
-.chart-content {
-  display: flex;
-  flex-flow: column;
-  height: 100%;
+.header-button {
+    height: 36px;
+    top: 13px;
+}
+
+.content {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+.header {
+    display: flex;
+    padding: 0 20px;
 }
 
 #chart {
-  flex: 1 1 auto;
-}
-
-.chart-header {
-  background-color: rgb(250, 250, 250);
-  padding: 0 20px;
-  flex: 0 0 auto;
-}
-
-.chart-button-spacer {
-  margin-right: 20px;
+    flex: 1 1 auto;
 }
 
 .selected:after {
-  content: "";
-  display: block;
-  margin: 0 auto;
-  width: 100%;
-  border-bottom: 1px solid #673ab7;
+    content: "";
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    border-bottom: 1px solid #673ab7;
+}
+
+#time-range {
+    padding-left: 20px;
 }

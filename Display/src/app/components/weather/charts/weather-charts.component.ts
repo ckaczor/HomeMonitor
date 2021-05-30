@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { TimeSpan } from 'src/app/models/time-span';
 import { Chart } from 'angular-highcharts';
 import { SeriesLineOptions, SeriesWindbarbOptions, SeriesColumnOptions } from 'highcharts';
 import { HttpClient } from '@angular/common/http';
-import { WeatherReadingGrouped } from '../../../models/weather/weather-reading-grouped';
-import { WindHistoryGrouped } from '../../../models/weather/wind-history-grouped';
+import { WeatherReadingGrouped } from 'src/app/models/weather/weather-reading-grouped';
+import { WindHistoryGrouped } from 'src/app/models/weather/wind-history-grouped';
 
 import * as moment from 'moment';
 
@@ -12,12 +13,6 @@ import HC_exporting from 'highcharts/modules/exporting';
 import HC_windbarb from 'highcharts/modules/windbarb';
 HC_exporting(Highcharts);
 HC_windbarb(Highcharts);
-
-enum TimeSpan {
-    Last24Hours,
-    Day,
-    Custom
-}
 
 enum ChartType {
     Weather,
@@ -33,62 +28,41 @@ export class WeatherChartsComponent implements OnInit {
 
     public chart: Chart;
     public loading = true;
-    public timeSpanItems: { [value: number]: string } = {};
-    public timeSpans: typeof TimeSpan = TimeSpan;
-    public maxDate: moment.Moment = moment().endOf('day');
+
     public selectedChartType: ChartType = ChartType.Weather;
     public ChartType = ChartType;
 
-    private selectedTimeSpanValue: TimeSpan = TimeSpan.Last24Hours;
-    private selectedDateValue: moment.Moment = moment().startOf('day');
+    private timeSpanValue: TimeSpan = TimeSpan.Last24Hours;
+    private dateValue: moment.Moment = moment().startOf('day');
+
+    public get timeSpan(): TimeSpan {
+        return this.timeSpanValue;
+    }
+    public set timeSpan(value: TimeSpan) {
+        if (this.timeSpanValue === value) {
+            return;
+        }
+        this.timeSpanValue = value;
+        this.load();
+    }
+
+    public get date(): moment.Moment {
+        return this.dateValue;
+    }
+    public set date(value: moment.Moment) {
+        if (this.dateValue === value) {
+            return;
+        }
+        this.dateValue = value;
+        this.load();
+    }
 
     private timeInterval = 15;
 
     constructor(private httpClient: HttpClient) { }
 
     ngOnInit() {
-        this.timeSpanItems[TimeSpan.Last24Hours] = 'Last 24 hours';
-        this.timeSpanItems[TimeSpan.Day] = 'Day';
-
-        this.loadChart();
-    }
-
-    public get selectedTimeSpan() {
-        return this.selectedTimeSpanValue;
-    }
-
-    public set selectedTimeSpan(value) {
-        this.selectedTimeSpanValue = value;
-
-        this.loadChart();
-    }
-
-    public get selectedDate() {
-        return this.selectedDateValue;
-    }
-
-    public set selectedDate(value) {
-        this.selectedDateValue = value;
-
-        this.loadChart();
-    }
-
-    public handleDateArrowClick(value: number) {
-        this.selectedDate = moment(this.selectedDate).add(value, 'day');
-    }
-
-    public isSelectedDateToday(): boolean {
-        const isToday = moment(this.selectedDate).startOf('day').isSame(moment().startOf('day'));
-
-        return isToday;
-    }
-
-    public resetToToday() {
-        this.selectedDate = moment().startOf('day');
-    }
-
-    public getSelectedDateDisplayString(): string {
-        return moment(this.selectedDate).format('LL');
+        this.load();
     }
 
     public chartTypeChange(value: ChartType) {
@@ -98,7 +72,7 @@ export class WeatherChartsComponent implements OnInit {
 
         this.selectedChartType = value;
 
-        this.loadChart();
+        this.load();
     }
 
     private loadWeatherChart(start: moment.Moment, end: moment.Moment) {
@@ -125,14 +99,13 @@ export class WeatherChartsComponent implements OnInit {
                 seriesData[4].data.push([date, dataElement.rainTotal]);
             });
 
-            const title = this.selectedTimeSpan === TimeSpan.Last24Hours ? this.timeSpanItems[TimeSpan.Last24Hours] : this.getSelectedDateDisplayString();
-
             this.chart = new Chart({
                 chart: {
-                    zoomType: 'x'
+                    zoomType: 'x',
+                    spacingTop: 20
                 },
                 title: {
-                    text: title
+                    text: ''
                 },
                 credits: {
                     enabled: true
@@ -253,14 +226,13 @@ export class WeatherChartsComponent implements OnInit {
                 seriesData[3].data.push([date, dataElement.averageSpeed, dataElement.averageDirection]);
             });
 
-            const title = this.selectedTimeSpan === TimeSpan.Last24Hours ? this.timeSpanItems[TimeSpan.Last24Hours] : this.getSelectedDateDisplayString();
-
             this.chart = new Chart({
                 chart: {
-                    zoomType: 'x'
+                    zoomType: 'x',
+                    spacingTop: 20
                 },
                 title: {
-                    text: title
+                    text: ''
                 },
                 credits: {
                     enabled: true
@@ -319,7 +291,7 @@ export class WeatherChartsComponent implements OnInit {
         });
     }
 
-    public loadChart() {
+    public load() {
         let start: moment.Moment;
         let end: moment.Moment;
 
@@ -329,7 +301,7 @@ export class WeatherChartsComponent implements OnInit {
             this.chart.ref$.subscribe(o => o.showLoading());
         }
 
-        switch (this.selectedTimeSpan) {
+        switch (this.timeSpan) {
             case TimeSpan.Last24Hours: {
                 start = moment().subtract(24, 'hour');
                 end = moment();
@@ -338,8 +310,8 @@ export class WeatherChartsComponent implements OnInit {
             }
 
             case TimeSpan.Day: {
-                start = moment(this.selectedDate).startOf('day');
-                end = moment(this.selectedDate).endOf('day');
+                start = moment(this.date).startOf('day');
+                end = moment(this.date).endOf('day');
 
                 break;
             }

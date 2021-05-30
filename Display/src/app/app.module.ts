@@ -32,6 +32,8 @@ import { WeatherCurrentComponent } from './components/weather/current/weather-cu
 import { AlmanacComponent } from './components/weather/almanac/almanac.component';
 import { PowerComponent } from './components/power/current/power.component';
 import { PowerChartsComponent } from './components/power/charts/power-charts.component';
+import { WeatherSummaryComponent } from './components/weather/summary/weather-summary.component';
+import { TimeRangeComponent } from './components/time-range/time-range.component';
 
 const config: SocketIoConfig = { url: '/', options: {} };
 
@@ -45,7 +47,9 @@ const config: SocketIoConfig = { url: '/', options: {} };
         WeatherCurrentComponent,
         AlmanacComponent,
         PowerComponent,
-        PowerChartsComponent
+        PowerChartsComponent,
+        WeatherSummaryComponent,
+        TimeRangeComponent
     ],
     imports: [
         BrowserModule,

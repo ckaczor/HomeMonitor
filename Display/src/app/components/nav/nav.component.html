@@ -16,6 +16,15 @@
                 </span>
             </a>
 
+            <a routerLink="/weather-summary" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>
+                <mat-icon matListIcon class="nav-icon">
+                    list
+                </mat-icon>
+                <span class="nav-caption">
+                    Summary
+                </span>
+            </a>
+
             <a routerLink="/weather-charts" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" mat-list-item>
                 <mat-icon matListIcon class="nav-icon">
                     multiline_chart
