@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ChrisKaczor.HomeMonitor.Weather.Models;
 using JetBrains.Annotations;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
 {
@@ -21,7 +19,6 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
 
         public ReadingAggregate WindSpeed { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
         public WindDirection WindDirectionAverage { get; set; }
 
         public decimal RainTotal { get; set; }
