@@ -23,7 +23,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
 
         public decimal RainTotal { get; set; }
 
-        private readonly static List<int> _windDirectionValues = ((WindDirection[])Enum.GetValues(typeof(WindDirection))).Select(e => (int)e).ToList();
+        private static readonly List<int> _windDirectionValues = ((WindDirection[])Enum.GetValues(typeof(WindDirection))).Select(e => (int)e).ToList();
 
         public WeatherAggregate(IEnumerable<WeatherReading> readings)
         {
@@ -32,7 +32,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
 
             Humidity = new ReadingAggregate(readings, r => r.Humidity, 1);
 
-            Temperature = new ReadingAggregate(readings, r => r.PressureTemperature, 1);
+            Temperature = new ReadingAggregate(readings, r => r.HumidityTemperature, 1);
 
             Pressure = new ReadingAggregate(readings, r => r.Pressure, 2);
 
