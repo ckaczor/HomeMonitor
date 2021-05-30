@@ -143,10 +143,10 @@ export class WeatherChartsComponent implements OnInit {
                     {
                         visible: true,
                         labels: {
-                            format: '{value:.2f}%'
+                            format: '{value}%'
                         },
                         title: {
-                            text: 'Percentage'
+                            text: 'Humidity'
                         },
                         min: 0,
                         max: 100,
@@ -166,7 +166,7 @@ export class WeatherChartsComponent implements OnInit {
                     },
                     {
                         labels: {
-                            format: '{value:.2f} lx',
+                            format: '{value} lx',
                         },
                         title: {
                             text: 'Light'
@@ -254,7 +254,7 @@ export class WeatherChartsComponent implements OnInit {
                 yAxis: [
                     {
                         labels: {
-                            format: '{value:.2f} MPH',
+                            format: '{value} MPH',
                         },
                         title: {
                             text: 'Wind Speed'
