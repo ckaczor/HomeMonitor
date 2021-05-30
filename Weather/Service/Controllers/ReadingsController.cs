@@ -35,9 +35,9 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Controllers
         [HttpGet("aggregate")]
         public async Task<ActionResult<WeatherAggregate>> GetHistoryAggregate(DateTimeOffset start, DateTimeOffset end)
         {
-            var readings = await _database.GetReadingHistory(start, end);
+            var readings = (await _database.GetReadingHistory(start, end)).ToList();
 
-            return new WeatherAggregate(readings);
+            return readings.Any() ? new WeatherAggregate(readings) : null;
         }
 
         [HttpGet("value-history")]

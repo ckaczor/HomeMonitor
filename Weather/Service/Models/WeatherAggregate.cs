@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using ChrisKaczor.HomeMonitor.Weather.Models;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
 {
@@ -19,13 +21,14 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
 
         public ReadingAggregate WindSpeed { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public WindDirection WindDirectionAverage { get; set; }
 
         public decimal RainTotal { get; set; }
 
-        private static readonly List<int> _windDirectionValues = ((WindDirection[])Enum.GetValues(typeof(WindDirection))).Select(e => (int)e).ToList();
+        private static readonly List<int> WindDirectionValues = ((WindDirection[])Enum.GetValues(typeof(WindDirection))).Select(e => (int)e).ToList();
 
-        public WeatherAggregate(IEnumerable<WeatherReading> readings)
+        public WeatherAggregate(List<WeatherReading> readings)
         {
             if (!readings.Any())
                 return;
@@ -41,7 +44,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
             WindSpeed = new ReadingAggregate(readings, r => r.WindSpeed, 1);
 
             var windDirectionAverage = readings.Average(r => (decimal)r.WindDirection);
-            WindDirectionAverage = (WindDirection)_windDirectionValues.Aggregate((x, y) => Math.Abs(x - windDirectionAverage) < Math.Abs(y - windDirectionAverage) ? x : y);
+            WindDirectionAverage = (WindDirection)WindDirectionValues.Aggregate((x, y) => Math.Abs(x - windDirectionAverage) < Math.Abs(y - windDirectionAverage) ? x : y);
 
             RainTotal = readings.Sum(r => r.Rain);
         }
