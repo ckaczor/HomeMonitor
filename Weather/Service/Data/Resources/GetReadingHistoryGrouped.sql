@@ -9,7 +9,7 @@ FROM (
                 RIGHT('00' + CAST(DATEPART(MINUTE, Timestamp) / @BucketMinutes * @BucketMinutes AS VARCHAR), 2)
 				+ ':00+00:00' AS DATETIMEOFFSET)									  AS Bucket,
 				Humidity,
-				PressureTemperature AS Temperature,
+				HumidityTemperature AS Temperature,
 				Pressure,
 				LightLevel,
                 Rain
