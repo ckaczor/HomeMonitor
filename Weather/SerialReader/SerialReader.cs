@@ -96,7 +96,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.SerialReader
 
                     if (!BoardStarted)
                     {
-                        BoardStarted = message.Contains("Board started");
+                        BoardStarted = message.Contains("Board starting");
 
                         if (BoardStarted)
                             WriteLog("Board started");
