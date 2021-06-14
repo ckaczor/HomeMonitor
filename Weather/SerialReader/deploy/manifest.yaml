@@ -96,10 +96,12 @@ spec:
           httpGet:
             path: health/health
             port: 80
+          initialDelaySeconds: 30
         readinessProbe:
           httpGet:
             path: health/ready
             port: 80
+          initialDelaySeconds: 30
         env:
         - name: Weather__Queue__Host
           value: weather-queue
