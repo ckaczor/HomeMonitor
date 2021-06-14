@@ -21,7 +21,7 @@ namespace ChrisKaczor.HomeMonitor.Weather.SerialReader.Controllers
             var lastReading = SerialReader.LastReading;
             var timeSinceLastReading = DateTimeOffset.UtcNow - lastReading;
 
-            return timeSinceLastReading <= _checkTimeSpan ? Ok(lastReading) : BadRequest(lastReading);
+            return SerialReader.BoardStarted && timeSinceLastReading <= _checkTimeSpan ? Ok(lastReading) : BadRequest(lastReading);
         }
     }
 }

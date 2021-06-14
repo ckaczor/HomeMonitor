@@ -55,7 +55,6 @@ namespace ChrisKaczor.HomeMonitor.Weather.SerialReader
 
                     WriteLog("Opening serial port");
 
-                    serialPort.ReadBufferSize = 10 * 1024;
                     serialPort.Open();
 
                     BoardStarted = false;
