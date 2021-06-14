@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{914B9DB9-3BCD-4B55-8289-2E59D6CA96BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelsTests", "ModelsTests\ModelsTests.csproj", "{F83A3E8C-3A03-4264-B136-1FBE569A9411}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelsTests", "ModelsTests\ModelsTests.csproj", "{F83A3E8C-3A03-4264-B136-1FBE569A9411}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
