@@ -1,12 +1,12 @@
 ﻿using ChrisKaczor.HomeMonitor.Power.Service.Data;
 using ChrisKaczor.HomeMonitor.Power.Service.Models;
 using JetBrains.Annotations;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using RestSharp;
 using System;
-using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,18 +18,22 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
     {
         private readonly IConfiguration _configuration;
         private readonly Database _database;
+        private readonly TelemetryClient _telemetryClient;
 
         private HubConnection _hubConnection;
         private Timer _readTimer;
 
-        public PowerReader(IConfiguration configuration, Database database)
+        public PowerReader(IConfiguration configuration, Database database, TelemetryClient telemetryClient)
         {
             _configuration = configuration;
             _database = database;
+            _telemetryClient = telemetryClient;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            _telemetryClient.TrackTrace($"{nameof(PowerReader)} - Start");
+
             _readTimer = new Timer(OnTimer, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 
             if (!string.IsNullOrEmpty(_configuration["Hub:Power"]))
@@ -81,6 +85,8 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
+            _telemetryClient.TrackTrace($"{nameof(PowerReader)} - Stop");
+
             _readTimer.Dispose();
 
             _hubConnection?.StopAsync(cancellationToken).Wait(cancellationToken);

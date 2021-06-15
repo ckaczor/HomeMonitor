@@ -1,4 +1,5 @@
 ﻿using ChrisKaczor.HomeMonitor.Power.Service.Data;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,10 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<ITelemetryInitializer, TelemetryInitializer>();
+
+            services.AddApplicationInsightsTelemetry();
+
             services.AddTransient<Database>();
 
             services.AddHostedService<PowerReader>();
