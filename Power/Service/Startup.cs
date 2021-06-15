@@ -16,7 +16,9 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
         {
             services.AddSingleton<ITelemetryInitializer, TelemetryInitializer>();
 
-            services.AddApplicationInsightsTelemetry();
+            services.AddApplicationInsightsTelemetry(options => {
+                options.EnableDependencyTrackingTelemetryModule = false;
+            });
 
             services.AddTransient<Database>();
 
