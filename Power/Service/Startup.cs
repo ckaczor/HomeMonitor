@@ -1,4 +1,5 @@
 ﻿using ChrisKaczor.HomeMonitor.Power.Service.Data;
+using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO.Compression;
+using System.Threading;
 
 namespace ChrisKaczor.HomeMonitor.Power.Service
 {
@@ -16,7 +18,8 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
         {
             services.AddSingleton<ITelemetryInitializer, TelemetryInitializer>();
 
-            services.AddApplicationInsightsTelemetry(options => {
+            services.AddApplicationInsightsTelemetry(options =>
+            {
                 options.EnableDependencyTrackingTelemetryModule = false;
             });
 
@@ -37,12 +40,21 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
-        public void Configure(IApplicationBuilder applicationBuilder, IWebHostEnvironment environment)
+        public void Configure(IApplicationBuilder applicationBuilder, IWebHostEnvironment environment, IHostApplicationLifetime hostApplicationLifetime)
         {
             if (environment.IsDevelopment())
                 applicationBuilder.UseDeveloperExceptionPage();
 
-            var database = applicationBuilder.ApplicationServices.GetService<Database>();
+            hostApplicationLifetime.ApplicationStopping.Register(() =>
+            {
+                var telemetryClient = applicationBuilder.ApplicationServices.GetRequiredService<TelemetryClient>();
+
+                telemetryClient.Flush();
+
+                Thread.Sleep(5000);
+            });
+
+            var database = applicationBuilder.ApplicationServices.GetRequiredService<Database>();
             database.EnsureDatabase();
 
             applicationBuilder.UseCors("CorsPolicy");
