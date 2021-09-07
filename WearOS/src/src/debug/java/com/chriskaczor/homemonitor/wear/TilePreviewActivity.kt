@@ -16,7 +16,7 @@ class TilePreviewActivity : ComponentActivity() {
 
         tileUiClient = TileUiClient(
             context = this,
-            component = ComponentName(this, GoalsTileService::class.java),
+            component = ComponentName(this, PowerTileService::class.java),
             parentView = rootLayout
         )
         tileUiClient.connect()

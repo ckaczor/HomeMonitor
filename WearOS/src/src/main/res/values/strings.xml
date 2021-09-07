@@ -3,9 +3,5 @@
     <string name="app_name">Home Monitor</string>
     <string name="tile_description">Home Monitor</string>
 
-
-    <string name="fitness_tile_label">Step progress</string>
-    <string name="goal">/ %d steps</string>
-
-    <string name="placeholder_text">Time to create a tile!</string>
+    <string name="power_tile_label">Power</string>
 </resources>
