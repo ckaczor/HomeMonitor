@@ -4,4 +4,5 @@
     <string name="tile_description">Home Monitor</string>
 
     <string name="power_tile_label">Power</string>
+    <string name="weather_tile_label">Weather</string>
 </resources>

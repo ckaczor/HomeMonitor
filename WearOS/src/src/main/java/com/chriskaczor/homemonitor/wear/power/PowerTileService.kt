@@ -1,4 +1,4 @@
-package com.chriskaczor.homemonitor.wear
+package com.chriskaczor.homemonitor.wear.power
 
 import androidx.core.content.ContextCompat
 import androidx.wear.tiles.ActionBuilders
@@ -15,6 +15,7 @@ import androidx.wear.tiles.TileBuilders.Tile
 import androidx.wear.tiles.TileService
 import androidx.wear.tiles.TimelineBuilders.Timeline
 import androidx.wear.tiles.TimelineBuilders.TimelineEntry
+import com.chriskaczor.homemonitor.wear.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -95,17 +96,17 @@ class PowerTileService : TileService() {
         serviceScope.cancel()
     }
 
-    private fun layout(goalProgress: PowerStatus, deviceParameters: DeviceParameters) =
+    private fun layout(goalProgress: PowerStatus?, deviceParameters: DeviceParameters) =
         Box.Builder()
             .setWidth(expand())
             .setHeight(expand())
             .addContent(
                 Column.Builder()
                     .addContent(
-                        generationLayout(goalProgress.generation, deviceParameters)
+                        generationLayout(goalProgress?.generation ?: -1, deviceParameters)
                     )
                     .addContent(
-                        consumptionLayout(goalProgress.consumption, deviceParameters)
+                        consumptionLayout(goalProgress?.consumption ?: -1, deviceParameters)
                     )
                     .addContent(Spacer.Builder().setHeight(VERTICAL_SPACING_HEIGHT).build())
                     .addContent(refreshButton())
@@ -135,7 +136,7 @@ class PowerTileService : TileService() {
             )
             .addContent(
                 Text.Builder()
-                    .setText(generation.toString())
+                    .setText(if (generation <= 0) "0" else generation.toString())
                     .setFontStyle(FontStyles.display3(deviceParameters).build())
                     .build()
             ).build()
@@ -163,7 +164,7 @@ class PowerTileService : TileService() {
             )
             .addContent(
                 Text.Builder()
-                    .setText(consumption.toString())
+                    .setText(if (consumption <= 0) "0" else consumption.toString())
                     .setFontStyle(FontStyles.display3(deviceParameters).build())
                     .build()
             ).build()

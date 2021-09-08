@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.wear.tiles.manager.TileUiClient
+import com.chriskaczor.homemonitor.wear.power.PowerTileService
 
 class TilePreviewActivity : ComponentActivity() {
     lateinit var tileUiClient: TileUiClient

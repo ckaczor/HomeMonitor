@@ -1,4 +1,4 @@
-package com.chriskaczor.homemonitor.wear
+package com.chriskaczor.homemonitor.wear.power
 
 import com.beust.klaxon.Json
 import com.beust.klaxon.Klaxon
@@ -17,16 +17,11 @@ data class PowerStatus(
 )
 
 object PowerRepository {
-    suspend fun getPowerStatus(): PowerStatus {
+    suspend fun getPowerStatus(): PowerStatus? {
         val json = URL("http://home.kaczorzoo.net/api/power/status/recent").readText();
 
-        val data = Klaxon().parse<PowerStatus>(json) ?: return powerStatus;
-
-        powerStatus = powerStatus.copy(generation = data.generation, consumption = data.consumption, timestamp = data.timestamp);
+        val powerStatus = Klaxon().parse<PowerStatus>(json);
 
         return powerStatus;
     }
 }
-
-var powerStatus =
-    PowerStatus(generation = 0, consumption = 0, timestamp = Timestamp(System.currentTimeMillis()).toString())
