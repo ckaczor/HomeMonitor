@@ -6,6 +6,9 @@ import java.net.URL
 import java.sql.Timestamp
 
 data class WeatherStatus(
+    @Json(name = "temperature")
+    val temperature: Double,
+
     @Json(name = "humidity")
     val humidity: Double,
 

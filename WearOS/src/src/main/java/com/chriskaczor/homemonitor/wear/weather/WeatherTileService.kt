@@ -31,8 +31,9 @@ private val VERTICAL_SPACING_HEIGHT = dp(8f)
 
 // identifiers
 private const val ID_IMAGE_REFRESH = "image_refresh"
-private const val ID_IMAGE_GENERATION = "image_generation"
-private const val ID_IMAGE_CONSUMPTION = "image_consumption"
+private const val ID_IMAGE_TEMPERATURE = "image_temperature"
+private const val ID_IMAGE_HUMIDITY = "image_humidity"
+private const val ID_IMAGE_PRESSURE = "image_pressure"
 private const val ID_CLICK_REFRESH = "click_refresh"
 
 class WeatherTileService : TileService() {
@@ -72,16 +73,25 @@ class WeatherTileService : TileService() {
                     ).build()
             )
             .addIdToImageMapping(
-                ID_IMAGE_GENERATION,
+                ID_IMAGE_HUMIDITY,
                 ImageResource.Builder()
                     .setAndroidResourceByResId(
                         AndroidImageResourceByResId.Builder()
-                            .setResourceId(R.drawable.ic_sun)
+                            .setResourceId(R.drawable.ic_humidity)
                             .build()
                     ).build()
             )
             .addIdToImageMapping(
-                ID_IMAGE_CONSUMPTION,
+                ID_IMAGE_TEMPERATURE,
+                ImageResource.Builder()
+                    .setAndroidResourceByResId(
+                        AndroidImageResourceByResId.Builder()
+                            .setResourceId(R.drawable.ic_temperature)
+                            .build()
+                    ).build()
+            )
+            .addIdToImageMapping(
+                ID_IMAGE_PRESSURE,
                 ImageResource.Builder()
                     .setAndroidResourceByResId(
                         AndroidImageResourceByResId.Builder()
@@ -103,17 +113,21 @@ class WeatherTileService : TileService() {
             .addContent(
                 Column.Builder()
                     .addContent(
-                        generationLayout(goalProgress?.humidity ?: -1.0, deviceParameters)
+                        temperatureLayout(goalProgress?.temperature ?: -1.0, deviceParameters)
+                    )
+
+                    .addContent(
+                        humidityLayout(goalProgress?.humidity ?: -1.0, deviceParameters)
                     )
                     .addContent(
-                        consumptionLayout(goalProgress?.pressure ?: -1.0, deviceParameters)
+                        pressureLayout((goalProgress?.pressure ?: -100.0) / 100, deviceParameters)
                     )
                     .addContent(Spacer.Builder().setHeight(VERTICAL_SPACING_HEIGHT).build())
                     .addContent(refreshButton())
                     .build()
             ).build()
 
-    private fun generationLayout(generation: Double, deviceParameters: DeviceParameters) =
+    private fun temperatureLayout(temperature: Double, deviceParameters: DeviceParameters) =
         Row.Builder()
             .addContent(
                 Image.Builder()
@@ -131,17 +145,17 @@ class WeatherTileService : TileService() {
                             )
                             .build()
                     )
-                    .setResourceId(ID_IMAGE_GENERATION)
+                    .setResourceId(ID_IMAGE_TEMPERATURE)
                     .build()
             )
             .addContent(
                 Text.Builder()
-                    .setText(if (generation <= 0) "0" else generation.toString())
+                    .setText(String.format("%.02f", temperature))
                     .setFontStyle(FontStyles.display3(deviceParameters).build())
                     .build()
             ).build()
 
-    private fun consumptionLayout(consumption: Double, deviceParameters: DeviceParameters) =
+    private fun humidityLayout(humidity: Double, deviceParameters: DeviceParameters) =
         Row.Builder()
             .addContent(
                 Image.Builder()
@@ -159,12 +173,40 @@ class WeatherTileService : TileService() {
                             )
                             .build()
                     )
-                    .setResourceId(ID_IMAGE_CONSUMPTION)
+                    .setResourceId(ID_IMAGE_HUMIDITY)
                     .build()
             )
             .addContent(
                 Text.Builder()
-                    .setText(if (consumption <= 0) "0" else consumption.toString())
+                    .setText(if (humidity <= 0) "0" else String.format("%.02f", humidity))
+                    .setFontStyle(FontStyles.display3(deviceParameters).build())
+                    .build()
+            ).build()
+
+    private fun pressureLayout(pressure: Double, deviceParameters: DeviceParameters) =
+        Row.Builder()
+            .addContent(
+                Image.Builder()
+                    .setHeight(dp(36f))
+                    .setWidth(dp(36f))
+                    .setModifiers(
+                        Modifiers.Builder()
+                            .setPadding(
+                                Padding.Builder()
+                                    .setStart(dp(0f))
+                                    .setEnd(dp(10f))
+                                    .setTop(dp(1f))
+                                    .setBottom(dp(0f))
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .setResourceId(ID_IMAGE_PRESSURE)
+                    .build()
+            )
+            .addContent(
+                Text.Builder()
+                    .setText(if (pressure <= 0) "0" else String.format("%.02f", pressure))
                     .setFontStyle(FontStyles.display3(deviceParameters).build())
                     .build()
             ).build()
