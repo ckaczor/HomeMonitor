@@ -15,6 +15,8 @@ namespace ChrisKaczor.HomeMonitor.Weather.Models
 
         public decimal WindSpeed { get; set; }
 
+        public decimal Temperature { get; set; }
+
         public decimal Humidity { get; set; }
 
         public decimal HumidityTemperature { get; set; }
