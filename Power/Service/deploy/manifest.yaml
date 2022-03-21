@@ -94,7 +94,7 @@ spec:
         securityContext:
           privileged: true
         env:
-        - name: ApplicationInsights__InstrumentationKey
+        - name: ApplicationInsights__ConnectionString
           valueFrom:
             secretKeyRef:
               name: telemetry
