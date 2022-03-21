@@ -16,7 +16,7 @@ stages:
   jobs:
   - job: Build
     pool:
-      name: Hosted Ubuntu 1604
+      vmImage: 'ubuntu-latest'
     steps:
     - task: Docker@0
       displayName: 'Build an image'
@@ -48,7 +48,7 @@ stages:
   jobs:
   - job: Deploy
     pool:
-      name: Hosted Ubuntu 1604
+      vmImage: 'ubuntu-latest'
     steps:
     - task: DownloadBuildArtifacts@0
       inputs:

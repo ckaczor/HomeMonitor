@@ -48,7 +48,7 @@ stages:
   jobs:
   - job: Deploy
     pool:
-      name: Hosted Ubuntu 1604
+      vmImage: 'ubuntu-latest'
     steps:
     - task: DownloadBuildArtifacts@0
       inputs:
