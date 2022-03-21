@@ -115,7 +115,6 @@ class WeatherTileService : TileService() {
                     .addContent(
                         temperatureLayout(goalProgress?.temperature ?: -1.0, deviceParameters)
                     )
-
                     .addContent(
                         humidityLayout(goalProgress?.humidity ?: -1.0, deviceParameters)
                     )
@@ -150,7 +149,7 @@ class WeatherTileService : TileService() {
             )
             .addContent(
                 Text.Builder()
-                    .setText(String.format("%.02f", temperature))
+                    .setText(String.format("%.01f", temperature))
                     .setFontStyle(FontStyles.display3(deviceParameters).build())
                     .build()
             ).build()
@@ -178,7 +177,7 @@ class WeatherTileService : TileService() {
             )
             .addContent(
                 Text.Builder()
-                    .setText(if (humidity <= 0) "0" else String.format("%.02f", humidity))
+                    .setText(if (humidity <= 0) "0" else String.format("%.01f", humidity))
                     .setFontStyle(FontStyles.display3(deviceParameters).build())
                     .build()
             ).build()
@@ -206,7 +205,7 @@ class WeatherTileService : TileService() {
             )
             .addContent(
                 Text.Builder()
-                    .setText(if (pressure <= 0) "0" else String.format("%.02f", pressure))
+                    .setText(if (pressure <= 0) "0" else String.format("%.01f", pressure))
                     .setFontStyle(FontStyles.display3(deviceParameters).build())
                     .build()
             ).build()
