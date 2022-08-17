@@ -9,7 +9,7 @@ char pass[] = SECRET_PASS;
 WiFiClient wifiClient;
 MqttClient mqttClient(wifiClient);
 
-const char broker[] = "172.23.10.51";
+const char broker[] = "172.23.10.3";
 int port = 1883;
 
 const long interval = 500;  // Interval for sending messages (milliseconds)
