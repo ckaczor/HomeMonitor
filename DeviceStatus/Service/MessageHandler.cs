@@ -13,12 +13,16 @@ public class MessageHandler : IHostedService
     private readonly IConfiguration _configuration;
     private readonly DeviceRepository _deviceRepository;
     private readonly LaundryMonitor _laundryMonitor;
+    private readonly Dictionary<string, Timer> _deviceTimers = new();
+    private readonly TimeSpan _deviceDelayTime;
 
     public MessageHandler(IConfiguration configuration, DeviceRepository deviceRepository, LaundryMonitor laundryMonitor)
     {
         _configuration = configuration;
         _deviceRepository = deviceRepository;
         _laundryMonitor = laundryMonitor;
+
+        _deviceDelayTime = TimeSpan.Parse(_configuration["DeviceStatus:DelayTime"]);
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -38,13 +42,54 @@ public class MessageHandler : IHostedService
 
     private async Task OnInterceptingPublishAsync(InterceptingPublishEventArgs arg)
     {
-        WriteLog($"{arg.ApplicationMessage.Topic}: {arg.ApplicationMessage.ConvertPayloadToString()}");
+        var topic = arg.ApplicationMessage.Topic;
+        var payload = arg.ApplicationMessage.ConvertPayloadToString();
 
-        _deviceRepository.HandleDeviceMessage(arg.ApplicationMessage.Topic, arg.ApplicationMessage.ConvertPayloadToString());
+        WriteLog($"Topic: {topic} = {payload}");
 
-        var device = _deviceRepository[arg.ApplicationMessage.Topic];
+        var newDevice = new Device(topic, payload);
 
-        await _laundryMonitor.HandleDeviceMessage(device);
+        if (_deviceTimers.ContainsKey(newDevice.Name))
+            await _deviceTimers[newDevice.Name].DisposeAsync();
+
+        if (newDevice.Status)
+        {
+            WriteLog($"{arg.ApplicationMessage.Topic}: Status true, handling immediately");
+
+            await HandleDeviceMessage(newDevice);
+        }
+        else
+        {
+            WriteLog($"{arg.ApplicationMessage.Topic}: Status false, setting timer");
+
+            _deviceTimers[newDevice.Name] = new Timer(OnDeviceTimer, newDevice, _deviceDelayTime, Timeout.InfiniteTimeSpan);
+        }
+    }
+
+    private async void OnDeviceTimer(object? state)
+    {
+        var device = (Device)state!;
+
+        await HandleDeviceMessage(device);
+
+        await _deviceTimers[device.Name].DisposeAsync();
+
+        _deviceTimers.Remove(device.Name);
+    }
+
+    private async Task HandleDeviceMessage(Device newDevice)
+    {
+        if (_deviceRepository.ContainsKey(newDevice.Name) && _deviceRepository[newDevice.Name].Status == newDevice.Status)
+        {
+            WriteLog($"Skipping device update: {newDevice.Name} = {newDevice.Status}");
+            return;
+        }
+
+        WriteLog($"Sending device update: {newDevice.Name} = {newDevice.Status}");
+
+        _deviceRepository[newDevice.Name] = newDevice;
+
+        await _laundryMonitor.HandleDeviceMessage(newDevice);
 
         if (_hubConnection == null)
             return;
@@ -52,9 +97,9 @@ public class MessageHandler : IHostedService
         try
         {
             if (_hubConnection.State == HubConnectionState.Disconnected)
-                _hubConnection.StartAsync().Wait();
+                await _hubConnection.StartAsync();
 
-            var json = JsonSerializer.Serialize(device);
+            var json = JsonSerializer.Serialize(newDevice);
 
             await _hubConnection.InvokeAsync("SendLatestStatus", json);
         }
