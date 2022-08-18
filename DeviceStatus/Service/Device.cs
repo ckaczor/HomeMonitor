@@ -1,9 +1,14 @@
-﻿namespace Service;
+﻿using System.Text.Json.Serialization;
+
+namespace Service;
 
 public class Device
 {
+    [JsonPropertyName("name")]
     public string Name { get; }
-    public bool Status { get; set; }
+
+    [JsonPropertyName("status")]
+    public bool Status { get; private set; }
 
     public Device(string name, string statusString)
     {
