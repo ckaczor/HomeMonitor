@@ -52,15 +52,15 @@ public class MessageHandler : IHostedService
         if (_deviceTimers.ContainsKey(newDevice.Name))
             await _deviceTimers[newDevice.Name].DisposeAsync();
 
-        if (newDevice.Status)
+        if (!_deviceRepository.ContainsKey(newDevice.Name) || newDevice.Status)
         {
-            WriteLog($"{arg.ApplicationMessage.Topic}: Status true, handling immediately");
+            WriteLog($"{arg.ApplicationMessage.Topic}: Handling status immediately");
 
             await HandleDeviceMessage(newDevice);
         }
         else
         {
-            WriteLog($"{arg.ApplicationMessage.Topic}: Status false, setting timer");
+            WriteLog($"{arg.ApplicationMessage.Topic}: Setting timer for status");
 
             _deviceTimers[newDevice.Name] = new Timer(OnDeviceTimer, newDevice, _deviceDelayTime, Timeout.InfiniteTimeSpan);
         }
