@@ -27,6 +27,16 @@ spec:
         env:
         - name: Hub__DeviceStatus
           value: http://hub-service/device-status
+        - name: Telegram__BotToken
+          valueFrom:
+            secretKeyRef:
+              name: telegram
+              key: bot-token 
+        - name: Telegram__ChatId
+          valueFrom:
+            secretKeyRef:
+              name: telegram
+              key: chat-id 
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

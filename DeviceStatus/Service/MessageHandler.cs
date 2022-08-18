@@ -1,8 +1,7 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.SignalR.Client;
+﻿using Microsoft.AspNetCore.SignalR.Client;
 using MQTTnet;
 using MQTTnet.Server;
+using System.Text.Json;
 
 namespace Service;
 
@@ -13,11 +12,13 @@ public class MessageHandler : IHostedService
 
     private readonly IConfiguration _configuration;
     private readonly DeviceRepository _deviceRepository;
+    private readonly LaundryMonitor _laundryMonitor;
 
-    public MessageHandler(IConfiguration configuration, DeviceRepository deviceRepository)
+    public MessageHandler(IConfiguration configuration, DeviceRepository deviceRepository, LaundryMonitor laundryMonitor)
     {
         _configuration = configuration;
         _deviceRepository = deviceRepository;
+        _laundryMonitor = laundryMonitor;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -37,10 +38,13 @@ public class MessageHandler : IHostedService
 
     private async Task OnInterceptingPublishAsync(InterceptingPublishEventArgs arg)
     {
+        WriteLog($"{arg.ApplicationMessage.Topic}: {arg.ApplicationMessage.ConvertPayloadToString()}");
+
         _deviceRepository.HandleDeviceMessage(arg.ApplicationMessage.Topic, arg.ApplicationMessage.ConvertPayloadToString());
 
-        Console.WriteLine(arg.ApplicationMessage.Topic);
-        Console.WriteLine(arg.ApplicationMessage.ConvertPayloadToString());
+        var device = _deviceRepository[arg.ApplicationMessage.Topic];
+
+        await _laundryMonitor.HandleDeviceMessage(device);
 
         if (_hubConnection == null)
             return;
@@ -50,7 +54,7 @@ public class MessageHandler : IHostedService
             if (_hubConnection.State == HubConnectionState.Disconnected)
                 _hubConnection.StartAsync().Wait();
 
-            var json = JsonSerializer.Serialize(_deviceRepository[arg.ApplicationMessage.Topic]);
+            var json = JsonSerializer.Serialize(device);
 
             await _hubConnection.InvokeAsync("SendLatestStatus", json);
         }
