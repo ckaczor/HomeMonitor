@@ -249,7 +249,7 @@ export class WeatherChartsComponent implements OnInit {
                         month: '%b \'%y',
                         year: '%Y'
                     },
-                    offset: '50'
+                    offset: 50
                 },
                 yAxis: [
                     {
