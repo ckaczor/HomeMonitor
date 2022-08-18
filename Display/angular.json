@@ -38,7 +38,9 @@
                 "highcharts/highstock",
                 "highcharts/modules/exporting",
                 "highcharts/modules/windbarb",
-                "moment-duration-format"
+                "moment-duration-format",
+                "suncalc",
+                "moment"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
