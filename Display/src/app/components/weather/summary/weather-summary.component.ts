@@ -3,7 +3,7 @@ import { TimeSpan } from 'src/app/models/time-span';
 import { WeatherService } from 'src/app/services/weather/weather.service';
 import { WeatherAggregates } from 'src/app/models/weather/weather-aggregates';
 
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
     selector: 'app-weather-summary',
@@ -13,7 +13,7 @@ import * as moment from 'moment';
 export class WeatherSummaryComponent implements OnInit {
 
     public loading = true;
-    public weatherAggregates: WeatherAggregates = null;
+    public weatherAggregates: WeatherAggregates | undefined | null = null;
 
     private timeSpanValue: TimeSpan = TimeSpan.Last24Hours;
     private dateValue: moment.Moment = moment().startOf('day');

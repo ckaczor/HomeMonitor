@@ -8,7 +8,7 @@ import { PowerStatus } from 'src/app/models/power/power-status';
 })
 export class PowerService {
     private connection: HubConnection;
-    private latestStatus: BehaviorSubject<PowerStatus> = new BehaviorSubject<PowerStatus>(null);
+    private latestStatus: BehaviorSubject<PowerStatus | null> = new BehaviorSubject<PowerStatus | null>(null);
 
     constructor() {
         this.connection = new HubConnectionBuilder()
@@ -22,7 +22,7 @@ export class PowerService {
         this.connection.start();
     }
 
-    getLatestStatus(): Observable<PowerStatus> {
+    getLatestStatus(): Observable<PowerStatus | null> {
         return this.latestStatus.asObservable();
     }
 }

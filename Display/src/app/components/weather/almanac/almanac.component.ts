@@ -14,10 +14,10 @@ import 'moment-duration-format';
 })
 export class AlmanacComponent implements OnInit {
     public loaded = false;
-    public latestReading: WeatherUpdate;
-    public sunTimes: SunCalc.GetTimesResult;
-    public moonTimes: SunCalc.GetMoonTimes;
-    public moon: SunCalc.GetMoonIlluminationResult;
+    public latestReading: WeatherUpdate | undefined | null;
+    public sunTimes: SunCalc.GetTimesResult | undefined | null;
+    public moonTimes: SunCalc.GetMoonTimes | undefined | null;
+    public moon: SunCalc.GetMoonIlluminationResult | undefined | null;
 
     constructor(private weatherService: WeatherService) { }
 
@@ -33,8 +33,8 @@ export class AlmanacComponent implements OnInit {
 
             const date = new Date();
 
-            this.sunTimes = SunCalc.getTimes(date, this.latestReading.Latitude, this.latestReading.Longitude);
-            this.moonTimes = SunCalc.getMoonTimes(date, this.latestReading.Latitude, this.latestReading.Longitude);
+            this.sunTimes = SunCalc.getTimes(date, this.latestReading?.Latitude!, this.latestReading?.Longitude!);
+            this.moonTimes = SunCalc.getMoonTimes(date, this.latestReading?.Latitude!, this.latestReading?.Longitude!);
             this.moon = SunCalc.getMoonIllumination(date);
 
             this.loaded = true;
@@ -59,6 +59,8 @@ export class AlmanacComponent implements OnInit {
         } else if (phase < 1.0) {
             return 'Waning Crescent';
         }
+
+        return '';
     }
 
     moonPhaseLetter(phase: number): string {
@@ -79,10 +81,12 @@ export class AlmanacComponent implements OnInit {
         } else if (phase < 1.0) {
             return 'W';
         }
+
+        return '';
     }
 
     dayLength(): string {
-        const duration = moment.duration((this.sunTimes.sunset.valueOf() - this.sunTimes.sunrise.valueOf()));
+        const duration = moment.duration((this.sunTimes!.sunset.valueOf() - this.sunTimes!.sunrise.valueOf()));
         return duration.format('hh [hours] mm [minutes]');
     }
 }

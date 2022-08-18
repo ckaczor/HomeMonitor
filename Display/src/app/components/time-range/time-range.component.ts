@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TimeSpan } from 'src/app/models/time-span';
 
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
     selector: 'app-time-range',
@@ -11,12 +11,12 @@ import * as moment from 'moment';
 export class TimeRangeComponent implements OnInit {
 
     @Input()
-    public loading: boolean;
+    public loading: boolean | undefined;
 
-    private timeSpanValue: TimeSpan;
+    private timeSpanValue: TimeSpan | undefined;
 
     @Input()
-    public set timeSpan(val: TimeSpan) {
+    public set timeSpan(val: TimeSpan | undefined) {
         this.timeSpanChange.emit(val);
         this.timeSpanValue = val;
     }
@@ -28,10 +28,10 @@ export class TimeRangeComponent implements OnInit {
     @Output()
     public timeSpanChange: EventEmitter<TimeSpan> = new EventEmitter<TimeSpan>();
 
-    private dateValue: moment.Moment;
+    private dateValue: moment.Moment | undefined;
 
     @Input()
-    public set date(val: moment.Moment) {
+    public set date(val: moment.Moment | undefined) {
         this.dateChange.emit(val);
         this.dateValue = val;
     }

@@ -9,7 +9,7 @@
                     Generation
                 </td>
                 <td>
-                    {{ latestStatus.Generation < 0 ? 0 : latestStatus.Generation }} W
+                    {{ latestStatus!.Generation < 0 ? 0 : latestStatus!.Generation }} W
                 </td>
             </tr>
             <tr>
@@ -17,7 +17,7 @@
                     Consumption
                 </td>
                 <td>
-                    {{ latestStatus.Consumption < 0 ? 0 : latestStatus.Consumption }} W
+                    {{ latestStatus!.Consumption < 0 ? 0 : latestStatus!.Consumption }} W
                 </td>
             </tr>
         </table>

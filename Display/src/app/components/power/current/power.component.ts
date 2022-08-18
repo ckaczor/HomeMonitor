@@ -8,7 +8,7 @@ import { PowerStatus } from 'src/app/models/power/power-status';
     styleUrls: ['./power.component.scss']
 })
 export class PowerComponent implements OnInit {
-    public latestStatus: PowerStatus;
+    public latestStatus: PowerStatus | undefined | null;
     constructor(private powerService: PowerService) { }
 
     ngOnInit() {

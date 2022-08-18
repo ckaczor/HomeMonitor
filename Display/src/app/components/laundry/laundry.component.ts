@@ -8,7 +8,7 @@ import { LaundryStatus } from '../../models/laundry/laundry-status';
     styleUrls: ['./laundry.component.scss']
 })
 export class LaundryComponent implements OnInit {
-    public latestStatus: LaundryStatus;
+    public latestStatus: LaundryStatus | undefined;
     constructor(private laundryService: LaundryService) { }
 
     ngOnInit() {

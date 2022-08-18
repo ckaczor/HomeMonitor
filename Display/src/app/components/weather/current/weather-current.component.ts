@@ -8,7 +8,7 @@ import { WeatherService } from 'src/app/services/weather/weather.service';
     styleUrls: ['./weather-current.component.scss']
 })
 export class WeatherCurrentComponent implements OnInit {
-    public latestReading: WeatherUpdate;
+    public latestReading: WeatherUpdate | null | undefined;
 
     constructor(private weatherService: WeatherService) { }
 
@@ -17,7 +17,7 @@ export class WeatherCurrentComponent implements OnInit {
     }
 
     rotationClass(): string {
-        const pressureDifference = this.latestReading.PressureDifferenceThreeHour;
+        const pressureDifference = this.latestReading?.PressureDifferenceThreeHour;
 
         if (!pressureDifference) {
             return '';
@@ -32,5 +32,7 @@ export class WeatherCurrentComponent implements OnInit {
         } else if (pressureDifference < -2.0) {
             return 'down-high';
         }
+
+        return '';
     }
 }

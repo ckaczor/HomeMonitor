@@ -1,5 +1,5 @@
 export class PowerStatusGrouped {
-    bucket: string;
-    averageGeneration: number;
-    averageConsumption: number;
+    bucket: string | undefined;
+    averageGeneration: number | undefined;
+    averageConsumption: number | undefined;
 }

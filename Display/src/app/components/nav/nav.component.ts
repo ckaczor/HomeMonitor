@@ -10,7 +10,7 @@ import { MatSidenav } from '@angular/material/sidenav';
     styleUrls: ['./nav.component.scss']
 })
 export class NavComponent {
-    @ViewChild('sidenav', {}) sidenav: MatSidenav;
+    @ViewChild('sidenav', {}) sidenav: MatSidenav | undefined;
 
     isHandset$: Observable<boolean> = this.breakpointObserver.observe([
         Breakpoints.HandsetLandscape,
@@ -30,7 +30,7 @@ export class NavComponent {
     public toggleSidenav() {
         this.isHandset$.subscribe(isHandset => {
             if (isHandset) {
-                this.sidenav.toggle();
+                this.sidenav!.toggle();
             }
         });
     }

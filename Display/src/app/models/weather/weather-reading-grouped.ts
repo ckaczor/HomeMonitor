@@ -1,8 +1,8 @@
 export class WeatherReadingGrouped {
-    bucket: string;
-    averageTemperature: number;
-    averagePressure: number;
-    averageLightLevel: number;
-    averageHumidity: number;
-    rainTotal: number;
+    bucket: string | undefined;
+    averageTemperature: number | undefined;
+    averagePressure: number | undefined;
+    averageLightLevel: number | undefined;
+    averageHumidity: number | undefined;
+    rainTotal: number | undefined;
 }

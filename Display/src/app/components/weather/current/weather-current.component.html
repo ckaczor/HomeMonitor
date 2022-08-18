@@ -10,23 +10,23 @@
                     Temperature
                 </td>
                 <td>
-                    {{ latestReading.Temperature.toFixed(2) }}°F
+                    {{ latestReading!.Temperature?.toFixed(2) }}°F
                 </td>
             </tr>
-            <tr *ngIf="latestReading.HeatIndex">
+            <tr *ngIf="latestReading!.HeatIndex">
                 <td class="weather-current-header">
                     Heat index
                 </td>
                 <td>
-                    {{ latestReading.HeatIndex.toFixed(2) }}°F
+                    {{ latestReading!.HeatIndex?.toFixed(2) }}°F
                 </td>
             </tr>
-            <tr *ngIf="latestReading.WindChill">
+            <tr *ngIf="latestReading!.WindChill">
                 <td class="weather-current-header">
                     Wind chill
                 </td>
                 <td>
-                    {{ latestReading.WindChill.toFixed(2) }}°F
+                    {{ latestReading!.WindChill?.toFixed(2) }}°F
                 </td>
             </tr>
             <tr>
@@ -34,7 +34,7 @@
                     Humidity
                 </td>
                 <td>
-                    {{ latestReading.Humidity.toFixed(2) }}%
+                    {{ latestReading!.Humidity?.toFixed(2) }}%
                 </td>
             </tr>
             <tr>
@@ -42,7 +42,7 @@
                     Dew point
                 </td>
                 <td>
-                    {{ latestReading.DewPoint.toFixed(2) }}°F
+                    {{ latestReading!.DewPoint?.toFixed(2) }}°F
                 </td>
             </tr>
             <tr>
@@ -50,9 +50,9 @@
                     Pressure
                 </td>
                 <td>
-                    {{ (latestReading.Pressure / 33.864 / 100).toFixed(2) }}"
+                    {{ latestReading!.Pressure && (latestReading!.Pressure / 33.864 / 100)?.toFixed(2) }}"
 
-                    <span class="pressure-trend-arrow" [ngClass]="rotationClass()" title="3 Hour Change: {{ latestReading.PressureDifferenceThreeHour.toFixed(1) }}">➜</span>
+                    <span class="pressure-trend-arrow" [ngClass]="rotationClass()" title="3 Hour Change: {{ latestReading!.PressureDifferenceThreeHour?.toFixed(1) }}">➜</span>
                 </td>
             </tr>
             <tr>
@@ -60,7 +60,7 @@
                     Wind
                 </td>
                 <td>
-                    {{ latestReading.WindSpeed.toFixed(2) }} mph {{ latestReading.WindDirection }}
+                    {{ latestReading!.WindSpeed?.toFixed(2) }} mph {{ latestReading!.WindDirection }}
                 </td>
             </tr>
             <tr>
@@ -68,7 +68,7 @@
                     Rain
                 </td>
                 <td>
-                    {{ latestReading.RainLastHour.toFixed(2) }}" (last hour)
+                    {{ latestReading!.RainLastHour?.toFixed(2) }}" (last hour)
                 </td>
             </tr>
             <tr>
@@ -76,7 +76,7 @@
                     Light
                 </td>
                 <td>
-                    {{ latestReading.LightLevel.toFixed(2) }} lx
+                    {{ latestReading!.LightLevel?.toFixed(2) }} lx
                 </td>
             </tr>
         </table>

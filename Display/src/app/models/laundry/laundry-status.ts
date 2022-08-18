@@ -1,4 +1,4 @@
 export class LaundryStatus {
-    washer = false;
-    dryer = false;
+    washer: boolean | undefined = false;
+    dryer: boolean | undefined = false;
 }

@@ -1,4 +1,4 @@
 export class WeatherValue {
-    timestamp: string;
-    value: number;
+    timestamp: string | undefined;
+    value: number | undefined;
 }

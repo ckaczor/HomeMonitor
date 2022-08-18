@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, firstValueFrom } from 'rxjs';
 import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import { LaundryStatus } from '../../models/laundry/laundry-status';
 import { HttpClient } from '@angular/common/http';
 
 class DeviceMessage {
-    name: string;
-    status: boolean;
+    name: string | undefined;
+    status: boolean | undefined;
 }
 
 @Injectable({
@@ -48,7 +48,7 @@ export class LaundryService {
     }
 
     private async loadLatestStatus() {
-        const data = await this.httpClient.get<DeviceMessage[]>(`/api/device-status/status/recent`).toPromise();
+        const data = await firstValueFrom(this.httpClient.get<DeviceMessage[]>(`/api/device-status/status/recent`));
 
         const newStatus = new LaundryStatus();
 

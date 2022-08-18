@@ -26,7 +26,7 @@ enum ChartType {
 })
 export class WeatherChartsComponent implements OnInit {
 
-    public chart: Chart;
+    public chart: Chart | undefined;
     public loading = true;
 
     public selectedChartType: ChartType = ChartType.Weather;
@@ -91,12 +91,12 @@ export class WeatherChartsComponent implements OnInit {
             seriesData.push({ type: 'column', name: 'Rain', data: [], yAxis: 3, marker: { enabled: false }, tooltip: { valueSuffix: '"' } } as SeriesColumnOptions);
 
             data.forEach(dataElement => {
-                const date = Date.parse(dataElement.bucket);
-                seriesData[0].data.push([date, dataElement.averageTemperature]);
-                seriesData[1].data.push([date, dataElement.averagePressure / 33.864 / 100]);
-                seriesData[2].data.push([date, dataElement.averageHumidity]);
-                seriesData[3].data.push([date, dataElement.averageLightLevel]);
-                seriesData[4].data.push([date, dataElement.rainTotal]);
+                const date = Date.parse(dataElement.bucket!);
+                seriesData[0].data!.push([date, dataElement.averageTemperature]);
+                seriesData[1].data!.push([date, dataElement.averagePressure! / 33.864 / 100]);
+                seriesData[2].data!.push([date, dataElement.averageHumidity]);
+                seriesData[3].data!.push([date, dataElement.averageLightLevel]);
+                seriesData[4].data!.push([date, dataElement.rainTotal]);
             });
 
             this.chart = new Chart({
@@ -219,11 +219,11 @@ export class WeatherChartsComponent implements OnInit {
             seriesData.push({ type: 'windbarb', name: 'Direction', data: [], marker: { enabled: false }, tooltip: { valueSuffix: ' MPH' } } as SeriesWindbarbOptions);
 
             data.forEach(dataElement => {
-                const date = Date.parse(dataElement.bucket);
-                seriesData[0].data.push([date, dataElement.minimumSpeed]);
-                seriesData[1].data.push([date, dataElement.averageSpeed]);
-                seriesData[2].data.push([date, dataElement.maximumSpeed]);
-                seriesData[3].data.push([date, dataElement.averageSpeed, dataElement.averageDirection]);
+                const date = Date.parse(dataElement.bucket!);
+                seriesData[0].data!.push([date, dataElement.minimumSpeed]);
+                seriesData[1].data!.push([date, dataElement.averageSpeed]);
+                seriesData[2].data!.push([date, dataElement.maximumSpeed]);
+                seriesData[3].data!.push([date, dataElement.averageSpeed, dataElement.averageDirection]);
             });
 
             this.chart = new Chart({

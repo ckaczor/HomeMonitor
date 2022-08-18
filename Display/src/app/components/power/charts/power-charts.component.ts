@@ -21,7 +21,7 @@ HC_exporting(Highcharts);
 })
 export class PowerChartsComponent implements OnInit {
 
-    public chart: Chart;
+    public chart: Chart | undefined;
     public loading = true;
 
     private timeSpanValue: TimeSpan = TimeSpan.Last24Hours;
@@ -71,19 +71,19 @@ export class PowerChartsComponent implements OnInit {
         ]).subscribe(data => {
             const seriesData: Array<SeriesLineOptions> = [];
 
-            seriesData.push({ name: 'Generation', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: ' W' } } as SeriesLineOptions);
-            seriesData.push({ name: 'Consumption', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: ' W' } } as SeriesLineOptions);
-            seriesData.push({ name: 'Light', data: [], yAxis: 1, marker: { enabled: false }, tooltip: { valueSuffix: ' lx' } } as SeriesLineOptions);
+            seriesData.push({ type: 'line', name: 'Generation', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: ' W' } } as SeriesLineOptions);
+            seriesData.push({ type: 'line', name: 'Consumption', data: [], yAxis: 0, marker: { enabled: false }, tooltip: { valueSuffix: ' W' } } as SeriesLineOptions);
+            seriesData.push({ type: 'line', name: 'Light', data: [], yAxis: 1, marker: { enabled: false }, tooltip: { valueSuffix: ' lx' } } as SeriesLineOptions);
 
             data[0].forEach(dataElement => {
-                const date = Date.parse(dataElement.bucket);
-                seriesData[0].data.push([date, dataElement.averageGeneration < 0 ? 0 : dataElement.averageGeneration]);
-                seriesData[1].data.push([date, dataElement.averageConsumption < 0 ? 0 : dataElement.averageConsumption]);
+                const date = Date.parse(dataElement.bucket!);
+                seriesData[0].data!.push([date, dataElement.averageGeneration! < 0 ? 0 : dataElement.averageGeneration]);
+                seriesData[1].data!.push([date, dataElement.averageConsumption! < 0 ? 0 : dataElement.averageConsumption]);
             });
 
             data[1].forEach(dataElement => {
-                const date = Date.parse(dataElement.bucket);
-                seriesData[2].data.push([date, dataElement.averageValue]);
+                const date = Date.parse(dataElement.bucket!);
+                seriesData[2].data!.push([date, dataElement.averageValue]);
             });
 
             this.chart = new Chart({

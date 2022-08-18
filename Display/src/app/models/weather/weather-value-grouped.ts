@@ -1,4 +1,4 @@
 export class WeatherValueGrouped {
-    bucket: string;
-    averageValue: number;
+    bucket: string | undefined;
+    averageValue: number | undefined;
 }

@@ -10,7 +10,7 @@
         </button>
     </header>
     <gridster class="content" [options]="options">
-        <gridster-item [item]="dashboardLayout.layout[0]">
+        <gridster-item [item]="dashboardLayout!.layout![0]">
             <div class="dashboard-item">
                 <div class="dashboard-item-header">
                     Weather
@@ -20,7 +20,7 @@
                 </div>
             </div>
         </gridster-item>
-        <gridster-item [item]="dashboardLayout.layout[1]">
+        <gridster-item [item]="dashboardLayout!.layout![1]">
             <div class="dashboard-item">
                 <div class="dashboard-item-header">
                     Laundry
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </gridster-item>
-        <gridster-item [item]="dashboardLayout.layout[2]">
+        <gridster-item [item]="dashboardLayout!.layout![2]">
             <div class="dashboard-item">
                 <div class="dashboard-item-header">
                     Almanac
@@ -40,7 +40,7 @@
                 </div>
             </div>
         </gridster-item>
-        <gridster-item [item]="dashboardLayout.layout[3]">
+        <gridster-item [item]="dashboardLayout!.layout![3]">
             <div class="dashboard-item">
                 <div class="dashboard-item-header">
                     Power

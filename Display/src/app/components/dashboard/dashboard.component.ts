@@ -8,8 +8,8 @@ import { DashboardLayout } from 'src/app/models/dashboard/dashboard-layout';
     styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-    public options: GridsterConfig;
-    public dashboardLayout: DashboardLayout;
+    public options: GridsterConfig | undefined;
+    public dashboardLayout: DashboardLayout | undefined;
     public locked = true;
 
     private defaultLayout: DashboardLayout = {
@@ -46,14 +46,14 @@ export class DashboardComponent implements OnInit {
     }
 
     changedOptions() {
-        this.options.api.optionsChanged();
+        this.options!.api!.optionsChanged!();
     }
 
     toggleLocked() {
         this.locked = !this.locked;
 
-        this.options.resizable.enabled = !this.locked;
-        this.options.draggable.enabled = !this.locked;
+        this.options!.resizable!.enabled = !this.locked;
+        this.options!.draggable!.enabled = !this.locked;
 
         this.changedOptions();
     }

@@ -1,8 +1,8 @@
 export class WindHistoryGrouped {
-    bucket: string;
-    minimumSpeed: number;
-    averageSpeed: number;
-    maximumSpeed: number;
-    averageDirection: number;
+    bucket: string | undefined;
+    minimumSpeed: number | undefined;
+    averageSpeed: number | undefined;
+    maximumSpeed: number | undefined;
+    averageDirection: number | undefined;
 }
 

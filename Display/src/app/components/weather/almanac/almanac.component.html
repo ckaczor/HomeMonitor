@@ -9,7 +9,7 @@
                     Sunrise
                 </td>
                 <td colspan="2">
-                    {{ sunTimes.sunrise | amLocal | amDateFormat: 'hh:mm:ss A' }}
+                    {{ sunTimes!.sunrise | amLocal | amDateFormat: 'hh:mm:ss A' }}
                 </td>
             </tr>
             <tr>
@@ -17,7 +17,7 @@
                     Sunset
                 </td>
                 <td colspan="2">
-                    {{ sunTimes.sunset | amLocal | amDateFormat: 'hh:mm:ss A' }}
+                    {{ sunTimes!.sunset | amLocal | amDateFormat: 'hh:mm:ss A' }}
                 </td>
             </tr>
             <tr>
@@ -33,7 +33,7 @@
                     Moonrise
                 </td>
                 <td colspan="2">
-                    {{ moonTimes.rise | amLocal | amDateFormat: 'hh:mm:ss A' }}
+                    {{ moonTimes!.rise | amLocal | amDateFormat: 'hh:mm:ss A' }}
                 </td>
             </tr>
             <tr>
@@ -41,7 +41,7 @@
                     Moonset
                 </td>
                 <td colspan="2">
-                    {{ moonTimes.set | amLocal | amDateFormat: 'hh:mm:ss A' }}
+                    {{ moonTimes!.set | amLocal | amDateFormat: 'hh:mm:ss A' }}
                 </td>
             </tr>
             <tr>
@@ -49,13 +49,13 @@
                     Moon
                 </td>
                 <td>
-                    {{ moonPhaseName(moon.phase) }}
+                    {{ moonPhaseName(moon!.phase) }}
                     <br>
-                    {{ (moon.fraction * 100).toFixed(1) }}% illuminated
+                    {{ (moon!.fraction * 100).toFixed(1) }}% illuminated
                 </td>
                 <td>
                     <div class="moon-phase">
-                        {{ moonPhaseLetter(moon.phase) }}
+                        {{ moonPhaseLetter(moon!.phase) }}
                     </div>
                 </td>
             </tr>
