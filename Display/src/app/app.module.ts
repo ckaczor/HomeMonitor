@@ -22,7 +22,6 @@ import { MatListModule } from '@angular/material/list';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MomentModule } from 'ngx-moment';
 
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { GridsterModule } from 'angular-gridster2';
 
 import { LaundryComponent } from './components/laundry/laundry.component';
@@ -34,8 +33,6 @@ import { PowerComponent } from './components/power/current/power.component';
 import { PowerChartsComponent } from './components/power/charts/power-charts.component';
 import { WeatherSummaryComponent } from './components/weather/summary/weather-summary.component';
 import { TimeRangeComponent } from './components/time-range/time-range.component';
-
-const config: SocketIoConfig = { url: '/', options: {} };
 
 @NgModule({
     declarations: [
@@ -55,7 +52,6 @@ const config: SocketIoConfig = { url: '/', options: {} };
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
-        SocketIoModule.forRoot(config),
         ChartModule,
         HttpClientModule,
         MatIconModule,

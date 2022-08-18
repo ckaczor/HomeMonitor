@@ -38,9 +38,7 @@
                 "highcharts/highstock",
                 "highcharts/modules/exporting",
                 "highcharts/modules/windbarb",
-                "moment-duration-format",
-                "socket.io-client",
-                "socket.io-parser"
+                "moment-duration-format"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
