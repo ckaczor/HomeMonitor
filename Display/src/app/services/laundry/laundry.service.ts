@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, firstValueFrom } from 'rxjs';
-import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
+import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr';
 import { LaundryStatus } from '../../models/laundry/laundry-status';
 import { HttpClient } from '@angular/common/http';
 

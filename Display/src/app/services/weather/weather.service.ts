@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, firstValueFrom } from 'rxjs';
-import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
+import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr';
 import { WeatherUpdate } from 'src/app/models/weather/weather-update';
 import { WeatherValue } from 'src/app/models/weather/weather-value';
 import { HttpClient } from '@angular/common/http';
