@@ -45,8 +45,13 @@ public class MessageHandler : IHostedService
 
     private async Task RequestLatestStatus()
     {
+        WriteLog("RequestLatestStatus");
+
         foreach (var device in _deviceRepository.Values)
+        {
+            WriteLog($"RequestLatestStatus: {device.Name}");
             await SendDeviceStatus(device);
+        }
     }
 
     private async Task OnInterceptingPublishAsync(InterceptingPublishEventArgs arg)

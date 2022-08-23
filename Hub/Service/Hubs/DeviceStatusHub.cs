@@ -11,13 +11,15 @@ namespace ChrisKaczor.HomeMonitor.Hub.Service.Hubs
         [UsedImplicitly]
         public async Task RequestLatestStatus()
         {
+            Console.WriteLine("RequestLatestStatus");
+
             await Clients.Others.SendAsync("RequestLatestStatus");
         }
 
         [UsedImplicitly]
         public async Task SendLatestStatus(string message)
         {
-            Console.WriteLine(message);
+            Console.WriteLine($"LatestStatus: {message}");
 
             await Clients.Others.SendAsync("LatestStatus", message);
         }
