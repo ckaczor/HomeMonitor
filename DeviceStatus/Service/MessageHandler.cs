@@ -31,6 +31,8 @@ public class MessageHandler : IHostedService
         {
             _hubConnection = new HubConnectionBuilder().WithUrl(_configuration["Hub:DeviceStatus"]).Build();
             _hubConnection.On("RequestLatestStatus", async () => await RequestLatestStatus());
+
+            await _hubConnection.StartAsync(cancellationToken);
         }
 
         var mqttFactory = new MqttFactory();
