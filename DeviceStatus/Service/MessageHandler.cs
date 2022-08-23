@@ -28,7 +28,10 @@ public class MessageHandler : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         if (!string.IsNullOrEmpty(_configuration["Hub:DeviceStatus"]))
+        {
             _hubConnection = new HubConnectionBuilder().WithUrl(_configuration["Hub:DeviceStatus"]).Build();
+            _hubConnection.On("RequestLatestStatus", async () => await RequestLatestStatus());
+        }
 
         var mqttFactory = new MqttFactory();
 
@@ -38,6 +41,12 @@ public class MessageHandler : IHostedService
         _mqttServer.InterceptingPublishAsync += OnInterceptingPublishAsync;
 
         await _mqttServer.StartAsync();
+    }
+
+    private async Task RequestLatestStatus()
+    {
+        foreach (var device in _deviceRepository.Values)
+            await SendDeviceStatus(device);
     }
 
     private async Task OnInterceptingPublishAsync(InterceptingPublishEventArgs arg)
@@ -91,6 +100,11 @@ public class MessageHandler : IHostedService
 
         await _laundryMonitor.HandleDeviceMessage(newDevice);
 
+        await SendDeviceStatus(newDevice);
+    }
+
+    private async Task SendDeviceStatus(Device device)
+    {
         if (_hubConnection == null)
             return;
 
@@ -99,7 +113,7 @@ public class MessageHandler : IHostedService
             if (_hubConnection.State == HubConnectionState.Disconnected)
                 await _hubConnection.StartAsync();
 
-            var json = JsonSerializer.Serialize(newDevice);
+            var json = JsonSerializer.Serialize(device);
 
             await _hubConnection.InvokeAsync("SendLatestStatus", json);
         }
