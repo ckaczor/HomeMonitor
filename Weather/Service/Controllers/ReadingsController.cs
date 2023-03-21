@@ -21,9 +21,26 @@ namespace ChrisKaczor.HomeMonitor.Weather.Service.Controllers
         }
 
         [HttpGet("recent")]
-        public async Task<ActionResult<WeatherReading>> GetRecent()
+        public async Task<ActionResult<WeatherReading>> GetRecent([FromQuery] string tz)
         {
-            return await _database.GetRecentReading();
+            var recentReading = await _database.GetRecentReading();
+
+            if (string.IsNullOrWhiteSpace(tz)) 
+                return recentReading;
+
+            try
+            {
+                var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(tz);
+
+                recentReading.Timestamp = recentReading.Timestamp.ToOffset(timeZoneInfo.GetUtcOffset(recentReading.Timestamp));
+                recentReading.GpsTimestamp = recentReading.GpsTimestamp.ToOffset(timeZoneInfo.GetUtcOffset(recentReading.GpsTimestamp));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            return recentReading;
         }
 
         [HttpGet("history")]
