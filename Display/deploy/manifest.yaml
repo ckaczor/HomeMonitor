@@ -68,6 +68,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   creationTimestamp: null
+  name: display
   namespace: home-monitor
 spec:
   stripPrefix:
