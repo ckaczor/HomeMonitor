@@ -44,7 +44,7 @@ spec:
   type: ClusterIP
 ---
 kind: Ingress
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 metadata:
   name: display
   namespace: home-monitor
@@ -60,6 +60,9 @@ spec:
   - http:
       paths:
       - path: "/"
+        pathType: ImplementationSpecific
         backend:
-          serviceName: display
-          servicePort: 80
+          service:
+            name: display
+            port:
+                number: 80

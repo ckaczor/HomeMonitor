@@ -143,7 +143,7 @@ spec:
   type: ClusterIP
 ---
 kind: Ingress
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 metadata:
   name: power
   namespace: home-monitor
@@ -156,6 +156,9 @@ spec:
   - http:
       paths:
       - path: "/api/power"
+        pathType: ImplementationSpecific
         backend:
-          serviceName: power-service
-          servicePort: 80
+          service:
+            name: power-service
+            port: 
+              number: 80

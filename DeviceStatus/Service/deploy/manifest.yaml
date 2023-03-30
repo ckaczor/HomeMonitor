@@ -69,7 +69,7 @@ spec:
   type: LoadBalancer  
 ---
 kind: Ingress
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 metadata:
   name: device-status
   namespace: home-monitor
@@ -82,6 +82,9 @@ spec:
   - http:
       paths:
       - path: "/api/device-status"
+        pathType: ImplementationSpecific
         backend:
-          serviceName: device-status-service
-          servicePort: 80
+          service:
+            name: device-status-service
+            port: 
+              number: 80
