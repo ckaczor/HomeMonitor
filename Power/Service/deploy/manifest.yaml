@@ -142,23 +142,34 @@ spec:
     app: power-service
   type: ClusterIP
 ---
-kind: Ingress
-apiVersion: networking.k8s.io/v1
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
-  name: power
-  namespace: home-monitor
   annotations:
     kubernetes.io/ingress.class: traefik
-    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
-    traefik.frontend.rule.type: PathPrefixStrip
+  creationTimestamp: null
+  name: power
+  namespace: home-monitor
 spec:
-  rules:
-  - http:
-      paths:
-      - path: "/api/power"
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: power-service
-            port: 
-              number: 80
+  routes:
+  - kind: Rule
+    match: PathPrefix(`/api/power`)
+    middlewares:
+    - name: api-power
+      namespace: home-monitor
+    services:
+    - kind: Service
+      name: power-service
+      namespace: home-monitor
+      port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  creationTimestamp: null
+  name: api-power
+  namespace: home-monitor
+spec:
+  stripPrefix:
+    prefixes:
+    - /api/power

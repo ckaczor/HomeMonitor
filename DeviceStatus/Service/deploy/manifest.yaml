@@ -68,23 +68,34 @@ spec:
     app: device-status-service
   type: LoadBalancer  
 ---
-kind: Ingress
-apiVersion: networking.k8s.io/v1
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
-  name: device-status
-  namespace: home-monitor
   annotations:
     kubernetes.io/ingress.class: traefik
-    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
-    traefik.frontend.rule.type: PathPrefixStrip
+  creationTimestamp: null
+  name: device-status
+  namespace: home-monitor
 spec:
-  rules:
-  - http:
-      paths:
-      - path: "/api/device-status"
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: device-status-service
-            port: 
-              number: 80
+  routes:
+  - kind: Rule
+    match: PathPrefix(`/api/device-status`)
+    middlewares:
+    - name: api-device-status
+      namespace: home-monitor
+    services:
+    - kind: Service
+      name: device-status-service
+      namespace: home-monitor
+      port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  creationTimestamp: null
+  name: api-device-status
+  namespace: home-monitor
+spec:
+  stripPrefix:
+    prefixes:
+    - /api/device-status

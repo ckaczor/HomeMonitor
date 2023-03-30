@@ -43,26 +43,34 @@ spec:
     app: hub-service
   type: ClusterIP
 ---
-kind: Ingress
-apiVersion: networking.k8s.io/v1
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
-  name: hub
-  namespace: home-monitor
   annotations:
     kubernetes.io/ingress.class: traefik
-    nginx.ingress.kubernetes.io/affinity: cookie
-    nginx.ingress.kubernetes.io/session-cookie-hash: sha1
-    nginx.ingress.kubernetes.io/session-cookie-name: REALTIMESERVERID
-    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
-    traefik.frontend.rule.type: PathPrefixStrip
+  creationTimestamp: null
+  name: hub
+  namespace: home-monitor
 spec:
-  rules:
-  - http:
-      paths:
-      - path: "/api/hub"
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: hub-service
-            port: 
-              number: 80
+  routes:
+  - kind: Rule
+    match: PathPrefix(`/api/hub`)
+    middlewares:
+    - name: api-hub
+      namespace: home-monitor
+    services:
+    - kind: Service
+      name: hub-service
+      namespace: home-monitor
+      port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  creationTimestamp: null
+  name: api-hub
+  namespace: home-monitor
+spec:
+  stripPrefix:
+    prefixes:
+    - /api/hub

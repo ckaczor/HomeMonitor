@@ -137,23 +137,34 @@ spec:
     app: weather-service
   type: ClusterIP
 ---
-kind: Ingress
-apiVersion: networking.k8s.io/v1
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
-  name: weather
-  namespace: home-monitor
   annotations:
     kubernetes.io/ingress.class: traefik
-    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
-    traefik.frontend.rule.type: PathPrefixStrip
+  creationTimestamp: null
+  name: weather
+  namespace: home-monitor
 spec:
-  rules:
-  - http:
-      paths:
-      - path: "/api/weather"
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: weather-service
-            port: 
-              number: 80
+  routes:
+  - kind: Rule
+    match: PathPrefix(`/api/weather`)
+    middlewares:
+    - name: api-weather
+      namespace: home-monitor
+    services:
+    - kind: Service
+      name: weather-service
+      namespace: home-monitor
+      port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  creationTimestamp: null
+  name: api-weather
+  namespace: home-monitor
+spec:
+  stripPrefix:
+    prefixes:
+    - /api/weather
