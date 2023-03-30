@@ -56,7 +56,7 @@ spec:
   - kind: Rule
     match: PathPrefix(`/`)
     middlewares:
-    - name: ""
+    - name: display
       namespace: home-monitor
     services:
     - kind: Service
