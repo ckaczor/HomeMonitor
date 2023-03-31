@@ -44,34 +44,34 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
 
         private void OnTimer(object state)
         {
-            var client = new RestClient(_configuration["Power:Host"]);
-
-            var request = new RestRequest("current-sample", Method.GET);
-            request.AddHeader("Authorization", _configuration["Power:AuthorizationHeader"]);
-
-            var response = client.Execute(request);
-
-            var sample = JsonSerializer.Deserialize<PowerSample>(response.Content);
-
-            var generation = Array.Find(sample.Channels, c => c.Type == "GENERATION");
-            var consumption = Array.Find(sample.Channels, c => c.Type == "CONSUMPTION");
-
-            if (generation == null || consumption == null)
-                return;
-
-            var status = new PowerStatus { Generation = generation.RealPower, Consumption = consumption.RealPower };
-
-            _database.StorePowerData(status);
-
-            var json = JsonSerializer.Serialize(status);
-
-            Console.WriteLine(json);
-
-            if (_hubConnection == null)
-                return;
-
             try
             {
+                var client = new RestClient(_configuration["Power:Host"]);
+
+                var request = new RestRequest("current-sample", Method.GET);
+                request.AddHeader("Authorization", _configuration["Power:AuthorizationHeader"]);
+
+                var response = client.Execute(request);
+
+                var sample = JsonSerializer.Deserialize<PowerSample>(response.Content);
+
+                var generation = Array.Find(sample.Channels, c => c.Type == "GENERATION");
+                var consumption = Array.Find(sample.Channels, c => c.Type == "CONSUMPTION");
+
+                if (generation == null || consumption == null)
+                    return;
+
+                var status = new PowerStatus { Generation = generation.RealPower, Consumption = consumption.RealPower };
+
+                _database.StorePowerData(status);
+
+                var json = JsonSerializer.Serialize(status);
+
+                Console.WriteLine(json);
+
+                if (_hubConnection == null)
+                    return;
+
                 if (_hubConnection.State == HubConnectionState.Disconnected)
                     _hubConnection.StartAsync().Wait();
 
@@ -79,7 +79,7 @@ namespace ChrisKaczor.HomeMonitor.Power.Service
             }
             catch (Exception exception)
             {
-                WriteLog($"Hub exception: {exception}");
+                WriteLog($"Exception: {exception}");
             }
         }
 
