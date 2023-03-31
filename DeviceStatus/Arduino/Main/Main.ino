@@ -38,7 +38,7 @@ void connectNetwork() {
 }
 
 bool checkNetwork() {
-  if (!WiFi.status() == WL_DISCONNECTED) {
+  if (WiFi.status() != WL_CONNECTED) {
     WiFi.disconnect();
 
     Serial.print("Attempting to reconnect to WPA SSID: ");
