@@ -2,8 +2,10 @@
 Description=Device Status Server Service
 
 [Service]
+User=ckaczor
 Environment=PYTHONUNBUFFERED=1
 ExecStart=/usr/bin/python /home/ckaczor/Code/Personal/HomeMonitor/DeviceStatus/Sender/sender.py
+Restart=on-failure
 
 [Install]
 WantedBy=default.target
