@@ -1,0 +1,9 @@
+[Unit]
+Description=Device Status Server Service
+
+[Service]
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python /home/ckaczor/Code/Personal/HomeMonitor/DeviceStatus/Sender/sender.py
+
+[Install]
+WantedBy=default.target
