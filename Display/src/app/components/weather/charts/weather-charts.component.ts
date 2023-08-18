@@ -159,8 +159,8 @@ export class WeatherChartsComponent implements OnInit {
                         title: {
                             text: 'Rain'
                         },
-                        min: 0,
-                        max: 0.25,
+                        softMin: 0,
+                        softMax: 0.25,
                         visible: true,
                         opposite: true
                     },
