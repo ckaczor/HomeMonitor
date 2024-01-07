@@ -58,24 +58,25 @@ public class MessageHandler : IHostedService
     private async Task OnApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs arg)
     {
         var topic = arg.ApplicationMessage.Topic;
+        var deviceName = topic["device-status/".Length..];
         var payload = arg.ApplicationMessage.ConvertPayloadToString();
 
         WriteLog($"Topic: {topic} = {payload}");
 
-        var newDevice = new Device(topic, payload);
+        var newDevice = new Device(deviceName, payload);
 
         if (_deviceTimers.ContainsKey(newDevice.Name))
             await _deviceTimers[newDevice.Name].DisposeAsync();
 
         if (!_deviceRepository.ContainsKey(newDevice.Name) || newDevice.Status)
         {
-            WriteLog($"{arg.ApplicationMessage.Topic}: Handling status immediately");
+            WriteLog($"{deviceName}: Handling status immediately");
 
             await HandleDeviceMessage(newDevice);
         }
         else
         {
-            WriteLog($"{arg.ApplicationMessage.Topic}: Setting timer for status");
+            WriteLog($"{deviceName}: Setting timer for status");
 
             _deviceTimers[newDevice.Name] = new Timer(OnDeviceTimer, newDevice, _deviceDelayTime, Timeout.InfiniteTimeSpan);
         }
