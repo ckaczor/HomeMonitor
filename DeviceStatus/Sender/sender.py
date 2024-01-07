@@ -64,7 +64,7 @@ while True:
 
             device.last_status = pin_status
 
-            info = client.publish(device.name, str(pin_status), 1)
+            info = client.publish("device-status/" % (device.name), str(pin_status), 1)
 
             info.wait_for_publish()
 

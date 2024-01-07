@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using MQTTnet;
-using MQTTnet.Server;
+using MQTTnet.Client;
 using System.Text.Json;
 
 namespace Service;
 
 public class MessageHandler : IHostedService
 {
-    private MqttServer? _mqttServer;
+    private IMqttClient? _mqttClient;
     private HubConnection? _hubConnection;
 
     private readonly IConfiguration _configuration;
@@ -37,26 +37,25 @@ public class MessageHandler : IHostedService
 
         var mqttFactory = new MqttFactory();
 
-        var mqttServerOptions = new MqttServerOptionsBuilder().WithDefaultEndpoint().Build();
+        _mqttClient = mqttFactory.CreateMqttClient();
+        var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer(_configuration["Mqtt:Server"]).Build();
 
-        _mqttServer = mqttFactory.CreateMqttServer(mqttServerOptions);
-        _mqttServer.InterceptingPublishAsync += OnInterceptingPublishAsync;
+        _mqttClient.ApplicationMessageReceivedAsync += OnApplicationMessageReceivedAsync;
 
-        await _mqttServer.StartAsync();
+        await _mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
+
+        var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
+            .WithTopicFilter(
+                f =>
+                {
+                    f.WithTopic("device-status/#");
+                })
+            .Build();
+
+        await _mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
     }
 
-    private async Task RequestLatestStatus()
-    {
-        WriteLog("RequestLatestStatus");
-
-        foreach (var device in _deviceRepository.Values)
-        {
-            WriteLog($"RequestLatestStatus: {device.Name}");
-            await SendDeviceStatus(device);
-        }
-    }
-
-    private async Task OnInterceptingPublishAsync(InterceptingPublishEventArgs arg)
+    private async Task OnApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs arg)
     {
         var topic = arg.ApplicationMessage.Topic;
         var payload = arg.ApplicationMessage.ConvertPayloadToString();
@@ -79,6 +78,17 @@ public class MessageHandler : IHostedService
             WriteLog($"{arg.ApplicationMessage.Topic}: Setting timer for status");
 
             _deviceTimers[newDevice.Name] = new Timer(OnDeviceTimer, newDevice, _deviceDelayTime, Timeout.InfiniteTimeSpan);
+        }
+    }
+
+    private async Task RequestLatestStatus()
+    {
+        WriteLog("RequestLatestStatus");
+
+        foreach (var device in _deviceRepository.Values)
+        {
+            WriteLog($"RequestLatestStatus: {device.Name}");
+            await SendDeviceStatus(device);
         }
     }
 
@@ -135,8 +145,8 @@ public class MessageHandler : IHostedService
         if (_hubConnection != null)
             await _hubConnection.StopAsync(cancellationToken);
 
-        if (_mqttServer != null)
-            await _mqttServer.StopAsync();
+        if (_mqttClient != null)
+            await _mqttClient.DisconnectAsync(new MqttClientDisconnectOptionsBuilder().Build(), CancellationToken.None);
     }
 
     private static void WriteLog(string message)

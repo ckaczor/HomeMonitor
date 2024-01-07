@@ -56,18 +56,6 @@ spec:
     app: device-status-service
   type: ClusterIP
 ---
-kind: Service
-apiVersion: v1
-metadata:
-  name: device-status-service-mqtt
-spec:
-  ports:
-  - name: client
-    port: 1883
-  selector:
-    app: device-status-service
-  type: LoadBalancer  
----
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
