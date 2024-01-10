@@ -1,0 +1,76 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: calendar-service
+  namespace: home-monitor
+  labels:
+    app: calendar-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: calendar-service
+  template:
+    metadata:
+      labels:
+        app: calendar-service
+    spec:
+      containers:
+      - name: calendar-service
+        image: ckaczor/home-monitor-calendar-service:#BUILD_BUILDNUMBER#
+        terminationMessagePath: "/dev/termination-log"
+        terminationMessagePolicy: File
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        kubernetes.io/hostname: kubernetes
+      schedulerName: default-scheduler
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: calendar-service
+spec:
+  ports:
+  - name: client
+    port: 8080
+  selector:
+    app: calendar-service
+  type: ClusterIP
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: traefik
+  creationTimestamp: null
+  name: calendar
+  namespace: home-monitor
+spec:
+  routes:
+  - kind: Rule
+    match: PathPrefix(`/api/calendar`)
+    middlewares:
+    - name: api-calendar
+      namespace: home-monitor
+    services:
+    - kind: Service
+      name: calendar-service
+      namespace: home-monitor
+      port: 8080
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  creationTimestamp: null
+  name: api-calendar
+  namespace: home-monitor
+spec:
+  stripPrefix:
+    prefixes:
+    - /api/calendar
