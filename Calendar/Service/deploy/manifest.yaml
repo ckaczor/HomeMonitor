@@ -52,6 +52,8 @@ metadata:
   name: calendar
   namespace: home-monitor
 spec:
+  entryPoints:
+  - local
   routes:
   - kind: Rule
     match: PathPrefix(`/api/calendar`)
