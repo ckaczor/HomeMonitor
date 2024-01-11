@@ -6,9 +6,9 @@
 # If you put them in the code you risk committing that info or sharing it
 
 secrets = {
-    'ssid' : 'Home',
-    'password' : '***REMOVED***',
-    'aio_username' : 'ckaczor',
-    'aio_key' : '***REMOVED***',
+    'ssid' : '',
+    'password' : '',
+    'aio_username' : '',
+    'aio_key' : '',
     'timezone' : "America/New_York", # http://worldtimeapi.org/timezones
     }
