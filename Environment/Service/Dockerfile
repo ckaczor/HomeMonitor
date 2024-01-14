@@ -11,8 +11,8 @@ WORKDIR "/src"
 RUN dotnet publish "Service.csproj" -c Release -o /app
 
 FROM base AS final
-RUN apk add --no-cache tzdata
 WORKDIR /app
 COPY --from=build /app .
+RUN apk add --no-cache tzdata icu-libs
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 ENTRYPOINT ["dotnet", "ChrisKaczor.HomeMonitor.Environment.Service.dll"]
