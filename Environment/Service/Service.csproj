@@ -23,6 +23,7 @@
     <PackageReference Include="Dapper" Version="2.1.28" />
     <PackageReference Include="dbup-sqlserver" Version="5.0.37" />
     <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.1" />
     <PackageReference Include="MQTTnet.AspNetCore" Version="4.3.3.952" />
   </ItemGroup>
 
