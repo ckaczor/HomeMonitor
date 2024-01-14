@@ -1,9 +1,8 @@
 ﻿using System.Text.Json;
 using ChrisKaczor.HomeMonitor.Environment.Service.Data;
+using Microsoft.AspNetCore.SignalR.Client;
 using MQTTnet;
 using MQTTnet.Client;
-using Microsoft.AspNetCore.SignalR.Client;
-using System.Threading;
 
 namespace ChrisKaczor.HomeMonitor.Environment.Service;
 
@@ -12,10 +11,10 @@ public class MessageHandler : IHostedService
     private readonly IConfiguration _configuration;
     private readonly Database _database;
     private readonly IMqttClient _mqttClient;
-    private HubConnection _hubConnection;
 
     private readonly MqttFactory _mqttFactory;
     private readonly string _topic;
+    private readonly HubConnection _hubConnection;
 
     public MessageHandler(IConfiguration configuration, Database database)
     {
@@ -69,10 +68,10 @@ public class MessageHandler : IHostedService
 
         await _database.StoreMessageAsync(message);
 
-        await SendLatestReading(message);
+        await SendMessage(message);
     }
 
-    private async Task SendLatestReading(Message message)
+    private async Task SendMessage(Message message)
     {
         try
         {
@@ -81,7 +80,7 @@ public class MessageHandler : IHostedService
 
             var json = JsonSerializer.Serialize(message);
 
-            await _hubConnection.InvokeAsync("SendLatestReading", json);
+            await _hubConnection.InvokeAsync("SendMessage", json);
         }
         catch (Exception exception)
         {
