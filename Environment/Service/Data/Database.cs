@@ -11,7 +11,7 @@ public class Database(IConfiguration configuration)
     {
         var connectionStringBuilder = new SqlConnectionStringBuilder
         {
-            DataSource = configuration["Environment:Database:Host"],
+            DataSource = $"{_configuration["Environment:Database:Host"]},{_configuration["Environment:Database:Port"]}",
             UserID = configuration["Environment:Database:User"],
             Password = configuration["Environment:Database:Password"],
             InitialCatalog = configuration["Environment:Database:Name"],
