@@ -106,7 +106,7 @@ spec:
             secretKeyRef:
               name: environment-database-credentials
               key: password    
-        - name: Hub__Environment
+        - name: Environment__Hub__Url
           value: http://hub-service/environment
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
