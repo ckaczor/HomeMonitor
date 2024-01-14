@@ -14,4 +14,5 @@ FROM base AS final
 RUN apk add --no-cache tzdata
 WORKDIR /app
 COPY --from=build /app .
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 ENTRYPOINT ["dotnet", "ChrisKaczor.HomeMonitor.Environment.Service.dll"]
