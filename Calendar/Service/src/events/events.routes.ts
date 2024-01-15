@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as DateHolidays from 'date-holidays';
 import { Event } from './event';
+import { DateTime } from 'luxon';
 
 export const eventsRouter = express.Router();
 
@@ -25,11 +26,12 @@ function getHolidays(req: Request): DateHolidays.HolidaysTypes.Holiday[] {
 eventsRouter.get('/all', async (req: Request, res: Response) => {
     try {
         const timezone = req.query.timezone as string;
+        
         const holidays = getHolidays(req);
 
-        const calendarEvents = holidays.map(holiday => new Event(holiday, timezone));
+        const events = holidays.map(holiday => new Event(holiday, timezone));
 
-        return res.status(StatusCodes.OK).json(calendarEvents);
+        return res.status(StatusCodes.OK).json(events);
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
     }
@@ -38,21 +40,20 @@ eventsRouter.get('/all', async (req: Request, res: Response) => {
 eventsRouter.get('/next', async (req: Request, res: Response) => {
     try {
         const timezone = req.query.timezone as string;
+
         const holidays = getHolidays(req);
 
-        const nextHoliday = holidays.find(holiday => {
-            const holidayDate = new Date(holiday.date);
+        const events = holidays.map(holiday => new Event(holiday, timezone));
 
-            return holidayDate.getTime() > Date.now();
-        });
+        const now = DateTime.now();
 
-        if (nextHoliday == null) {
+        const nextEvent = events.find(event => event.date > now || event.isToday);
+
+        if (!nextEvent) {
             return res.status(StatusCodes.OK).json(null);
         }
 
-        const calendarEvent = new Event(nextHoliday, timezone);
-
-        return res.status(StatusCodes.OK).json(calendarEvent);
+        return res.status(StatusCodes.OK).json(nextEvent);
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
     }
@@ -61,17 +62,16 @@ eventsRouter.get('/next', async (req: Request, res: Response) => {
 eventsRouter.get('/future', async (req: Request, res: Response) => {
     try {
         const timezone = req.query.timezone as string;
+
         const holidays = getHolidays(req);
 
-        const futureHolidays = holidays.filter(holiday => {
-            const holidayDate = new Date(holiday.date);
+        const events = holidays.map(holiday => new Event(holiday, timezone));
 
-            return holidayDate.getTime() > Date.now();
-        });
+        const now = DateTime.now();
 
-        const calendarEvents = futureHolidays.map(holiday => new Event(holiday, timezone));
+        const futureEvents = events.filter(event => event.date > now || event.isToday);
 
-        return res.status(StatusCodes.OK).json(calendarEvents);
+        return res.status(StatusCodes.OK).json(futureEvents);
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
     }
