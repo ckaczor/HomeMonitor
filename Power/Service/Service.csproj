@@ -1,36 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <AssemblyName>ChrisKaczor.HomeMonitor.Power.Service</AssemblyName>
     <RootNamespace>ChrisKaczor.HomeMonitor.Power.Service</RootNamespace>
-    <CodeAnalysisRuleSet>../../ChrisKaczor.ruleset</CodeAnalysisRuleSet>
-    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>  
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
-
   <ItemGroup>
+    <None Remove="C:\Users\chris\.nuget\packages\opentelemetry.autoinstrumentation\1.3.0\contentFiles\any\any\instrument.cmd" />
+    <None Remove="C:\Users\chris\.nuget\packages\opentelemetry.autoinstrumentation\1.3.0\contentFiles\any\any\instrument.sh" />
     <None Remove="Data\Resources\CreateStatus.sql" />
     <None Remove="Data\Resources\GetStatusHistoryGrouped.sql" />
     <None Remove="Data\Resources\Schema.sql" />
     <None Remove="Data\Resources\GetRecentStatus.sql" />
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="Data\Resources\CreateStatus.sql" />
     <EmbeddedResource Include="Data\Resources\GetStatusHistoryGrouped.sql" />
     <EmbeddedResource Include="Data\Resources\Schema.sql" />
     <EmbeddedResource Include="Data\Resources\GetRecentStatus.sql" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.90" />
-    <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.17.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.17.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.6" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="2.1.3" />
-    <PackageReference Include="RestSharp" Version="106.11.7" />
+    <PackageReference Include="Dapper" Version="2.1.28" />
+    <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.4" />
+    <PackageReference Include="OpenTelemetry.AutoInstrumentation" Version="1.3.0" />
+    <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.7.0" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.7.0" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.7.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.7.0" />
+    <PackageReference Include="RestSharp" Version="110.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.1" />
   </ItemGroup>
-
 </Project>

@@ -6,29 +6,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChrisKaczor.HomeMonitor.Power.Service.Controllers
+namespace ChrisKaczor.HomeMonitor.Power.Service.Controllers;
+
+[Route("[controller]")]
+[ApiController]
+public class StatusController(Database database) : ControllerBase
 {
-    [Route("[controller]")]
-    [ApiController]
-    public class StatusController : ControllerBase
+    [HttpGet("recent")]
+    public async Task<ActionResult<PowerStatus>> GetRecent()
     {
-        private readonly Database _database;
+        return await database.GetRecentStatus();
+    }
 
-        public StatusController(Database database)
-        {
-            _database = database;
-        }
-
-        [HttpGet("recent")]
-        public async Task<ActionResult<PowerStatus>> GetRecent()
-        {
-            return await _database.GetRecentStatus();
-        }
-
-        [HttpGet("history-grouped")]
-        public async Task<ActionResult<List<PowerStatusGrouped>>> GetHistoryGrouped(DateTimeOffset start, DateTimeOffset end, int bucketMinutes = 2)
-        {
-            return (await _database.GetStatusHistoryGrouped(start, end, bucketMinutes)).ToList();
-        }
+    [HttpGet("history-grouped")]
+    public async Task<ActionResult<List<PowerStatusGrouped>>> GetHistoryGrouped(DateTimeOffset start, DateTimeOffset end, int bucketMinutes = 2)
+    {
+        return (await database.GetStatusHistoryGrouped(start, end, bucketMinutes)).ToList();
     }
 }

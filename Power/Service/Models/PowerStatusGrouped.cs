@@ -1,13 +1,12 @@
 ﻿using JetBrains.Annotations;
 using System;
 
-namespace ChrisKaczor.HomeMonitor.Power.Service.Models
+namespace ChrisKaczor.HomeMonitor.Power.Service.Models;
+
+[PublicAPI]
+public class PowerStatusGrouped
 {
-    [PublicAPI]
-    public class PowerStatusGrouped
-    {
-        public DateTimeOffset Bucket { get; set; }
-        public long AverageGeneration { get; set; }
-        public long AverageConsumption { get; set; }
-    }
+    public DateTimeOffset Bucket { get; set; }
+    public long AverageGeneration { get; set; }
+    public long AverageConsumption { get; set; }
 }

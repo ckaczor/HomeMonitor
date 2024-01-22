@@ -94,11 +94,6 @@ spec:
         securityContext:
           privileged: true
         env:
-        - name: ApplicationInsights__ConnectionString
-          valueFrom:
-            secretKeyRef:
-              name: telemetry
-              key: key
         - name: Power__Database__Host
           value: power-database
         - name: Power__Database__User
