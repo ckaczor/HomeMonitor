@@ -49,10 +49,10 @@ spec:
                 operator: In
                 values: ["true"]
       tolerations: 
-      - key: "key"
-        operator: "Equal"
-        value: "value"
-        effect: "NoSchedule"
+      - key: weather
+        operator: Equal
+        value: "true"
+        effect: NoSchedule
   volumeClaimTemplates:
     - metadata:
         name: data
@@ -131,7 +131,7 @@ spec:
                 operator: In
                 values: ["true"]
       tolerations: 
-      - key: "key"
-        operator: "Equal"
-        value: "value"
-        effect: "NoSchedule"
+      - key: weather
+        operator: Equal
+        value: "true"
+        effect: NoSchedule
