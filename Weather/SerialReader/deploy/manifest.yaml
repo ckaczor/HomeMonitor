@@ -47,7 +47,7 @@ spec:
             - matchExpressions:
               - key: weather
                 operator: In
-                values: ["weather"]
+                values: ["true"]
       tolerations: 
       - key: "key"
         operator: "Equal"
@@ -129,7 +129,7 @@ spec:
             - matchExpressions:
               - key: weather
                 operator: In
-                values: ["weather"]
+                values: ["true"]
       tolerations: 
       - key: "key"
         operator: "Equal"
