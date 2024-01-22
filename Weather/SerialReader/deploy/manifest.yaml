@@ -40,14 +40,6 @@ spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: weather
-                operator: In
-                values: ["true"]
       tolerations: 
       - key: weather
         operator: Equal
@@ -122,16 +114,8 @@ spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: weather
-                operator: In
-                values: ["true"]
       tolerations: 
-      - key: weather
+      - key: "weather"
         operator: Equal
         value: "true"
         effect: NoSchedule
