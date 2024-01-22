@@ -40,9 +40,19 @@ spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
-      nodeSelector:
-        kubernetes.io/hostname: weather
-      schedulerName: default-scheduler
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: weather
+                operator: In
+                values: ["weather"]
+      tolerations: 
+      - key: "key"
+        operator: "Equal"
+        value: "value"
+        effect: "NoSchedule"
   volumeClaimTemplates:
     - metadata:
         name: data
@@ -112,6 +122,16 @@ spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
-      nodeSelector:
-        kubernetes.io/hostname: weather
-      schedulerName: default-scheduler
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: weather
+                operator: In
+                values: ["weather"]
+      tolerations: 
+      - key: "key"
+        operator: "Equal"
+        value: "value"
+        effect: "NoSchedule"
