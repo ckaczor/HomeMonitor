@@ -132,7 +132,7 @@ metadata:
 spec:
   ports:
   - name: client
-    port: 80
+    port: 8080
   selector:
     app: power-service
   type: ClusterIP
@@ -156,7 +156,7 @@ spec:
     - kind: Service
       name: power-service
       namespace: home-monitor
-      port: 80
+      port: 8080
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
