@@ -49,7 +49,7 @@ public class PowerReader(IConfiguration configuration, Database database, ILogge
 
             var content = response.Content!;
 
-            logger.LogInformation("API response: {content}", content);
+            logger.LogDebug("API response: {content}", content);
 
             var sample = JsonSerializer.Deserialize<PowerSample>(content);
 
@@ -65,7 +65,7 @@ public class PowerReader(IConfiguration configuration, Database database, ILogge
 
             var json = JsonSerializer.Serialize(status);
 
-            logger.LogInformation("Output message: {json}", json);
+            logger.LogDebug("Output message: {json}", json);
 
             if (_hubConnection == null)
                 return;

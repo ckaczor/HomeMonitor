@@ -32,9 +32,9 @@ public static class Program
 
         AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
-        var name = Assembly.GetExecutingAssembly().GetName().Name;
+        var serviceName = Assembly.GetExecutingAssembly().GetName().Name;
 
-        openTelemetry.ConfigureResource(resource => resource.AddService(name!));
+        openTelemetry.ConfigureResource(resource => resource.AddService(serviceName!));
 
         openTelemetry.WithMetrics(meterProviderBuilder => meterProviderBuilder
             .AddAspNetCoreInstrumentation()
@@ -57,9 +57,6 @@ public static class Program
 
             tracerProviderBuilder.AddSource(nameof(PowerReader));
 
-            if (builder.Environment.IsDevelopment())
-                tracerProviderBuilder.AddConsoleExporter();
-
             tracerProviderBuilder.SetErrorStatusOnException();
 
             tracerProviderBuilder.AddOtlpExporter(exporterOptions =>
@@ -69,14 +66,11 @@ public static class Program
             });
         });
 
-        builder.Services.AddLogging((loggingBuilder) =>
+        builder.Services.AddLogging(loggingBuilder =>
         {
             loggingBuilder.SetMinimumLevel(LogLevel.Information);
             loggingBuilder.AddOpenTelemetry(options =>
                 {
-                    if (builder.Environment.IsDevelopment())
-                        options.AddConsoleExporter();
-
                     options.AddOtlpExporter(exporterOptions =>
                     {
                         exporterOptions.Endpoint = new Uri(builder.Configuration["Telemetry:Endpoint"]!);
