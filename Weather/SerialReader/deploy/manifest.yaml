@@ -97,7 +97,7 @@ spec:
         livenessProbe:
           httpGet:
             path: health/health
-            port: 80
+            port: 8080
         env:
         - name: Weather__Queue__Host
           value: weather-queue

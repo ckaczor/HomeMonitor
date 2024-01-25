@@ -1,25 +1,17 @@
+using ChrisKaczor.HomeMonitor.Weather.Models;
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ChrisKaczor.HomeMonitor.Weather.Models;
-using JetBrains.Annotations;
 
-namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
+namespace ChrisKaczor.HomeMonitor.Weather.Service.Models;
+
+[PublicAPI]
+public class ReadingAggregate(IEnumerable<WeatherReading> readings, Func<WeatherReading, decimal> selector, int decimalPlaces)
 {
-    [PublicAPI]
-    public class ReadingAggregate
-    {
-        public decimal Min { get; set; }
+    public decimal Min { get; set; } = readings.Min(selector);
 
-        public decimal Max { get; set; }
+    public decimal Max { get; set; } = readings.Max(selector);
 
-        public decimal Average { get; set; }
-
-        public ReadingAggregate(IEnumerable<WeatherReading> readings, Func<WeatherReading, decimal> selector, int decimalPlaces)
-        {
-            Min = readings.Min(selector);
-            Max = readings.Max(selector);
-            Average = readings.Average(selector).Truncate(decimalPlaces);
-        }
-    }
+    public decimal Average { get; set; } = readings.Average(selector).Truncate(decimalPlaces);
 }

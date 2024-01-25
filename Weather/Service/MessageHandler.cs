@@ -13,119 +13,109 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ChrisKaczor.HomeMonitor.Weather.Service
+namespace ChrisKaczor.HomeMonitor.Weather.Service;
+
+[UsedImplicitly]
+public class MessageHandler(IConfiguration configuration, Database database) : IHostedService
 {
-    [UsedImplicitly]
-    public class MessageHandler : IHostedService
+    private IConnection _queueConnection;
+    private IModel _queueModel;
+
+    private HubConnection _hubConnection;
+
+    public Task StartAsync(CancellationToken cancellationToken)
     {
-        private readonly IConfiguration _configuration;
-        private readonly Database _database;
+        var host = configuration["Weather:Queue:Host"];
 
-        private IConnection _queueConnection;
-        private IModel _queueModel;
+        if (string.IsNullOrEmpty(host))
+            return Task.CompletedTask;
 
-        private HubConnection _hubConnection;
+        WriteLog("MessageHandler: Start");
 
-        public MessageHandler(IConfiguration configuration, Database database)
+        var factory = new ConnectionFactory
         {
-            _configuration = configuration;
-            _database = database;
-        }
+            HostName = host,
+            UserName = configuration["Weather:Queue:User"],
+            Password = configuration["Weather:Queue:Password"]
+        };
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        _queueConnection = factory.CreateConnection();
+        _queueModel = _queueConnection.CreateModel();
+
+        _queueModel.QueueDeclare(configuration["Weather:Queue:Name"], true, false, false, null);
+
+        var consumer = new EventingBasicConsumer(_queueModel);
+        consumer.Received += DeviceEventHandler;
+
+        _queueModel.BasicConsume(configuration["Weather:Queue:Name"], true, consumer);
+
+        if (!string.IsNullOrEmpty(configuration["Hub:Weather"]))
+            _hubConnection = new HubConnectionBuilder().WithUrl(configuration["Hub:Weather"]).Build();
+
+        return Task.CompletedTask;
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        WriteLog("MessageHandler: Stop");
+
+        _hubConnection?.StopAsync(cancellationToken).Wait(cancellationToken);
+
+        _queueModel?.Close();
+        _queueConnection?.Close();
+
+        return Task.CompletedTask;
+    }
+
+    private void DeviceEventHandler(object model, BasicDeliverEventArgs eventArgs)
+    {
+        try
         {
-            var host = _configuration["Weather:Queue:Host"];
+            var body = eventArgs.Body;
+            var message = Encoding.UTF8.GetString(body.ToArray());
 
-            if (string.IsNullOrEmpty(host))
-                return Task.CompletedTask;
+            WriteLog($"Message received: {message}");
 
-            WriteLog("MessageHandler: Start");
+            var weatherMessage = JsonConvert.DeserializeObject<WeatherMessage>(message);
 
-            var factory = new ConnectionFactory
+            if (weatherMessage.Type == MessageType.Text)
             {
-                HostName = host,
-                UserName = _configuration["Weather:Queue:User"],
-                Password = _configuration["Weather:Queue:Password"]
-            };
+                WriteLog(weatherMessage.Message);
 
-            _queueConnection = factory.CreateConnection();
-            _queueModel = _queueConnection.CreateModel();
+                return;
+            }
 
-            _queueModel.QueueDeclare(_configuration["Weather:Queue:Name"], true, false, false, null);
+            database.StoreWeatherData(weatherMessage);
 
-            var consumer = new EventingBasicConsumer(_queueModel);
-            consumer.Received += DeviceEventHandler;
+            if (_hubConnection == null)
+                return;
 
-            _queueModel.BasicConsume(_configuration["Weather:Queue:Name"], true, consumer);
+            var weatherUpdate = new WeatherUpdate(weatherMessage, database);
 
-            if (!string.IsNullOrEmpty(_configuration["Hub:Weather"]))
-                _hubConnection = new HubConnectionBuilder().WithUrl(_configuration["Hub:Weather"]).Build();
-
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            WriteLog("MessageHandler: Stop");
-
-            _hubConnection?.StopAsync(cancellationToken).Wait(cancellationToken);
-
-            _queueModel?.Close();
-            _queueConnection?.Close();
-
-            return Task.CompletedTask;
-        }
-
-        private void DeviceEventHandler(object model, BasicDeliverEventArgs eventArgs)
-        {
             try
             {
-                var body = eventArgs.Body;
-                var message = Encoding.UTF8.GetString(body.ToArray());
+                if (_hubConnection.State == HubConnectionState.Disconnected)
+                    _hubConnection.StartAsync().Wait();
 
-                WriteLog($"Message received: {message}");
+                var json = JsonConvert.SerializeObject(weatherUpdate);
 
-                var weatherMessage = JsonConvert.DeserializeObject<WeatherMessage>(message);
-
-                if (weatherMessage.Type == MessageType.Text)
-                {
-                    WriteLog(weatherMessage.Message);
-
-                    return;
-                }
-
-                _database.StoreWeatherData(weatherMessage);
-
-                if (_hubConnection == null)
-                    return;
-
-                var weatherUpdate = new WeatherUpdate(weatherMessage, _database);
-
-                try
-                {
-                    if (_hubConnection.State == HubConnectionState.Disconnected)
-                        _hubConnection.StartAsync().Wait();
-
-                    var json = JsonConvert.SerializeObject(weatherUpdate);
-
-                    _hubConnection.InvokeAsync("SendLatestReading", json).Wait();
-                }
-                catch (Exception exception)
-                {
-                    WriteLog($"Hub exception: {exception}");
-                }
+                _hubConnection.InvokeAsync("SendLatestReading", json).Wait();
             }
             catch (Exception exception)
             {
-                WriteLog($"Exception: {exception}");
-
-                throw;
+                WriteLog($"Hub exception: {exception}");
             }
         }
-
-        private static void WriteLog(string message)
+        catch (Exception exception)
         {
-            Console.WriteLine(message);
+            WriteLog($"Exception: {exception}");
+
+            throw;
         }
+    }
+
+    private static void WriteLog(string message)
+    {
+        Console.WriteLine(message);
     }
 }

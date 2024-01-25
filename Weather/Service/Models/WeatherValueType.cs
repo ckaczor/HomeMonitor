@@ -1,18 +1,17 @@
 ﻿using JetBrains.Annotations;
 
-namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
+namespace ChrisKaczor.HomeMonitor.Weather.Service.Models;
+
+[PublicAPI]
+public enum WeatherValueType
 {
-    [PublicAPI]
-    public enum WeatherValueType
-    {
-        WindSpeed,
-        Humidity,
-        HumidityTemperature,
-        Rain,
-        Pressure,
-        PressureTemperature,
-        LightLevel,
-        Altitude,
-        SatelliteCount
-    }
+    WindSpeed,
+    Humidity,
+    HumidityTemperature,
+    Rain,
+    Pressure,
+    PressureTemperature,
+    LightLevel,
+    Altitude,
+    SatelliteCount
 }

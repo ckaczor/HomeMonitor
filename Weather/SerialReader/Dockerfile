@@ -1,8 +1,8 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-focal-arm32v7 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-jammy-arm32v7 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build
 WORKDIR /src
 COPY ["./SerialReader.csproj", "./"]
 RUN dotnet restore -r linux-arm "SerialReader.csproj"

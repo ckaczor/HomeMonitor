@@ -1,13 +1,12 @@
 ﻿using JetBrains.Annotations;
 using System;
 
-namespace ChrisKaczor.HomeMonitor.Weather.Service.Models
-{
-    [PublicAPI]
-    public class WeatherValueGrouped
-    {
-        public DateTimeOffset Bucket { get; set; }
+namespace ChrisKaczor.HomeMonitor.Weather.Service.Models;
 
-        public decimal AverageValue { get; set; }
-    }
+[PublicAPI]
+public class WeatherValueGrouped
+{
+    public DateTimeOffset Bucket { get; set; }
+
+    public decimal AverageValue { get; set; }
 }

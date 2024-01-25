@@ -7,78 +7,70 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChrisKaczor.HomeMonitor.Weather.Service.Controllers
+namespace ChrisKaczor.HomeMonitor.Weather.Service.Controllers;
+
+[Route("[controller]")]
+[ApiController]
+public class ReadingsController(Database database) : ControllerBase
 {
-    [Route("[controller]")]
-    [ApiController]
-    public class ReadingsController : ControllerBase
+    [HttpGet("recent")]
+    public async Task<ActionResult<WeatherReading>> GetRecent([FromQuery] string tz)
     {
-        private readonly Database _database;
+        var recentReading = await database.GetRecentReading();
 
-        public ReadingsController(Database database)
-        {
-            _database = database;
-        }
-
-        [HttpGet("recent")]
-        public async Task<ActionResult<WeatherReading>> GetRecent([FromQuery] string tz)
-        {
-            var recentReading = await _database.GetRecentReading();
-
-            if (string.IsNullOrWhiteSpace(tz)) 
-                return recentReading;
-
-            try
-            {
-                var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(tz);
-
-                recentReading.Timestamp = recentReading.Timestamp.ToOffset(timeZoneInfo.GetUtcOffset(recentReading.Timestamp));
-                recentReading.GpsTimestamp = recentReading.GpsTimestamp.ToOffset(timeZoneInfo.GetUtcOffset(recentReading.GpsTimestamp));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-
+        if (string.IsNullOrWhiteSpace(tz))
             return recentReading;
-        }
 
-        [HttpGet("history")]
-        public async Task<ActionResult<List<WeatherReading>>> GetHistory(DateTimeOffset start, DateTimeOffset end)
+        try
         {
-            return (await _database.GetReadingHistory(start, end)).ToList();
-        }
+            var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(tz);
 
-        [HttpGet("aggregate")]
-        public async Task<ActionResult<WeatherAggregate>> GetHistoryAggregate(DateTimeOffset start, DateTimeOffset end)
+            recentReading.Timestamp = recentReading.Timestamp.ToOffset(timeZoneInfo.GetUtcOffset(recentReading.Timestamp));
+            recentReading.GpsTimestamp = recentReading.GpsTimestamp.ToOffset(timeZoneInfo.GetUtcOffset(recentReading.GpsTimestamp));
+        }
+        catch (Exception e)
         {
-            var readings = (await _database.GetReadingHistory(start, end)).ToList();
-
-            return readings.Any() ? new WeatherAggregate(readings) : null;
+            return BadRequest(e.Message);
         }
 
-        [HttpGet("value-history")]
-        public async Task<ActionResult<List<WeatherValue>>> GetValueHistory(WeatherValueType weatherValueType, DateTimeOffset start, DateTimeOffset end)
-        {
-            return (await _database.GetReadingValueHistory(weatherValueType, start, end)).ToList();
-        }
+        return recentReading;
+    }
 
-        [HttpGet("value-history-grouped")]
-        public async Task<ActionResult<List<WeatherValueGrouped>>> GetValueHistoryGrouped(WeatherValueType weatherValueType, DateTimeOffset start, DateTimeOffset end, int bucketMinutes = 2)
-        {
-            return (await _database.GetReadingValueHistoryGrouped(weatherValueType, start, end, bucketMinutes)).ToList();
-        }
+    [HttpGet("history")]
+    public async Task<ActionResult<List<WeatherReading>>> GetHistory(DateTimeOffset start, DateTimeOffset end)
+    {
+        return (await database.GetReadingHistory(start, end)).ToList();
+    }
 
-        [HttpGet("history-grouped")]
-        public async Task<ActionResult<List<WeatherReadingGrouped>>> GetHistoryGrouped(DateTimeOffset start, DateTimeOffset end, int bucketMinutes = 2)
-        {
-            return (await _database.GetReadingHistoryGrouped(start, end, bucketMinutes)).ToList();
-        }
+    [HttpGet("aggregate")]
+    public async Task<ActionResult<WeatherAggregate>> GetHistoryAggregate(DateTimeOffset start, DateTimeOffset end)
+    {
+        var readings = (await database.GetReadingHistory(start, end)).ToList();
 
-        [HttpGet("wind-history-grouped")]
-        public async Task<ActionResult<List<WindHistoryGrouped>>> GetWindHistoryGrouped(DateTimeOffset start, DateTimeOffset end, int bucketMinutes = 60)
-        {
-            return (await _database.GetWindHistoryGrouped(start, end, bucketMinutes)).ToList();
-        }
+        return readings.Any() ? new WeatherAggregate(readings) : null;
+    }
+
+    [HttpGet("value-history")]
+    public async Task<ActionResult<List<WeatherValue>>> GetValueHistory(WeatherValueType weatherValueType, DateTimeOffset start, DateTimeOffset end)
+    {
+        return (await database.GetReadingValueHistory(weatherValueType, start, end)).ToList();
+    }
+
+    [HttpGet("value-history-grouped")]
+    public async Task<ActionResult<List<WeatherValueGrouped>>> GetValueHistoryGrouped(WeatherValueType weatherValueType, DateTimeOffset start, DateTimeOffset end, int bucketMinutes = 2)
+    {
+        return (await database.GetReadingValueHistoryGrouped(weatherValueType, start, end, bucketMinutes)).ToList();
+    }
+
+    [HttpGet("history-grouped")]
+    public async Task<ActionResult<List<WeatherReadingGrouped>>> GetHistoryGrouped(DateTimeOffset start, DateTimeOffset end, int bucketMinutes = 2)
+    {
+        return (await database.GetReadingHistoryGrouped(start, end, bucketMinutes)).ToList();
+    }
+
+    [HttpGet("wind-history-grouped")]
+    public async Task<ActionResult<List<WindHistoryGrouped>>> GetWindHistoryGrouped(DateTimeOffset start, DateTimeOffset end, int bucketMinutes = 60)
+    {
+        return (await database.GetWindHistoryGrouped(start, end, bucketMinutes)).ToList();
     }
 }
