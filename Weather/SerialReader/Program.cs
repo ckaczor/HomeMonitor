@@ -45,9 +45,15 @@ public static class Program
 
         openTelemetry.WithTracing(tracerProviderBuilder =>
         {
-            tracerProviderBuilder.AddAspNetCoreInstrumentation(instrumentationOptions => instrumentationOptions.RecordException = true);
+            tracerProviderBuilder.AddAspNetCoreInstrumentation(instrumentationOptions =>
+            {
+                instrumentationOptions.RecordException = true;
+            });
 
-            tracerProviderBuilder.AddHttpClientInstrumentation(instrumentationOptions => instrumentationOptions.RecordException = true);
+            tracerProviderBuilder.AddHttpClientInstrumentation(instrumentationOptions =>
+            {
+                instrumentationOptions.RecordException = true;
+            });
 
             tracerProviderBuilder.AddSqlClientInstrumentation(o =>
             {
@@ -69,8 +75,13 @@ public static class Program
         builder.Services.AddLogging(loggingBuilder =>
         {
             loggingBuilder.SetMinimumLevel(LogLevel.Information);
+
             loggingBuilder.AddOpenTelemetry(options =>
                 {
+                    options.IncludeFormattedMessage = true;
+                    options.IncludeScopes = true;
+                    options.ParseStateValues = true;
+
                     options.AddOtlpExporter(exporterOptions =>
                     {
                         exporterOptions.Endpoint = new Uri(builder.Configuration["Telemetry:Endpoint"]!);
