@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ChrisKaczor.Common.OpenTelemetry" Version="1.0.1" />
     <PackageReference Include="Dapper" Version="2.1.28" />
     <PackageReference Include="dbup-sqlserver" Version="5.0.37" />
     <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />

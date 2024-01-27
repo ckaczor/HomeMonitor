@@ -1,4 +1,6 @@
+using ChrisKaczor.Common.OpenTelemetry;
 using ChrisKaczor.HomeMonitor.Environment.Service.Data;
+using System.Reflection;
 
 namespace ChrisKaczor.HomeMonitor.Environment.Service;
 
@@ -9,6 +11,8 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Configuration.AddEnvironmentVariables();
+
+        builder.Services.AddCommonOpenTelemetry(Assembly.GetExecutingAssembly().GetName().Name, builder.Configuration["Telemetry:Endpoint"], nameof(MessageHandler));
 
         builder.Services.AddControllers();
 
