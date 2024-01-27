@@ -21,13 +21,11 @@
     <EmbeddedResource Include="Data\Resources\GetRecentStatus.sql" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ChrisKaczor.Common.OpenTelemetry" Version="1.0.1" />
     <PackageReference Include="Dapper" Version="2.1.28" />
     <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.4" />
-    <PackageReference Include="OpenTelemetry.AutoInstrumentation" Version="1.3.0" />
-    <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.7.0" />
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.7.0" />
-    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.7.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.7.0" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.1" />

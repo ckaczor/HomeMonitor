@@ -1,16 +1,10 @@
-﻿using ChrisKaczor.HomeMonitor.Power.Service.Data;
+﻿using ChrisKaczor.Common.OpenTelemetry;
+using ChrisKaczor.HomeMonitor.Power.Service.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using OpenTelemetry.Exporter;
-using OpenTelemetry.Logs;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
-using System;
 using System.IO.Compression;
 using System.Reflection;
 
@@ -24,61 +18,9 @@ public static class Program
 
         builder.Configuration.AddEnvironmentVariables();
 
+        builder.Services.AddCommonOpenTelemetry(Assembly.GetExecutingAssembly().GetName().Name, builder.Configuration["Telemetry:Endpoint"], nameof(PowerReader));
+
         builder.Services.AddControllers();
-
-        // ---
-
-        var openTelemetry = builder.Services.AddOpenTelemetry();
-
-        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-
-        var serviceName = Assembly.GetExecutingAssembly().GetName().Name;
-
-        openTelemetry.ConfigureResource(resource => resource.AddService(serviceName!));
-
-        openTelemetry.WithMetrics(meterProviderBuilder => meterProviderBuilder
-            .AddAspNetCoreInstrumentation()
-            .AddHttpClientInstrumentation()
-            .AddProcessInstrumentation()
-            .AddMeter("Microsoft.AspNetCore.Hosting")
-            .AddMeter("Microsoft.AspNetCore.Server.Kestrel"));
-
-        openTelemetry.WithTracing(tracerProviderBuilder =>
-        {
-            tracerProviderBuilder.AddAspNetCoreInstrumentation(instrumentationOptions => instrumentationOptions.RecordException = true);
-
-            tracerProviderBuilder.AddHttpClientInstrumentation(instrumentationOptions => instrumentationOptions.RecordException = true);
-
-            tracerProviderBuilder.AddSqlClientInstrumentation(o =>
-            {
-                o.RecordException = true;
-                o.SetDbStatementForText = true;
-            });
-
-            tracerProviderBuilder.AddSource(nameof(PowerReader));
-
-            tracerProviderBuilder.SetErrorStatusOnException();
-
-            tracerProviderBuilder.AddOtlpExporter(exporterOptions =>
-            {
-                exporterOptions.Endpoint = new Uri(builder.Configuration["Telemetry:Endpoint"]!);
-                exporterOptions.Protocol = OtlpExportProtocol.Grpc;
-            });
-        });
-
-        builder.Services.AddLogging(loggingBuilder =>
-        {
-            loggingBuilder.SetMinimumLevel(LogLevel.Information);
-            loggingBuilder.AddOpenTelemetry(options =>
-                {
-                    options.AddOtlpExporter(exporterOptions =>
-                    {
-                        exporterOptions.Endpoint = new Uri(builder.Configuration["Telemetry:Endpoint"]!);
-                        exporterOptions.Protocol = OtlpExportProtocol.Grpc;
-                    });
-                }
-            );
-        });
 
         builder.Services.AddTransient<Database>();
 
