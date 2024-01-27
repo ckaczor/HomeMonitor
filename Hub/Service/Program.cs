@@ -1,18 +1,43 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using ChrisKaczor.Common.OpenTelemetry;
+using ChrisKaczor.HomeMonitor.Hub.Service.Hubs;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Reflection;
 
-namespace ChrisKaczor.HomeMonitor.Hub.Service
+namespace ChrisKaczor.HomeMonitor.Hub.Service;
+
+public static class Program
 {
-    public static class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            CreateWebHostBuilder(args).Build().Run();
-        }
+        var builder = WebApplication.CreateBuilder(args);
 
-        private static IWebHostBuilder CreateWebHostBuilder(string[] args)
-        {
-            return WebHost.CreateDefaultBuilder(args).UseStartup<Startup>();
-        }
+        builder.Configuration.AddEnvironmentVariables();
+
+        builder.Services.AddCommonOpenTelemetry(Assembly.GetExecutingAssembly().GetName().Name, builder.Configuration["Telemetry:Endpoint"]);
+
+        builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", corsPolicyBuilder => corsPolicyBuilder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:4200")));
+
+        builder.Services.AddSignalR().AddJsonProtocol(options => options.PayloadSerializerOptions.WriteIndented = false);
+
+        // ---
+
+        var app = builder.Build();
+
+        if (builder.Environment.IsDevelopment())
+            app.UseDeveloperExceptionPage();
+
+        app.UseCors("CorsPolicy");
+
+        app.UseRouting();
+
+        app.MapHub<WeatherHub>("/weather");
+        app.MapHub<PowerHub>("/power");
+        app.MapHub<DeviceStatusHub>("/device-status");
+        app.MapHub<EnvironmentHub>("/environment");
+
+        app.Run();
     }
 }

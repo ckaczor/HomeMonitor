@@ -1,17 +1,17 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.SignalR;
-using System;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace ChrisKaczor.HomeMonitor.Hub.Service.Hubs
 {
     [UsedImplicitly]
-    public class DeviceStatusHub : Microsoft.AspNetCore.SignalR.Hub
+    public class DeviceStatusHub(ILogger<DeviceStatusHub> logger) : Microsoft.AspNetCore.SignalR.Hub
     {
         [UsedImplicitly]
         public async Task RequestLatestStatus()
         {
-            Console.WriteLine("RequestLatestStatus");
+            logger.LogInformation("RequestLatestStatus");
 
             await Clients.Others.SendAsync("RequestLatestStatus");
         }
@@ -19,7 +19,7 @@ namespace ChrisKaczor.HomeMonitor.Hub.Service.Hubs
         [UsedImplicitly]
         public async Task SendLatestStatus(string message)
         {
-            Console.WriteLine($"LatestStatus: {message}");
+            logger.LogInformation($"LatestStatus: {message}");
 
             await Clients.Others.SendAsync("LatestStatus", message);
         }

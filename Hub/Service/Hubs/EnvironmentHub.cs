@@ -1,17 +1,17 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.SignalR;
-using System;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace ChrisKaczor.HomeMonitor.Hub.Service.Hubs
 {
     [UsedImplicitly]
-    public class EnvironmentHub : Microsoft.AspNetCore.SignalR.Hub
+    public class EnvironmentHub(ILogger<EnvironmentHub> logger) : Microsoft.AspNetCore.SignalR.Hub
     {
         [UsedImplicitly]
         public async Task SendMessage(string message)
         {
-            Console.WriteLine(message);
+            logger.LogInformation(message);
 
             await Clients.Others.SendAsync("Message", message);
         }
