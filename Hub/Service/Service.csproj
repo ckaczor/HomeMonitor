@@ -5,7 +5,6 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <AssemblyName>ChrisKaczor.HomeMonitor.Hub.Service</AssemblyName>
     <RootNamespace>ChrisKaczor.HomeMonitor.Hub.Service</RootNamespace>
-    <CodeAnalysisRuleSet>../../ChrisKaczor.ruleset</CodeAnalysisRuleSet>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>  
   </PropertyGroup>
 
