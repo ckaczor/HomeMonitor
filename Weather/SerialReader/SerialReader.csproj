@@ -12,15 +12,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ChrisKaczor.Common.OpenTelemetry" Version="1.0.1" />
     <PackageReference Include="ChrisKaczor.HomeMonitor.Weather.Models" Version="1.1.8" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
     <PackageReference Include="System.IO.Ports" Version="8.0.0" />
-    <PackageReference Include="OpenTelemetry.AutoInstrumentation" Version="1.3.0" />
-    <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.7.0" />
-    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.7.0" />
-    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.7.0" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.7.0" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.0" />
   </ItemGroup>
 
