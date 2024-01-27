@@ -1,22 +1,22 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Service;
+namespace ChrisKaczor.HomeMonitor.DeviceStatus.Service;
 
 public class Device
 {
-    [JsonPropertyName("name")]
-    public string Name { get; }
-
-    [JsonPropertyName("status")]
-    public bool Status { get; private set; }
-
     public Device(string name, string statusString)
     {
         Name = name;
         Update(statusString);
     }
 
-    public void Update(string statusString)
+    [JsonPropertyName("name")]
+    public string Name { get; }
+
+    [JsonPropertyName("status")]
+    public bool Status { get; private set; }
+
+    private void Update(string statusString)
     {
         Status = statusString == "1";
     }

@@ -1,3 +1,3 @@
-﻿namespace Service;
+﻿namespace ChrisKaczor.HomeMonitor.DeviceStatus.Service;
 
-public class DeviceRepository : Dictionary<string, Device> { }
+public class DeviceRepository : Dictionary<string, Device>;

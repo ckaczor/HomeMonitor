@@ -51,7 +51,7 @@ metadata:
 spec:
   ports:
   - name: client
-    port: 80
+    port: 8080
   selector:
     app: device-status-service
   type: ClusterIP
@@ -75,7 +75,7 @@ spec:
     - kind: Service
       name: device-status-service
       namespace: home-monitor
-      port: 80
+      port: 8080
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware

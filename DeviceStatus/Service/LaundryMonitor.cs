@@ -1,19 +1,12 @@
 ﻿using RestSharp;
 
-namespace Service;
+namespace ChrisKaczor.HomeMonitor.DeviceStatus.Service;
 
-public class LaundryMonitor
+public class LaundryMonitor(IConfiguration configuration)
 {
+    private readonly string _botToken = configuration["Telegram:BotToken"]!;
+    private readonly string _chatId = configuration["Telegram:ChatId"]!;
     private readonly RestClient _restClient = new();
-
-    private readonly string _botToken;
-    private readonly string _chatId;
-
-    public LaundryMonitor(IConfiguration configuration)
-    {
-        _botToken = configuration["Telegram:BotToken"];
-        _chatId = configuration["Telegram:ChatId"];
-    }
 
     public async Task HandleDeviceMessage(Device device)
     {

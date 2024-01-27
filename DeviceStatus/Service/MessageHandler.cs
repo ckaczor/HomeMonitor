@@ -3,33 +3,34 @@ using MQTTnet;
 using MQTTnet.Client;
 using System.Text.Json;
 
-namespace Service;
+namespace ChrisKaczor.HomeMonitor.DeviceStatus.Service;
 
 public class MessageHandler : IHostedService
 {
-    private IMqttClient? _mqttClient;
-    private HubConnection? _hubConnection;
-
     private readonly IConfiguration _configuration;
-    private readonly DeviceRepository _deviceRepository;
-    private readonly LaundryMonitor _laundryMonitor;
-    private readonly Dictionary<string, Timer> _deviceTimers = new();
+    private readonly ILogger _logger;
     private readonly TimeSpan _deviceDelayTime;
+    private readonly DeviceRepository _deviceRepository;
+    private readonly Dictionary<string, Timer> _deviceTimers = new();
+    private readonly LaundryMonitor _laundryMonitor;
+    private HubConnection? _hubConnection;
+    private IMqttClient? _mqttClient;
 
-    public MessageHandler(IConfiguration configuration, DeviceRepository deviceRepository, LaundryMonitor laundryMonitor)
+    public MessageHandler(IConfiguration configuration, DeviceRepository deviceRepository, LaundryMonitor laundryMonitor, ILogger<MessageHandler> logger)
     {
         _configuration = configuration;
+        _logger = logger;
         _deviceRepository = deviceRepository;
         _laundryMonitor = laundryMonitor;
 
-        _deviceDelayTime = TimeSpan.Parse(_configuration["DeviceStatus:DelayTime"]);
+        _deviceDelayTime = TimeSpan.Parse(_configuration["DeviceStatus:DelayTime"]!);
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         if (!string.IsNullOrEmpty(_configuration["Hub:DeviceStatus"]))
         {
-            _hubConnection = new HubConnectionBuilder().WithUrl(_configuration["Hub:DeviceStatus"]).Build();
+            _hubConnection = new HubConnectionBuilder().WithUrl(_configuration["Hub:DeviceStatus"]!).Build();
             _hubConnection.On("RequestLatestStatus", async () => await RequestLatestStatus());
 
             await _hubConnection.StartAsync(cancellationToken);
@@ -45,14 +46,19 @@ public class MessageHandler : IHostedService
         await _mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
 
         var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
-            .WithTopicFilter(
-                f =>
-                {
-                    f.WithTopic("device-status/#");
-                })
+            .WithTopicFilter(f => f.WithTopic("device-status/#"))
             .Build();
 
         await _mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
+    }
+
+    public async Task StopAsync(CancellationToken cancellationToken)
+    {
+        if (_hubConnection != null)
+            await _hubConnection.StopAsync(cancellationToken);
+
+        if (_mqttClient != null)
+            await _mqttClient.DisconnectAsync(new MqttClientDisconnectOptionsBuilder().Build(), CancellationToken.None);
     }
 
     private async Task OnApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs arg)
@@ -65,8 +71,8 @@ public class MessageHandler : IHostedService
 
         var newDevice = new Device(deviceName, payload);
 
-        if (_deviceTimers.ContainsKey(newDevice.Name))
-            await _deviceTimers[newDevice.Name].DisposeAsync();
+        if (_deviceTimers.TryGetValue(newDevice.Name, out var deviceTimer))
+            await deviceTimer.DisposeAsync();
 
         if (!_deviceRepository.ContainsKey(newDevice.Name) || newDevice.Status)
         {
@@ -95,7 +101,7 @@ public class MessageHandler : IHostedService
 
     private async void OnDeviceTimer(object? state)
     {
-        var device = (Device)state!;
+        var device = (Device) state!;
 
         await HandleDeviceMessage(device);
 
@@ -141,17 +147,8 @@ public class MessageHandler : IHostedService
         }
     }
 
-    public async Task StopAsync(CancellationToken cancellationToken)
+    private void WriteLog(string message)
     {
-        if (_hubConnection != null)
-            await _hubConnection.StopAsync(cancellationToken);
-
-        if (_mqttClient != null)
-            await _mqttClient.DisconnectAsync(new MqttClientDisconnectOptionsBuilder().Build(), CancellationToken.None);
-    }
-
-    private static void WriteLog(string message)
-    {
-        Console.WriteLine(message);
+        _logger.LogInformation(message);
     }
 }

@@ -1,29 +1,40 @@
-using Service;
+using ChrisKaczor.Common.OpenTelemetry;
+using System.Reflection;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace ChrisKaczor.HomeMonitor.DeviceStatus.Service;
 
-builder.Host.ConfigureAppConfiguration((_, config) => config.AddEnvironmentVariables());
-
-builder.Services.AddControllers();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddHostedService<MessageHandler>();
-
-builder.Services.AddSingleton<DeviceRepository>();
-builder.Services.AddSingleton<LaundryMonitor>();
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
+public static class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        builder.Configuration.AddEnvironmentVariables();
+
+        builder.Services.AddCommonOpenTelemetry(Assembly.GetExecutingAssembly().GetName().Name, builder.Configuration["Telemetry:Endpoint"], nameof(MessageHandler));
+
+        builder.Services.AddControllers();
+
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
+        builder.Services.AddHostedService<MessageHandler>();
+
+        builder.Services.AddSingleton<DeviceRepository>();
+        builder.Services.AddSingleton<LaundryMonitor>();
+
+        var app = builder.Build();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
+    }
 }
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
