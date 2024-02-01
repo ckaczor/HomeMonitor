@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using Dapper;
+﻿using Dapper;
 using DbUp;
-using Microsoft.Data.SqlClient;
+using Npgsql;
+using System.Reflection;
 
 namespace ChrisKaczor.HomeMonitor.Environment.Service.Data;
 
@@ -9,12 +9,13 @@ public class Database(IConfiguration configuration)
 {
     private string GetConnectionString()
     {
-        var connectionStringBuilder = new SqlConnectionStringBuilder
+        var connectionStringBuilder = new NpgsqlConnectionStringBuilder
         {
-            DataSource = $"{configuration["Environment:Database:Host"]},{configuration["Environment:Database:Port"]}",
-            UserID = configuration["Environment:Database:User"],
+            Host = configuration["Environment:Database:Host"],
+            Port = configuration.GetValue<int>("Environment:Database:Port"),
+            Username = configuration["Environment:Database:User"],
             Password = configuration["Environment:Database:Password"],
-            InitialCatalog = configuration["Environment:Database:Name"],
+            Database = configuration["Environment:Database:Name"],
             TrustServerCertificate = bool.Parse(configuration["Environment:Database:TrustServerCertificate"] ?? "false")
         };
 
@@ -25,16 +26,16 @@ public class Database(IConfiguration configuration)
     {
         var connectionString = GetConnectionString();
 
-        DbUp.EnsureDatabase.For.SqlDatabase(connectionString);
+        DbUp.EnsureDatabase.For.PostgresqlDatabase(connectionString);
 
-        var upgradeEngine = DeployChanges.To.SqlDatabase(connectionString).WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(), s => s.Contains(".Schema.")).LogToConsole().Build();
+        var upgradeEngine = DeployChanges.To.PostgresqlDatabase(connectionString).WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(), s => s.Contains(".Schema.")).LogToConsole().Build();
 
         upgradeEngine.PerformUpgrade();
     }
 
-    private SqlConnection CreateConnection()
+    private NpgsqlConnection CreateConnection()
     {
-        var connection = new SqlConnection(GetConnectionString());
+        var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
         return connection;

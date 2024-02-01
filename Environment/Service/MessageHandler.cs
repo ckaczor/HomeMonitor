@@ -14,7 +14,7 @@ public class MessageHandler : IHostedService
 
     private readonly MqttFactory _mqttFactory;
     private readonly string _topic;
-    private readonly HubConnection _hubConnection;
+    private readonly HubConnection? _hubConnection;
 
     public MessageHandler(IConfiguration configuration, Database database)
     {
@@ -33,12 +33,16 @@ public class MessageHandler : IHostedService
 
         _mqttClient.ApplicationMessageReceivedAsync += OnApplicationMessageReceivedAsync;
 
-        _hubConnection = new HubConnectionBuilder().WithUrl(configuration["Environment:Hub:Url"] ?? string.Empty).Build();
+        var hubUrl = configuration["Environment:Hub:Url"];
+
+        if (!string.IsNullOrEmpty(hubUrl))
+            _hubConnection = new HubConnectionBuilder().WithUrl(hubUrl).Build();
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        await _hubConnection.StartAsync(cancellationToken);
+        if (_hubConnection != null)
+            await _hubConnection.StartAsync(cancellationToken);
 
         var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer(_configuration["Mqtt:Server"]).Build();
         await _mqttClient.ConnectAsync(mqttClientOptions, cancellationToken);
@@ -51,7 +55,8 @@ public class MessageHandler : IHostedService
     {
         await _mqttClient.DisconnectAsync(new MqttClientDisconnectOptionsBuilder().Build(), cancellationToken);
 
-        await _hubConnection.StopAsync(cancellationToken);
+        if (_hubConnection != null)
+            await _hubConnection.StopAsync(cancellationToken);
     }
 
     private async Task OnApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs arg)
@@ -75,6 +80,9 @@ public class MessageHandler : IHostedService
     {
         try
         {
+            if (_hubConnection == null)
+                return;
+
             if (_hubConnection.State == HubConnectionState.Disconnected)
                 await _hubConnection.StartAsync();
 

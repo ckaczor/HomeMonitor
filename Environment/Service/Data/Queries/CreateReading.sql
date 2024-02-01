@@ -1,25 +1,30 @@
-BEGIN TRANSACTION
-
-INSERT Reading
-  (Timestamp, Name, Model, Temperature, Pressure, Humidity, Luminance, GasResistance, ColorTemperature, AirQualityIndex)
-SELECT
-  @Timestamp,
-  @Name,
-  @Model,
-  @Temperature,
-  @Pressure,
-  @Humidity,
-  @Luminance,
-  @GasResistance,
-  @ColorTemperature,
-  @AirQualityIndex
-WHERE NOT EXISTS
-  (
-    SELECT
-      1
-    FROM
-      Reading WITH (UPDLOCK, SERIALIZABLE)
-    WHERE Timestamp = @Timestamp AND Name = @Name AND Model = @Model
-  )
-
-COMMIT TRANSACTION
+INSERT INTO 
+    reading 
+    (
+        time, 
+        name, 
+        model, 
+        temperature, 
+        pressure, 
+        humidity, 
+        luminance, 
+        gas_resistance, 
+        color_temperature, 
+        air_quality_index
+    )
+VALUES 
+    (
+        @Timestamp, 
+        @Name, 
+        @Model, 
+        @Temperature, 
+        @Pressure, 
+        @Humidity, 
+        @Luminance, 
+        @GasResistance, 
+        @ColorTemperature, 
+        @AirQualityIndex
+    ) 
+ON CONFLICT 
+    ON CONSTRAINT reading_pk 
+        DO NOTHING
