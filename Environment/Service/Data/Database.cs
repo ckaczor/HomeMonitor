@@ -1,7 +1,9 @@
-﻿using Dapper;
+﻿using ChrisKaczor.HomeMonitor.Environment.Service.Models;
+using Dapper;
 using DbUp;
 using Npgsql;
 using System.Reflection;
+using ChrisKaczor.HomeMonitor.Environment.Service.Models.Indoor;
 
 namespace ChrisKaczor.HomeMonitor.Environment.Service.Data;
 
@@ -41,12 +43,21 @@ public class Database(IConfiguration configuration)
         return connection;
     }
 
-    public async Task StoreMessageAsync(Message message)
+    public async Task StoreMessageAsync(DeviceMessage message)
     {
         await using var connection = CreateConnection();
 
         var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.CreateReading.sql");
 
         await connection.QueryAsync(query, message);
+    }
+
+    public async Task<IEnumerable<Readings>> GetRecentReadings()
+    {
+        await using var connection = CreateConnection();
+
+        var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.GetRecentReadings.sql");
+
+        return await connection.QueryAsync<Readings>(query).ConfigureAwait(false);
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 using JetBrains.Annotations;
 
-namespace ChrisKaczor.HomeMonitor.Environment.Service;
+namespace ChrisKaczor.HomeMonitor.Environment.Service.Models.Indoor;
 
 [UsedImplicitly]
-public class Readings
+public class DeviceReadings
 {
     [JsonPropertyName("aqi")]
     public decimal AirQualityIndex { get; set; }

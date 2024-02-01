@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ChrisKaczor.HomeMonitor.Environment.Service;
+namespace ChrisKaczor.HomeMonitor.Environment.Service.Models.Indoor;
 
-public class Message
+public class DeviceMessage
 {
     [JsonPropertyName("model")]
     public required string Model { get; set; }
@@ -11,7 +11,7 @@ public class Message
     public required string Name { get; set; }
 
     [JsonPropertyName("readings")]
-    public required Readings Readings { get; set; }
+    public required DeviceReadings Readings { get; set; }
 
     [JsonPropertyName("timestamp")]
     public required DateTimeOffset Timestamp { get; set; }

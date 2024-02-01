@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using ChrisKaczor.HomeMonitor.Environment.Service.Data;
+using ChrisKaczor.HomeMonitor.Environment.Service.Models.Indoor;
 using Microsoft.AspNetCore.SignalR.Client;
 using MQTTnet;
 using MQTTnet.Client;
@@ -66,7 +67,7 @@ public class MessageHandler : IHostedService
 
         WriteLog($"Topic: {topic} = {payload}");
 
-        var message = JsonSerializer.Deserialize<Message>(payload);
+        var message = JsonSerializer.Deserialize<DeviceMessage>(payload);
 
         if (message == null)
             return;
@@ -76,7 +77,7 @@ public class MessageHandler : IHostedService
         await SendMessage(message);
     }
 
-    private async Task SendMessage(Message message)
+    private async Task SendMessage(DeviceMessage message)
     {
         try
         {

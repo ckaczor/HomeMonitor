@@ -11,10 +11,12 @@
 
   <ItemGroup>
     <None Remove="Data\Queries\CreateReading.sql" />
+    <None Remove="Data\Queries\GetRecentReadings.sql" />
     <None Remove="Data\Schema\1-Initial Schema.sql" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Data\Queries\GetRecentReadings.sql" />
     <EmbeddedResource Include="Data\Queries\CreateReading.sql" />
     <EmbeddedResource Include="Data\Schema\1-Initial Schema.sql" />
   </ItemGroup>
@@ -29,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Properties\" />
   </ItemGroup>
 
