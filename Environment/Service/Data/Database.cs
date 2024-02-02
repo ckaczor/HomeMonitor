@@ -47,7 +47,7 @@ public class Database(IConfiguration configuration)
     {
         await using var connection = CreateConnection();
 
-        var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.CreateReading.sql");
+        var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.CreateReading.psql");
 
         await connection.QueryAsync(query, message);
     }
@@ -56,8 +56,17 @@ public class Database(IConfiguration configuration)
     {
         await using var connection = CreateConnection();
 
-        var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.GetRecentReadings.sql");
+        var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.GetRecentReadings.psql");
 
         return await connection.QueryAsync<Readings>(query).ConfigureAwait(false);
+    }
+
+    public async Task<IEnumerable<ReadingsGrouped>> GetReadingsHistoryGrouped(DateTimeOffset start, DateTimeOffset end, int bucketMinutes)
+    {
+        await using var connection = CreateConnection();
+
+        var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.GetReadingsHistoryGrouped.psql");
+
+        return await connection.QueryAsync<ReadingsGrouped>(query, new { Start = start, End = end, BucketMinutes = bucketMinutes }).ConfigureAwait(false);
     }
 }

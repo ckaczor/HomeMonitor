@@ -32,4 +32,10 @@ public class ReadingsController(Database database) : ControllerBase
 
         return Ok(recentReadings);
     }
+
+    [HttpGet("history-grouped")]
+    public async Task<ActionResult<List<ReadingsGrouped>>> GetHistoryGrouped(DateTimeOffset start, DateTimeOffset end, int bucketMinutes = 5)
+    {
+        return (await database.GetReadingsHistoryGrouped(start, end, bucketMinutes)).ToList();
+    }
 }

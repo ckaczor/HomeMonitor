@@ -25,6 +25,9 @@ public static class Program
 
         app.MapControllers();
 
+        var database = app.Services.GetRequiredService<Database>();
+        database.EnsureDatabase();
+
         app.Run();
     }
 }

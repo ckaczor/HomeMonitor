@@ -1,9 +1,9 @@
-﻿using System.Text.Json;
-using ChrisKaczor.HomeMonitor.Environment.Service.Data;
+﻿using ChrisKaczor.HomeMonitor.Environment.Service.Data;
 using ChrisKaczor.HomeMonitor.Environment.Service.Models.Indoor;
 using Microsoft.AspNetCore.SignalR.Client;
 using MQTTnet;
 using MQTTnet.Client;
+using System.Text.Json;
 
 namespace ChrisKaczor.HomeMonitor.Environment.Service;
 
@@ -21,8 +21,6 @@ public class MessageHandler : IHostedService
     {
         _configuration = configuration;
         _database = database;
-
-        _database.EnsureDatabase();
 
         _topic = _configuration["Mqtt:Topic"] ?? string.Empty;
 

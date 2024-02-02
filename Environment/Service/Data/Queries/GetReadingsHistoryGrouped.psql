@@ -1,0 +1,20 @@
+SELECT
+  time_bucket('15 minute', time) AS bucket,
+  name,
+  ROUND(avg(temperature), 2) AS averageTemperature,
+  ROUND(avg(pressure), 2) AS averagePressure,
+  ROUND(avg(humidity), 2) AS averageHumidity,
+  ROUND(avg(luminance), 2) AS averageLuminance,
+  ROUND(avg(gas_resistance), 2) AS averageGasResistance,
+  ROUND(avg(color_temperature), 2) AS averageColorTemperature,
+  ROUND(avg(air_quality_index), 2) AS averageAirQualityIndex
+FROM
+  reading
+WHERE
+  time BETWEEN @Start AND @End
+GROUP BY
+  bucket,
+  name
+ORDER BY
+  bucket ASC,
+  name;
