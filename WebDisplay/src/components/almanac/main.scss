@@ -1,0 +1,24 @@
+@font-face {
+    font-family: moon;
+    src: url(/src/assets/moon_phases.ttf) format('opentype');
+}
+
+.almanac-content {
+    font-size: 14px;
+    padding: 10px;
+}
+
+.almanac-table-header {
+    font-weight: 500;
+    text-align: right;
+    padding-right: 10px;
+    white-space: nowrap;
+}
+
+.moon-phase {
+    font-family: moon;
+    font-size: 28px;
+    margin-left: 10px;
+    display: block;
+    margin-top: 1px;
+}

@@ -1,0 +1,24 @@
+$primary: #663399;
+
+@import 'bootstrap';
+
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    height: inherit;
+    width: inherit;
+}
+
+#root {
+    height: inherit;
+    width: inherit;
+
+    background-color: #fafafa;
+}
+
+.dropdown-toggle::after {
+    content: none !important;
+}
