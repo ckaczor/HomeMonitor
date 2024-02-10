@@ -13,6 +13,8 @@ public static class Program
 
         builder.Services.AddCommonOpenTelemetry(Assembly.GetExecutingAssembly().GetName().Name, builder.Configuration["Telemetry:Endpoint"], nameof(MessageHandler));
 
+        builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", corsPolicyBuilder => corsPolicyBuilder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
+
         builder.Services.AddControllers();
 
         builder.Services.AddEndpointsApiExplorer();
@@ -24,6 +26,8 @@ public static class Program
         builder.Services.AddSingleton<LaundryMonitor>();
 
         var app = builder.Build();
+
+        app.UseCors("CorsPolicy");        
 
         if (app.Environment.IsDevelopment())
         {
