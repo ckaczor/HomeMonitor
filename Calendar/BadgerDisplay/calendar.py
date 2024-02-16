@@ -32,7 +32,7 @@ def get_battery_level():
     battery_level = vsys    
 
 def get_data(url):
-    global name, type, date, days_until, hours_until, minutes_until, is_today
+    global name, type, date, days_until, hours_until, minutes_until, is_today, response_time
         
     print(f"Requesting URL: {url}")
     response = urequests.get(url)
@@ -41,19 +41,24 @@ def get_data(url):
     print("Data obtained!")
     print(json)
 
-    name = json["name"]
-    type = json["type"]
-    date = json["date"]
-    is_today = json["isToday"]
+    value = json["responseTime"];
+    response_time = datetime.datetime.fromisoformat(value[0:19])
     
-    if json["durationUntil"] is None:
+    event = json["event"]
+    
+    name = event["name"]
+    type = event["type"]
+    date = event["date"]
+    is_today = event["isToday"]
+    
+    if event["durationUntil"] is None:
         days_until = 0
         hours_until = 0
         minutes_until = 0
     else:
-        days_until = json["durationUntil"]["days"]
-        hours_until = json["durationUntil"]["hours"]
-        minutes_until = json["durationUntil"]["minutes"]
+        days_until = event["durationUntil"]["days"]
+        hours_until = event["durationUntil"]["hours"]
+        minutes_until = event["durationUntil"]["minutes"]
 
     response.close()
 
@@ -74,7 +79,7 @@ def update_display():
     
     badger.text(f"Battery: {battery_level:.2f}V", 2, HEIGHT - 10, scale=1)
     
-    text = f"{last_updated.date()} {last_updated.time()}"
+    text = f"{response_time.date()} {response_time.time()}"
     text_width = badger.measure_text(text, scale=1)
     badger.text(text, WIDTH - text_width - 2, HEIGHT - 10, scale=1)
     
@@ -95,15 +100,10 @@ while True:
                 ntptime.settime()
         except Exception as e:
             print(f"{step} - {repr(e)}")
-            
+                        
         step += 1
 
-        last_updated = datetime.datetime.now(tz=datetime.timezone.utc)            
-        year = datetime.date.today().year
-            
-        step += 1
-
-        get_data(f"{BASE_URL}&year={year}")
+        get_data(BASE_URL)
 
         step += 1
 
@@ -130,4 +130,7 @@ while True:
                 
         badger.update()
         
-        break
+        if LOOP:
+            badger2040.sleep_for(1)
+        else:
+            break
