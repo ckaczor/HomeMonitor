@@ -15,7 +15,7 @@ function getHolidays(req: Request): DateHolidays.HolidaysTypes.Holiday[] {
     const dateHolidays = new DateHolidays.default();
 
     dateHolidays.init(country, state, {
-        timezone: timezone
+        timezone: timezone,
     });
 
     const holidays = dateHolidays.getHolidays(year);
@@ -23,37 +23,25 @@ function getHolidays(req: Request): DateHolidays.HolidaysTypes.Holiday[] {
     return holidays;
 }
 
-eventsRouter.get('/all', async (req: Request, res: Response) => {
-    try {
-        const timezone = req.query.timezone as string;
-        
-        const holidays = getHolidays(req);
-
-        const events = holidays.map(holiday => new Event(holiday, timezone));
-
-        return res.status(StatusCodes.OK).json(events);
-    } catch (error) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
-    }
-});
-
 eventsRouter.get('/next', async (req: Request, res: Response) => {
     try {
         const timezone = req.query.timezone as string;
 
         const holidays = getHolidays(req);
 
-        const events = holidays.map(holiday => new Event(holiday, timezone));
+        const events = holidays.map((holiday) => new Event(holiday, timezone));
 
-        const now = DateTime.now();
+        const now = DateTime.now().setZone(timezone);
 
-        const nextEvent = events.find(event => event.date > now || event.isToday);
+        const nextEvent = events.find(
+            (event) => event.date > now || event.isToday
+        );
 
         if (!nextEvent) {
             return res.status(StatusCodes.OK).json(null);
         }
 
-        return res.status(StatusCodes.OK).json(nextEvent);
+        return res.status(StatusCodes.OK).json({ responseTime: now, event: nextEvent });
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
     }
@@ -65,13 +53,15 @@ eventsRouter.get('/future', async (req: Request, res: Response) => {
 
         const holidays = getHolidays(req);
 
-        const events = holidays.map(holiday => new Event(holiday, timezone));
+        const events = holidays.map((holiday) => new Event(holiday, timezone));
 
-        const now = DateTime.now();
+        const now = DateTime.now().setZone(timezone);
 
-        const futureEvents = events.filter(event => event.date > now || event.isToday);
+        const futureEvents = events.filter(
+            (event) => event.date > now || event.isToday
+        );
 
-        return res.status(StatusCodes.OK).json(futureEvents);
+        return res.status(StatusCodes.OK).json({ responseTime: now, events: futureEvents });
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
     }
