@@ -70,10 +70,16 @@ def update_display():
     badger.set_font("bitmap8")
     
     text = f"{name}"
-    text_width = badger.measure_text(text, scale=2)
-    badger.text(text, math.floor((WIDTH - text_width) / 2), 25, scale=2)
+    text_width = badger.measure_text(text, scale=3)
+    badger.text(text, math.floor((WIDTH - text_width) / 2), 25, scale=3)
     
-    text = "Today" if is_today else f"{days_until} days {hours_until} hours"
+    if is_today:
+        text = "Today"
+    elif days_until == 0:
+        text = "Tomorrow"
+    else:
+        text = f"{days_until} days after today"
+    
     text_width = badger.measure_text(text, scale=2)    
     badger.text(text, math.floor((WIDTH - text_width) / 2), 65, scale=2)
     
