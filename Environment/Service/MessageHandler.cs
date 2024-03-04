@@ -1,4 +1,5 @@
 ﻿using ChrisKaczor.HomeMonitor.Environment.Service.Data;
+using ChrisKaczor.HomeMonitor.Environment.Service.Models;
 using ChrisKaczor.HomeMonitor.Environment.Service.Models.Indoor;
 using Microsoft.AspNetCore.SignalR.Client;
 using MQTTnet;
@@ -41,7 +42,11 @@ public class MessageHandler : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         if (_hubConnection != null)
+        {
             await _hubConnection.StartAsync(cancellationToken);
+
+            _hubConnection.On("RequestLatest", SendStoredMessage);
+        }
 
         var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer(_configuration["Mqtt:Server"]).Build();
         await _mqttClient.ConnectAsync(mqttClientOptions, cancellationToken);
@@ -85,9 +90,36 @@ public class MessageHandler : IHostedService
             if (_hubConnection.State == HubConnectionState.Disconnected)
                 await _hubConnection.StartAsync();
 
-            var json = JsonSerializer.Serialize(message);
+            var deviceReadings = new Readings(message);
 
-            await _hubConnection.InvokeAsync("SendMessage", json);
+            var json = JsonSerializer.Serialize(deviceReadings);
+
+            await _hubConnection.InvokeAsync("SendLatest", json);
+        }
+        catch (Exception exception)
+        {
+            WriteLog($"Hub exception: {exception}");
+        }
+    }
+
+    private async Task SendStoredMessage()
+    {
+        try
+        {
+            if (_hubConnection == null)
+                return;
+
+            if (_hubConnection.State == HubConnectionState.Disconnected)
+                await _hubConnection.StartAsync();
+
+            var recentReadings = await _database.GetRecentReadings();
+
+            foreach (var recentReading in recentReadings)
+            {
+                var json = JsonSerializer.Serialize(recentReading);
+
+                await _hubConnection.InvokeAsync("SendLatest", json);
+            }
         }
         catch (Exception exception)
         {

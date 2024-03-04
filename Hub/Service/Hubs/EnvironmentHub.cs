@@ -9,11 +9,19 @@ namespace ChrisKaczor.HomeMonitor.Hub.Service.Hubs
     public class EnvironmentHub(ILogger<EnvironmentHub> logger) : Microsoft.AspNetCore.SignalR.Hub
     {
         [UsedImplicitly]
-        public async Task SendMessage(string message)
+        public async Task SendLatest(string message)
         {
             logger.LogInformation(message);
 
-            await Clients.Others.SendAsync("Message", message);
+            await Clients.Others.SendAsync("Latest", message);
+        }
+
+        [UsedImplicitly]
+        public async Task RequestLatest()
+        {
+            logger.LogInformation("RequestLatest");
+
+            await Clients.Others.SendAsync("RequestLatest");
         }
     }
 }
