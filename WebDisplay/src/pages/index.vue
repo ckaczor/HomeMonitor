@@ -19,6 +19,11 @@
                 <CurrentLaundryStatus></CurrentLaundryStatus>
             </v-col>
         </v-row>
+        <v-row>
+            <v-col cols="4">
+                <WeatherSummary></WeatherSummary>
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 

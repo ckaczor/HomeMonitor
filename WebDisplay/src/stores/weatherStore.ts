@@ -6,6 +6,7 @@ import WeatherUpdate from '@/models/weather/weather-update';
 import WeatherRecent from '@/models/weather/weather-recent';
 import WeatherValueType from '@/models/weather/weather-value-type';
 import WeatherValueGrouped from '@/models/weather/weather-value-grouped';
+import { WeatherAggregates } from '@/models/weather/weather-aggregates';
 
 export const useWeatherStore = defineStore('weather', {
     state: () => {
@@ -60,6 +61,20 @@ export const useWeatherStore = defineStore('weather', {
             const response = await axios.get<WeatherValueGrouped[]>(
                 Environment.getUrlPrefix() +
                     `/api/weather/readings/value-history-grouped?weatherValueType=${valueType}&start=${startString}&end=${endString}&bucketMinutes=${bucketMinutes}`
+            );
+
+            return response.data;
+        },
+        async getReadingAggregate(
+            start: Date,
+            end: Date
+        ): Promise<WeatherAggregates | undefined> {
+            const startString = start.toISOString();
+            const endString = end.toISOString();
+
+            const response = await axios.get<WeatherAggregates>(
+                Environment.getUrlPrefix() +
+                    `/api/weather/readings/aggregate?start=${startString}&end=${endString}`
             );
 
             return response.data;
