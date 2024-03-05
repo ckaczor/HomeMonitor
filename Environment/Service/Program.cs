@@ -10,7 +10,7 @@ public static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-       builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", corsPolicyBuilder => corsPolicyBuilder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:4200")));
+        builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", corsPolicyBuilder => corsPolicyBuilder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:4200")));
 
         builder.Configuration.AddEnvironmentVariables();
 
@@ -25,14 +25,14 @@ public static class Program
 
         var app = builder.Build();
 
+        app.UseCors("CorsPolicy");
+
         app.UseAuthorization();
 
         app.MapControllers();
 
         var database = app.Services.GetRequiredService<Database>();
         database.EnsureDatabase();
-
-        app.UseCors("CorsPolicy");
 
         app.Run();
     }
