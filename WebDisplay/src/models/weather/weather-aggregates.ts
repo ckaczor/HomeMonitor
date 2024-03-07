@@ -1,4 +1,4 @@
-export interface WeatherAggregates {
+export default interface WeatherAggregates {
     humidity: WeatherAggregate;
     temperature: WeatherAggregate;
     pressure: WeatherAggregate;

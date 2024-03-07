@@ -35,7 +35,7 @@
     </DashboardItem>
 </template>
 
-<style>
+<style scoped>
     .power-current {
         font-size: 14px;
         padding: 6px 12px;

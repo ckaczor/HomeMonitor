@@ -23,6 +23,12 @@
             <v-col cols="4">
                 <WeatherSummary></WeatherSummary>
             </v-col>
+            <v-col cols="2">
+                <Indoor title="Upstairs" deviceName="main"></Indoor>
+            </v-col>
+            <v-col cols="2">
+                <Indoor title="Downstairs" deviceName="basement"></Indoor>
+            </v-col>
         </v-row>
     </v-container>
 </template>

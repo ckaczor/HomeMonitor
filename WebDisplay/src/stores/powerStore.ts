@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import axios from 'axios';
 import Environment from '@/environment';
 import PowerStatus from '@/models/power/power-status';
+import PowerHistoryGrouped from '@/models/power/power-history-grouped';
 
 export const usePowerStore = defineStore('power', {
     state: () => {
@@ -36,6 +38,16 @@ export const usePowerStore = defineStore('power', {
             await this._connection.stop();
 
             this._connection = null;
+        },
+        async getReadingHistoryGrouped(start: Date, end: Date, bucketMinutes: number): Promise<PowerHistoryGrouped[]> {
+            const startString = start.toISOString();
+            const endString = end.toISOString();
+
+            const response = await axios.get<PowerHistoryGrouped[]>(
+                Environment.getUrlPrefix() + `/api/power/status/history-grouped?start=${startString}&end=${endString}&bucketMinutes=${bucketMinutes}`
+            );
+
+            return response.data;
         }
     }
 });

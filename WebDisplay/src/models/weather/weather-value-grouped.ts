@@ -1,4 +1,4 @@
-export default class WeatherValueGrouped {
-    bucket: string | undefined;
-    averageValue: number | undefined;
+export default interface WeatherValueGrouped {
+    bucket: string;
+    averageValue: number;
 }

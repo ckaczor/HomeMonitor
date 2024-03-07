@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import { useWeatherStore } from '@/stores/weatherStore';
+    import { ConvertPascalToInchesOfMercury } from '@/pressureConverter';
 
     const weatherStore = useWeatherStore();
     weatherStore.start();
@@ -31,62 +32,33 @@
                 <tbody>
                     <tr>
                         <td className="weather-current-header">Temperature</td>
-                        <td>
-                            {{
-                                weatherStore.current?.Temperature?.toFixed(2)
-                            }}°F
-                        </td>
+                        <td>{{ weatherStore.current?.Temperature?.toFixed(2) }}°F</td>
                     </tr>
                     <tr v-if="weatherStore.current?.HeatIndex">
                         <td className="weather-current-header">Heat index</td>
-                        <td>
-                            {{ weatherStore.current?.HeatIndex?.toFixed(2) }}°F
-                        </td>
+                        <td>{{ weatherStore.current?.HeatIndex?.toFixed(2) }}°F</td>
                     </tr>
 
                     <tr v-if="weatherStore.current?.WindChill">
                         <td className="weather-current-header">Wind chill</td>
-                        <td>
-                            {{ weatherStore.current?.WindChill?.toFixed(2) }}°F
-                        </td>
+                        <td>{{ weatherStore.current?.WindChill?.toFixed(2) }}°F</td>
                     </tr>
                     <tr>
                         <td className="weather-current-header">Humidity</td>
-                        <td>
-                            {{ weatherStore.current?.Humidity?.toFixed(2) }}%
-                        </td>
+                        <td>{{ weatherStore.current?.Humidity?.toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <td className="weather-current-header">Dew point</td>
-                        <td>
-                            {{ weatherStore.current?.DewPoint?.toFixed(2) }}°F
-                        </td>
+                        <td>{{ weatherStore.current?.DewPoint?.toFixed(2) }}°F</td>
                     </tr>
                     <tr>
                         <td className="weather-current-header">Pressure</td>
                         <td>
-                            {{
-                                weatherStore.current?.Pressure &&
-                                (
-                                    weatherStore.current?.Pressure /
-                                    33.864 /
-                                    100
-                                )?.toFixed(2)
-                            }}"
+                            {{ weatherStore.current?.Pressure && ConvertPascalToInchesOfMercury(weatherStore.current?.Pressure)?.toFixed(2) }}"
                             <span
                                 class="pressure-trend-arrow"
-                                :class="
-                                    rotationClass(
-                                        weatherStore.current
-                                            ?.PressureDifferenceThreeHour
-                                    )
-                                "
-                                :title="
-                                    '3 Hour Change: ' +
-                                    weatherStore.current?.PressureDifferenceThreeHour?.toFixed(
-                                        1
-                                    )
-                                ">
+                                :class="rotationClass(weatherStore.current?.PressureDifferenceThreeHour)"
+                                :title="'3 Hour Change: ' + weatherStore.current?.PressureDifferenceThreeHour?.toFixed(1)">
                                 ➜
                             </span>
                         </td>
@@ -100,11 +72,7 @@
                     </tr>
                     <tr>
                         <td className="weather-current-header">Rain</td>
-                        <td>
-                            {{
-                                weatherStore.current?.RainLastHour?.toFixed(2)
-                            }}" (last hour)
-                        </td>
+                        <td>{{ weatherStore.current?.RainLastHour?.toFixed(2) }}" (last hour)</td>
                     </tr>
                     <tr>
                         <td className="weather-current-header">Light</td>

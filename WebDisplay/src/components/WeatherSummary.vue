@@ -3,6 +3,7 @@
     import { useWeatherStore } from '@/stores/weatherStore';
     import { subHours } from 'date-fns';
     import { WeatherAggregates } from '@/models/weather/weather-aggregates';
+    import { ConvertPascalToInchesOfMercury } from '@/pressureConverter';
 
     const weatherAggregates = ref<WeatherAggregates | undefined>();
 
@@ -11,11 +12,9 @@
     const end = new Date();
     const start = subHours(end, 24);
 
-    weatherStore
-        .getReadingAggregate(start, end)
-        .then((newWeatherAggregates) => {
-            weatherAggregates.value = newWeatherAggregates;
-        });
+    weatherStore.getReadingAggregate(start, end).then((newWeatherAggregates) => {
+        weatherAggregates.value = newWeatherAggregates;
+    });
 </script>
 
 <template>
@@ -32,78 +31,35 @@
                     </tr>
                     <tr>
                         <td class="weather-summary-header">Temperature</td>
-                        <td>
-                            {{
-                                weatherAggregates!.temperature.min.toFixed(2)
-                            }}°F
-                        </td>
-                        <td>
-                            {{
-                                weatherAggregates!.temperature.average.toFixed(
-                                    2
-                                )
-                            }}°F
-                        </td>
-                        <td>
-                            {{
-                                weatherAggregates!.temperature.max.toFixed(2)
-                            }}°F
-                        </td>
+                        <td>{{ weatherAggregates!.temperature.min.toFixed(2) }}°F</td>
+                        <td>{{ weatherAggregates!.temperature.average.toFixed(2) }}°F</td>
+                        <td>{{ weatherAggregates!.temperature.max.toFixed(2) }}°F</td>
                     </tr>
                     <tr>
                         <td class="weather-summary-header">Humidity</td>
-                        <td>
-                            {{ weatherAggregates!.humidity.min.toFixed(2) }}%
-                        </td>
-                        <td>
-                            {{
-                                weatherAggregates!.humidity.average.toFixed(2)
-                            }}%
-                        </td>
-                        <td>
-                            {{ weatherAggregates!.humidity.max.toFixed(2) }}%
-                        </td>
+                        <td>{{ weatherAggregates!.humidity.min.toFixed(2) }}%</td>
+                        <td>{{ weatherAggregates!.humidity.average.toFixed(2) }}%</td>
+                        <td>{{ weatherAggregates!.humidity.max.toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <td class="weather-summary-header">Pressure</td>
-                        <td>
-                            {{
-                                (
-                                    weatherAggregates!.pressure.min /
-                                    33.864 /
-                                    100
-                                ).toFixed(2)
-                            }}"
-                        </td>
-                        <td>
-                            {{
-                                (
-                                    weatherAggregates!.pressure.average /
-                                    33.864 /
-                                    100
-                                ).toFixed(2)
-                            }}"
-                        </td>
-                        <td>
-                            {{
-                                (
-                                    weatherAggregates!.pressure.max /
-                                    33.864 /
-                                    100
-                                ).toFixed(2)
-                            }}"
-                        </td>
+                        <td>{{ ConvertPascalToInchesOfMercury(weatherAggregates!.pressure.min).toFixed(2) }}"</td>
+                        <td>{{ ConvertPascalToInchesOfMercury(weatherAggregates!.pressure.average).toFixed(2) }}"</td>
+                        <td>{{ ConvertPascalToInchesOfMercury(weatherAggregates!.pressure.max).toFixed(2) }}"</td>
                     </tr>
                     <tr>
                         <td class="weather-summary-header">Light</td>
                         <td>
-                            {{ weatherAggregates!.light.min.toFixed(2) }} lx
+                            {{ weatherAggregates!.light.min.toFixed(2) }}
+                            lx
                         </td>
                         <td>
-                            {{ weatherAggregates!.light.average.toFixed(2) }} lx
+                            {{ weatherAggregates!.light.average.toFixed(2) }}
+                            lx
                         </td>
                         <td>
-                            {{ weatherAggregates!.light.max.toFixed(2) }} lx
+                            {{ weatherAggregates!.light.max.toFixed(2) }}
+                            lx
                         </td>
                     </tr>
                     <tr>
@@ -113,9 +69,7 @@
                             mph
                         </td>
                         <td>
-                            {{
-                                weatherAggregates!.windSpeed.average.toFixed(2)
-                            }}
+                            {{ weatherAggregates!.windSpeed.average.toFixed(2) }}
                             mph
                         </td>
                         <td>
