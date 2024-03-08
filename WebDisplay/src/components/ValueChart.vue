@@ -29,7 +29,7 @@
         },
         title: {
             text: props.title,
-            align: 'center'
+            align: 'left'
         },
         legend: {
             itemMargin: {
@@ -81,29 +81,39 @@
 </script>
 
 <template>
-    <v-container
-        v-if="!props.ready"
-        class="fill-height loading">
-        <v-responsive class="align-center text-center fill-height">
-            <v-progress-circular
-                :size="50"
-                :width="5"
-                color="primary"
-                indeterminate></v-progress-circular>
-        </v-responsive>
-    </v-container>
-    <apexchart
-        v-else
-        width="100%"
-        height="300"
-        :type="props.type"
-        :options="chartOptions"
-        :series="chartSeries"></apexchart>
+    <div class="chart">
+        <v-container
+            v-if="!props.ready"
+            class="fill-height loading">
+            <v-responsive class="align-center text-center fill-height">
+                <v-progress-circular
+                    :size="50"
+                    :width="5"
+                    color="primary"
+                    indeterminate></v-progress-circular>
+            </v-responsive>
+        </v-container>
+        <apexchart
+            v-else
+            width="100%"
+            height="300"
+            :type="props.type"
+            :options="chartOptions"
+            :series="chartSeries"></apexchart>
+    </div>
 </template>
 
 <style scoped>
     .loading {
         width: 100%;
         min-height: 300px;
+    }
+
+    .chart {
+        border: 1px solid lightgray;
+        background-color: white;
+        padding-top: 10px;
+        padding-right: 10px;
+        border-radius: 3px;
     }
 </style>

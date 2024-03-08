@@ -5,7 +5,7 @@
 
 <template>
     <v-container fluid class="container">
-        <v-row align="start">
+        <v-row dense align="start">
             <v-col cols="3">
                 <CurrentWeather></CurrentWeather>
             </v-col>
@@ -18,8 +18,6 @@
             <v-col cols="2">
                 <CurrentLaundryStatus></CurrentLaundryStatus>
             </v-col>
-        </v-row>
-        <v-row>
             <v-col cols="4">
                 <WeatherSummary></WeatherSummary>
             </v-col>

@@ -2,7 +2,7 @@
     import { ref } from 'vue';
     import { useWeatherStore } from '@/stores/weatherStore';
     import { subHours } from 'date-fns';
-    import { WeatherAggregates } from '@/models/weather/weather-aggregates';
+    import WeatherAggregates from '@/models/weather/weather-aggregates';
     import { ConvertPascalToInchesOfMercury } from '@/pressureConverter';
 
     const weatherAggregates = ref<WeatherAggregates | undefined>();
@@ -63,7 +63,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="weather-summary-header">Wind Speed</td>
+                        <td class="weather-summary-header">Wind speed</td>
                         <td>
                             {{ weatherAggregates!.windSpeed.min.toFixed(2) }}
                             mph
@@ -78,7 +78,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="weather-summary-header">Wind Direction</td>
+                        <td class="weather-summary-header">Wind direction</td>
                         <td></td>
                         <td>
                             {{ weatherAggregates!.windDirectionAverage }}

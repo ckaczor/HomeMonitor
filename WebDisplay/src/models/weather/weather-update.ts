@@ -1,8 +1,10 @@
+import WindDirection from './wind-direction';
+
 export default class WeatherUpdate {
     Type: string | undefined;
     Message: null | undefined;
     Timestamp: Date | undefined;
-    WindDirection: string | undefined;
+    WindDirection: WindDirection | undefined;
     WindSpeed: number | undefined;
     Humidity: number | undefined;
     Rain: number | undefined;

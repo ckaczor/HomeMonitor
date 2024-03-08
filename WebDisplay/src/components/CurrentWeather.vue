@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { useWeatherStore } from '@/stores/weatherStore';
     import { ConvertPascalToInchesOfMercury } from '@/pressureConverter';
+    import { ShortenWindDirection } from '@/windFormatter';
 
     const weatherStore = useWeatherStore();
     weatherStore.start();
@@ -28,32 +29,42 @@
     <DashboardItem title="Weather">
         <div className="weather-current">
             <div v-if="!weatherStore.current">Loading...</div>
-            <table v-else>
+            <table
+                v-else
+                class="weather-table">
                 <tbody>
                     <tr>
-                        <td className="weather-current-header">Temperature</td>
-                        <td>{{ weatherStore.current?.Temperature?.toFixed(2) }}°F</td>
-                    </tr>
-                    <tr v-if="weatherStore.current?.HeatIndex">
-                        <td className="weather-current-header">Heat index</td>
-                        <td>{{ weatherStore.current?.HeatIndex?.toFixed(2) }}°F</td>
-                    </tr>
-
-                    <tr v-if="weatherStore.current?.WindChill">
-                        <td className="weather-current-header">Wind chill</td>
-                        <td>{{ weatherStore.current?.WindChill?.toFixed(2) }}°F</td>
+                        <td
+                            className="weather-current-header"
+                            width="1">
+                            Temperature
+                        </td>
+                        <td :colspan="weatherStore.current?.HeatIndex || weatherStore.current?.WindChill ? 1 : 3">
+                            {{ weatherStore.current?.Temperature?.toFixed(2) }}°F
+                        </td>
+                        <td>
+                            <div
+                                v-if="weatherStore.current?.HeatIndex || weatherStore.current?.WindChill"
+                                className="weather-current-header">
+                                Feels like
+                            </div>
+                        </td>
+                        <td>
+                            <div v-if="weatherStore.current?.HeatIndex">{{ weatherStore.current?.HeatIndex?.toFixed(2) }}°F</div>
+                            <div v-if="weatherStore.current?.WindChill">{{ weatherStore.current?.WindChill?.toFixed(2) }}°F</div>
+                        </td>
                     </tr>
                     <tr>
                         <td className="weather-current-header">Humidity</td>
-                        <td>{{ weatherStore.current?.Humidity?.toFixed(2) }}%</td>
+                        <td colspan="3">{{ weatherStore.current?.Humidity?.toFixed(2) }}%</td>
                     </tr>
                     <tr>
                         <td className="weather-current-header">Dew point</td>
-                        <td>{{ weatherStore.current?.DewPoint?.toFixed(2) }}°F</td>
+                        <td colspan="3">{{ weatherStore.current?.DewPoint?.toFixed(2) }}°F</td>
                     </tr>
                     <tr>
                         <td className="weather-current-header">Pressure</td>
-                        <td>
+                        <td colspan="3">
                             {{ weatherStore.current?.Pressure && ConvertPascalToInchesOfMercury(weatherStore.current?.Pressure)?.toFixed(2) }}"
                             <span
                                 class="pressure-trend-arrow"
@@ -65,18 +76,18 @@
                     </tr>
                     <tr>
                         <td className="weather-current-header">Wind</td>
-                        <td>
+                        <td colspan="3">
                             {{ weatherStore.current?.WindSpeed?.toFixed(2) }}
-                            mph {{ weatherStore.current?.WindDirection }}
+                            mph {{ ShortenWindDirection(weatherStore.current?.WindDirection) }}
                         </td>
                     </tr>
                     <tr>
                         <td className="weather-current-header">Rain</td>
-                        <td>{{ weatherStore.current?.RainLastHour?.toFixed(2) }}" (last hour)</td>
+                        <td colspan="3">{{ weatherStore.current?.RainLastHour?.toFixed(2) }}" (last hour)</td>
                     </tr>
                     <tr>
                         <td className="weather-current-header">Light</td>
-                        <td>
+                        <td colspan="3">
                             {{ weatherStore.current?.LightLevel?.toFixed(2) }}
                             lx
                         </td>
@@ -90,13 +101,17 @@
 <style>
     .weather-current {
         font-size: 14px;
-        padding: 6px 12px;
+        padding: 4px 12px;
     }
 
     .weather-current-header {
         font-weight: 500;
         text-align: right;
         padding-right: 10px;
+    }
+
+    .weather-table {
+        width: 100%;
     }
 
     .pressure-trend-arrow {

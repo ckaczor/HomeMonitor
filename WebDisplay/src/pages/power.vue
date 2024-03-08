@@ -53,8 +53,7 @@
             dense
             align="start">
             <v-col
-                sm="4"
-                md="6"
+                sm="6"
                 cols="12">
                 <ValueChart
                     :ready="powerReady"
@@ -68,8 +67,7 @@
                     :series="[generationSeries, consumptionSeries]"></ValueChart>
             </v-col>
             <v-col
-                sm="4"
-                md="6"
+                sm="6"
                 cols="12">
                 <ValueChart
                     :ready="lightReady"

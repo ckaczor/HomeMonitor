@@ -1,28 +1,46 @@
 <template>
     <v-app>
-        <v-app-bar title="Home Monitor" color="primary"></v-app-bar>
+        <v-app-bar
+            title="Home Monitor"
+            color="primary">
+            <template v-slot:prepend>
+                <v-app-bar-nav-icon
+                    v-show="!mdAndUp"
+                    @click="drawer = !drawer"></v-app-bar-nav-icon>
+            </template>
+        </v-app-bar>
 
-        <v-navigation-drawer expand-on-hover rail>
-            <v-list density="compact" nav>
+        <v-navigation-drawer
+            mobile-breakpoint="md"
+            :expand-on-hover="mdAndUp"
+            :rail="mdAndUp"
+            :model-value="mdAndUp ? true : drawer">
+            <v-list
+                density="compact"
+                nav>
                 <v-list-item
                     prepend-icon="mdi-view-dashboard"
                     title="Dashboard"
-                    to="/">
+                    to="/"
+                    @click="drawer = false">
                 </v-list-item>
                 <v-list-item
                     prepend-icon="mdi-sun-thermometer"
                     title="Outdoor"
-                    to="outdoor">
+                    to="outdoor"
+                    @click="drawer = false">
                 </v-list-item>
                 <v-list-item
                     prepend-icon="mdi-home-analytics"
                     title="Indoor"
-                    to="indoor">
+                    to="indoor"
+                    @click="drawer = false">
                 </v-list-item>
                 <v-list-item
                     prepend-icon="mdi-home-lightning-bolt-outline"
                     title="Power"
-                    to="power">
+                    to="power"
+                    @click="drawer = false">
                 </v-list-item>
             </v-list>
         </v-navigation-drawer>
@@ -34,5 +52,10 @@
 </template>
 
 <script lang="ts" setup>
-    //
+    import { ref } from 'vue';
+    import { useDisplay } from 'vuetify';
+
+    const drawer = ref(false);
+
+    const { mdAndUp } = useDisplay();
 </script>
