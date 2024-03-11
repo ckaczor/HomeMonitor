@@ -11,7 +11,12 @@
         valueDecimalPoints: { type: Number, required: false, default: 2 },
         group: { type: String, required: false, default: undefined },
         stepline: { type: Boolean, required: false, default: false },
-        ready: { type: Boolean, required: true }
+        ready: { type: Boolean, required: true },
+        yAxisMinimum: { type: Number, required: false, default: undefined },
+        yAxisMaximum: { type: Number, required: false, default: undefined },
+        tickAmount: { type: Number, required: false, default: undefined },
+        lineSize: { type: Number, required: false, default: 2 },
+        markerSize: { type: Number, required: false, default: 0 }
     });
 
     var chartOptions: ApexOptions = {
@@ -66,11 +71,17 @@
                 formatter: (value) => {
                     return `${value.toFixed(props.yAxisDecimalPoints)}${props.unit}`;
                 }
-            }
+            },
+            tickAmount: props.tickAmount,
+            min: props.yAxisMinimum,
+            max: props.yAxisMaximum
         },
         stroke: {
-            width: 2,
+            width: props.lineSize,
             curve: props.stepline ? 'stepline' : 'smooth'
+        },
+        markers: {
+            size: props.markerSize
         },
         dataLabels: {
             enabled: false
@@ -96,7 +107,7 @@
         <apexchart
             v-else
             width="100%"
-            height="300"
+            height="250"
             :type="props.type"
             :options="chartOptions"
             :series="chartSeries"></apexchart>
@@ -106,7 +117,7 @@
 <style scoped>
     .loading {
         width: 100%;
-        min-height: 300px;
+        min-height: 250px;
     }
 
     .chart {

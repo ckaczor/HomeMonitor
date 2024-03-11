@@ -11,6 +11,7 @@
         "@mdi/font": "7.0.96",
         "@microsoft/signalr": "^8.0.0",
         "@types/suncalc": "^1.9.2",
+        "@vuepic/vue-datepicker": "^8.2.0",
         "apexcharts": "^3.46.0",
         "axios": "^1.6.7",
         "core-js": "^3.34.0",
