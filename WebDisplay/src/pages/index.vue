@@ -1,7 +1,4 @@
-<script lang="ts" setup>
-    import CurrentWeather from '../components/CurrentWeather.vue';
-    import CurrentPower from '../components/CurrentPower.vue';
-</script>
+<script lang="ts" setup></script>
 
 <template>
     <v-container
@@ -18,9 +15,6 @@
         </v-card>
         <v-card class="current-laundry-status">
             <CurrentLaundryStatus></CurrentLaundryStatus>
-        </v-card>
-        <v-card class="weather-summary">
-            <WeatherSummary></WeatherSummary>
         </v-card>
         <v-card class="upstairs">
             <Indoor
@@ -41,35 +35,45 @@
         background-color: #fafafa;
     }
 
-    @media (min-width: 700px) {
+    @media (min-width: 1024px) {
         .container {
             display: grid;
             grid-template-columns: repeat(5, max-content);
-            grid-template-rows: repeat(5, max-content);
+            grid-template-rows: repeat(3, max-content);
             gap: 15px 15px;
             grid-auto-flow: row;
             grid-template-areas:
                 'current-weather current-weather almanac almanac current-power'
                 'current-weather current-weather almanac almanac current-laundry-status'
-                'weather-summary weather-summary weather-summary upstairs downstairs'
-                'weather-summary weather-summary weather-summary . .'
-                '. . . . .';
+                'upstairs downstairs . . .';
         }
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 1024px) {
         .container {
-            padding: 7px;
             display: grid;
-            grid-template-columns: repeat(1, max-content);
-            grid-template-rows: repeat(7, max-content);
+            grid-template-columns: repeat(4, max-content);
+            grid-template-rows: repeat(3, max-content);
+            gap: 15px 15px;
+            grid-auto-flow: row;
+            grid-template-areas:
+                'current-weather current-weather almanac almanac'
+                'current-weather current-weather almanac almanac'
+                'current-power current-laundry-status upstairs downstairs';
+        }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            grid-template-rows: repeat(6, max-content);
             gap: 10px 0px;
             grid-template-areas:
                 'current-weather'
                 'almanac'
                 'current-power'
                 'current-laundry-status'
-                'weather-summary'
                 'upstairs'
                 'downstairs';
         }
@@ -89,10 +93,6 @@
 
     .current-laundry-status {
         grid-area: current-laundry-status;
-    }
-
-    .weather-summary {
-        grid-area: weather-summary;
     }
 
     .upstairs {

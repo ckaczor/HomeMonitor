@@ -1,24 +1,35 @@
 <script lang="ts" setup>
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     import { useWeatherStore } from '@/stores/weatherStore';
-    import { subHours } from 'date-fns';
     import WeatherAggregates from '@/models/weather/weather-aggregates';
     import { ConvertPascalToInchesOfMercury } from '@/pressureConverter';
+    import { ShortenWindDirection } from '@/windFormatter';
+
+    const props = defineProps({
+        start: { type: Date, required: true },
+        end: { type: Date, required: true }
+    });
 
     const weatherAggregates = ref<WeatherAggregates | undefined>();
 
     const weatherStore = useWeatherStore();
 
-    const end = new Date();
-    const start = subHours(end, 24);
-
-    weatherStore.getReadingAggregate(start, end).then((newWeatherAggregates) => {
+    weatherStore.getReadingAggregate(props.start, props.end).then((newWeatherAggregates) => {
         weatherAggregates.value = newWeatherAggregates;
     });
+
+    watch(
+        () => [props.start, props.end],
+        () => {
+            weatherStore.getReadingAggregate(props.start, props.end).then((newWeatherAggregates) => {
+                weatherAggregates.value = newWeatherAggregates;
+            });
+        }
+    );
 </script>
 
 <template>
-    <DashboardItem title="Weather Summary">
+    <DashboardItem title="Weather">
         <div className="weather-summary">
             <div v-if="!weatherAggregates">Loading...</div>
             <table v-else>
@@ -81,7 +92,7 @@
                         <td class="weather-summary-header">Wind direction</td>
                         <td></td>
                         <td>
-                            {{ weatherAggregates!.windDirectionAverage }}
+                            {{ ShortenWindDirection(weatherAggregates!.windDirectionAverage) }}
                         </td>
                         <td></td>
                     </tr>

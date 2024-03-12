@@ -71,8 +71,10 @@
                         <td>{{ ConvertMillibarToInchesOfMercury(indoorStore.current.pressure).toFixed(2) }}"</td>
                     </tr>
                     <tr>
-                        <td className="header">Air Quality</td>
-                        <td :class="airQualityClass(indoorStore.current.airQualityIndex)" :title="indoorStore.current.airQualityIndex.toString()">
+                        <td className="header">Air quality</td>
+                        <td
+                            :class="airQualityClass(indoorStore.current.airQualityIndex)"
+                            :title="indoorStore.current.airQualityIndex.toString()">
                             {{ airQualityDescription(indoorStore.current.airQualityIndex) }}
                         </td>
                     </tr>

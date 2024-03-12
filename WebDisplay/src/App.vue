@@ -19,9 +19,15 @@
                 density="compact"
                 nav>
                 <v-list-item
-                    prepend-icon="mdi-view-dashboard"
-                    title="Dashboard"
+                    prepend-icon="mdi-information-outline"
+                    title="Current"
                     to="/"
+                    @click="drawer = false">
+                </v-list-item>
+                <v-list-item
+                    prepend-icon="mdi-chart-box-outline"
+                    title="Summary"
+                    to="summary"
                     @click="drawer = false">
                 </v-list-item>
                 <v-list-item

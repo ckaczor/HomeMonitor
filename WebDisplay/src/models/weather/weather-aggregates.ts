@@ -1,10 +1,12 @@
+import WindDirection from './wind-direction';
+
 export default interface WeatherAggregates {
     humidity: WeatherAggregate;
     temperature: WeatherAggregate;
     pressure: WeatherAggregate;
     light: WeatherAggregate;
     windSpeed: WeatherAggregate;
-    windDirectionAverage: number;
+    windDirectionAverage: WindDirection;
     rainTotal: number;
 }
 

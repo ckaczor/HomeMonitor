@@ -43,6 +43,7 @@ declare module 'vue-router/auto/routes' {
     '/indoor': RouteRecordInfo<'/indoor', '/indoor', Record<never, never>, Record<never, never>>,
     '/outdoor': RouteRecordInfo<'/outdoor', '/outdoor', Record<never, never>, Record<never, never>>,
     '/power': RouteRecordInfo<'/power', '/power', Record<never, never>, Record<never, never>>,
+    '/summary': RouteRecordInfo<'/summary', '/summary', Record<never, never>, Record<never, never>>,
   }
 }
 
