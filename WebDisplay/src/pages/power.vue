@@ -14,13 +14,13 @@
     const powerReady = ref(false);
     const lightReady = ref(false);
 
-    const powerCategories: number[] = [];
-    const lightCategories: number[] = [];
+    const powerCategories = ref<number[]>([]);
+    const lightCategories = ref<number[]>([]);
 
-    const generationSeries = { name: 'Generation', data: [] as number[] };
-    const consumptionSeries = { name: 'Consumption', data: [] as number[] };
+    const generationSeries = ref({ name: 'Generation', data: [] as number[] });
+    const consumptionSeries = ref({ name: 'Consumption', data: [] as number[] });
 
-    const lightSeries = { name: 'Average Light', data: [] as number[] };
+    const lightSeries = ref({ name: 'Average Light', data: [] as number[] });
 
     const end = ref(new Date());
     const start = ref(subHours(end.value, 24));
@@ -28,30 +28,31 @@
 
     const load = () => {
         powerReady.value = false;
-        powerCategories.length = 0;
-        generationSeries.data.length = 0;
-        consumptionSeries.data.length = 0;
-
         lightReady.value = false;
-        lightCategories.length = 0;
-        lightSeries.data.length = 0;
 
         powerStore.getReadingHistoryGrouped(start.value, end.value, 15).then((groupedReadingsList) => {
-            groupedReadingsList.forEach((groupedReadings) => {
-                powerCategories.push(new Date(groupedReadings.bucket).getTime());
+            powerCategories.value.length = 0;
+            generationSeries.value.data.length = 0;
+            consumptionSeries.value.data.length = 0;
 
-                generationSeries.data.push(groupedReadings.averageGeneration);
-                consumptionSeries.data.push(groupedReadings.averageConsumption);
+            groupedReadingsList.forEach((groupedReadings) => {
+                powerCategories.value.push(new Date(groupedReadings.bucket).getTime());
+
+                generationSeries.value.data.push(groupedReadings.averageGeneration);
+                consumptionSeries.value.data.push(groupedReadings.averageConsumption);
             });
 
             powerReady.value = true;
         });
 
         weatherStore.getReadingValueHistoryGrouped(WeatherValueType.Light, start.value, end.value, 15).then((groupedReadingsList) => {
-            groupedReadingsList.forEach((groupedReadings) => {
-                lightCategories.push(new Date(groupedReadings.bucket).getTime());
+            lightCategories.value.length = 0;
+            lightSeries.value.data.length = 0;
 
-                lightSeries.data.push(groupedReadings.averageValue);
+            groupedReadingsList.forEach((groupedReadings) => {
+                lightCategories.value.push(new Date(groupedReadings.bucket).getTime());
+
+                lightSeries.value.data.push(groupedReadings.averageValue);
             });
 
             lightReady.value = true;

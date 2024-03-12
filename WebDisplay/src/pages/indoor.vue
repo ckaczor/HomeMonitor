@@ -16,43 +16,43 @@
     const start = ref(subHours(end.value, 24));
     const timeSpan = ref(TimeSpan.Last24Hours);
 
-    const categories: number[] = [];
+    const categories = ref<number[]>([]);
 
-    const mainTemperatureSeries = { name: 'Upstairs', data: [] as number[] };
-    const basementTemperatureSeries = { name: 'Downstairs', data: [] as number[] };
+    const mainTemperatureSeries = ref({ name: 'Upstairs', data: [] as number[] });
+    const basementTemperatureSeries = ref({ name: 'Downstairs', data: [] as number[] });
 
-    const mainHumiditySeries = { name: 'Upstairs', data: [] as number[] };
-    const basementHumiditySeries = { name: 'Downstairs', data: [] as number[] };
+    const mainHumiditySeries = ref({ name: 'Upstairs', data: [] as number[] });
+    const basementHumiditySeries = ref({ name: 'Downstairs', data: [] as number[] });
 
-    const mainPressureSeries = { name: 'Upstairs', data: [] as number[] };
-    const basementPressureSeries = { name: 'Downstairs', data: [] as number[] };
+    const mainPressureSeries = ref({ name: 'Upstairs', data: [] as number[] });
+    const basementPressureSeries = ref({ name: 'Downstairs', data: [] as number[] });
 
     const load = () => {
         ready.value = false;
 
-        categories.length = 0;
-
-        mainTemperatureSeries.data.length = 0;
-        basementTemperatureSeries.data.length = 0;
-
-        mainHumiditySeries.data.length = 0;
-        basementHumiditySeries.data.length = 0;
-
-        mainPressureSeries.data.length = 0;
-        basementPressureSeries.data.length = 0;
-
         indoorStore.getReadingValueHistoryGrouped(start.value, end.value, 15).then((groupedReadingsList) => {
+            categories.value.length = 0;
+
+            mainTemperatureSeries.value.data.length = 0;
+            basementTemperatureSeries.value.data.length = 0;
+
+            mainHumiditySeries.value.data.length = 0;
+            basementHumiditySeries.value.data.length = 0;
+
+            mainPressureSeries.value.data.length = 0;
+            basementPressureSeries.value.data.length = 0;
+
             groupedReadingsList.forEach((groupedReadings) => {
                 if (groupedReadings.name === 'main') {
-                    categories.push(new Date(groupedReadings.bucket).getTime());
+                    categories.value.push(new Date(groupedReadings.bucket).getTime());
 
-                    mainTemperatureSeries.data.push(ConvertCToF(groupedReadings.averageTemperature));
-                    mainHumiditySeries.data.push(groupedReadings.averageHumidity);
-                    mainPressureSeries.data.push(ConvertMillibarToInchesOfMercury(groupedReadings.averagePressure));
+                    mainTemperatureSeries.value.data.push(ConvertCToF(groupedReadings.averageTemperature));
+                    mainHumiditySeries.value.data.push(groupedReadings.averageHumidity);
+                    mainPressureSeries.value.data.push(ConvertMillibarToInchesOfMercury(groupedReadings.averagePressure));
                 } else if (groupedReadings.name === 'basement') {
-                    basementTemperatureSeries.data.push(ConvertCToF(groupedReadings.averageTemperature));
-                    basementHumiditySeries.data.push(groupedReadings.averageHumidity);
-                    basementPressureSeries.data.push(ConvertMillibarToInchesOfMercury(groupedReadings.averagePressure));
+                    basementTemperatureSeries.value.data.push(ConvertCToF(groupedReadings.averageTemperature));
+                    basementHumiditySeries.value.data.push(groupedReadings.averageHumidity);
+                    basementPressureSeries.value.data.push(ConvertMillibarToInchesOfMercury(groupedReadings.averagePressure));
                 }
             });
 

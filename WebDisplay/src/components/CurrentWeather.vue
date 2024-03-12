@@ -45,7 +45,7 @@
                         <td>
                             <div
                                 v-if="weatherStore.current?.HeatIndex || weatherStore.current?.WindChill"
-                                className="weather-current-header">
+                                className="weather-current-header ml-8">
                                 Feels like
                             </div>
                         </td>

@@ -12,7 +12,6 @@ declare module 'vue' {
     CurrentPower: typeof import('./src/components/CurrentPower.vue')['default']
     CurrentWeather: typeof import('./src/components/CurrentWeather.vue')['default']
     DashboardItem: typeof import('./src/components/DashboardItem.vue')['default']
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     Indoor: typeof import('./src/components/Indoor.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

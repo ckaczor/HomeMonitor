@@ -16,7 +16,9 @@
         yAxisMaximum: { type: Number, required: false, default: undefined },
         tickAmount: { type: Number, required: false, default: undefined },
         lineSize: { type: Number, required: false, default: 2 },
-        markerSize: { type: Number, required: false, default: 0 }
+        markerSize: { type: Number, required: false, default: 0 },
+        yAxisLabelFormatter: { type: Function, required: false, default: undefined },
+        yAxisValueFormatter: { type: Function, required: false, default: undefined }
     });
 
     var chartOptions: ApexOptions = {
@@ -48,6 +50,10 @@
             },
             y: {
                 formatter: (value) => {
+                    if (props.yAxisValueFormatter) {
+                        return props.yAxisValueFormatter(value);
+                    }
+
                     return `${value.toFixed(props.valueDecimalPoints)}${props.unit}`;
                 }
             }
@@ -69,6 +75,10 @@
         yaxis: {
             labels: {
                 formatter: (value) => {
+                    if (props.yAxisLabelFormatter) {
+                        return props.yAxisLabelFormatter(value);
+                    }
+
                     return `${value.toFixed(props.yAxisDecimalPoints)}${props.unit}`;
                 }
             },
@@ -94,7 +104,7 @@
 <template>
     <div class="chart">
         <v-container
-            v-if="!props.ready"
+            v-show="!props.ready"
             class="fill-height loading">
             <v-responsive class="align-center text-center fill-height">
                 <v-progress-circular
@@ -105,7 +115,6 @@
             </v-responsive>
         </v-container>
         <apexchart
-            v-else
             width="100%"
             height="250"
             :type="props.type"
@@ -118,9 +127,17 @@
     .loading {
         width: 100%;
         min-height: 250px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 99;
+        background-color: #eeeeee;
     }
 
     .chart {
+        position: relative;
         border: 1px solid lightgray;
         background-color: white;
         padding-top: 10px;

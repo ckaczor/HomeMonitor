@@ -1,0 +1,68 @@
+name: $(Rev:r)
+
+pr: none
+
+trigger:
+  batch: 'true'
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - WebDisplay
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Docker@0
+      displayName: 'Build an image'
+      inputs:
+        containerregistrytype: 'Container Registry'
+        dockerRegistryConnection: 'Docker Hub'
+        dockerFile: 'WebDisplay/Dockerfile'
+        imageName: 'ckaczor/home-monitor-web-display:$(Build.BuildNumber)'
+        includeLatestTag: true
+    - task: Docker@0
+      displayName: 'Push an image'
+      inputs:
+        containerregistrytype: 'Container Registry'
+        dockerRegistryConnection: 'Docker Hub'
+        action: 'Push an image'
+        imageName: 'ckaczor/home-monitor-web-display:$(Build.BuildNumber)'
+        includeLatestTag: true
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: 'sed -i s/#BUILD_BUILDNUMBER#/$BUILD_BUILDNUMBER/ WebDisplay/deploy/manifest.yaml'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'WebDisplay/deploy/manifest.yaml'
+        ArtifactName: 'Manifest'
+        publishLocation: 'Container'
+
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        artifactName: 'Manifest'
+        buildType: 'current'
+        downloadType: 'single'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'Kubernetes'
+        namespace: 'home-monitor'
+        command: 'apply'
+        useConfigurationFile: true
+        configuration: '$(System.ArtifactsDirectory)/Manifest/manifest.yaml'
+        secretType: 'dockerRegistry'
+        containerRegistryType: 'Container Registry'

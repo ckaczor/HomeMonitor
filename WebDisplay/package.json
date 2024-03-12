@@ -1,6 +1,6 @@
 {
-    "name": "WebDisplay",
-    "version": "0.0.0",
+    "name": "web-display",
+    "version": "1.0.0",
     "scripts": {
         "dev": "cross-env NODE_OPTIONS='--no-warnings' vite",
         "build": "vue-tsc --noEmit && vite build",
