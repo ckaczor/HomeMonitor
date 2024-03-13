@@ -1,4 +1,4 @@
-@Environment_HostAddress = http://localhost:5000
+@Environment_HostAddress = http://localhost:5050
 
 GET {{Environment_HostAddress}}/readings/recent
 Accept: application/json
@@ -10,5 +10,10 @@ Accept: application/json
 
 ###
 
-GET {{Environment_HostAddress}}/readings/history-grouped?start=2024-02-02T06:00&end=2024-02-02T08:00&bucketMinutes=15
+GET {{Environment_HostAddress}}/readings/history-grouped?start=2024-03-11T00:00&end=2024-03-12T00:00&bucketMinutes=15
+Accept: application/json
+
+###
+
+GET {{Environment_HostAddress}}/readings/aggregate?start=2024-03-11T00:00&end=2024-03-12T00:00
 Accept: application/json

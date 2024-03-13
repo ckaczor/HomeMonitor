@@ -1,0 +1,13 @@
+SELECT name,
+       ROUND(min(temperature), 2) AS minimumTemperature,
+       ROUND(avg(temperature), 2) AS averageTemperature,
+       ROUND(max(temperature), 2) AS maximumTemperature,
+       ROUND(min(pressure), 2) AS minimumPressure,
+       ROUND(avg(pressure), 2) AS averagePressure,
+       ROUND(max(pressure), 2) AS maximumPressure,
+       ROUND(min(humidity), 2) AS minimumHumidity,
+       ROUND(avg(humidity), 2) AS averageHumidity,
+       ROUND(max(humidity), 2) AS maximumHumidity
+FROM reading
+WHERE time BETWEEN @Start AND @End
+GROUP BY name;

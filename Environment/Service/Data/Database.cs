@@ -1,9 +1,9 @@
 ﻿using ChrisKaczor.HomeMonitor.Environment.Service.Models;
+using ChrisKaczor.HomeMonitor.Environment.Service.Models.Indoor;
 using Dapper;
 using DbUp;
 using Npgsql;
 using System.Reflection;
-using ChrisKaczor.HomeMonitor.Environment.Service.Models.Indoor;
 
 namespace ChrisKaczor.HomeMonitor.Environment.Service.Data;
 
@@ -67,6 +67,17 @@ public class Database(IConfiguration configuration)
 
         var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.GetReadingsHistoryGrouped.psql");
 
+        query = query.Replace("@BucketMinutes", bucketMinutes.ToString());
+
         return await connection.QueryAsync<ReadingsGrouped>(query, new { Start = start, End = end, BucketMinutes = bucketMinutes }).ConfigureAwait(false);
+    }
+
+    public async Task<IEnumerable<ReadingsAggregate>> GetReadingsAggregate(DateTimeOffset start, DateTimeOffset end)
+    {
+        await using var connection = CreateConnection();
+
+        var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.GetReadingsAggregate.psql");
+
+        return await connection.QueryAsync<ReadingsAggregate>(query, new { Start = start, End = end }).ConfigureAwait(false);
     }
 }

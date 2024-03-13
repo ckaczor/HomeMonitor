@@ -38,4 +38,10 @@ public class ReadingsController(Database database) : ControllerBase
     {
         return (await database.GetReadingsHistoryGrouped(start, end, bucketMinutes)).ToList();
     }
+
+    [HttpGet("aggregate")]
+    public async Task<ActionResult<List<ReadingsAggregate>>> GetAggregate(DateTimeOffset start, DateTimeOffset end)
+    {
+        return (await database.GetReadingsAggregate(start, end)).ToList();
+    }
 }

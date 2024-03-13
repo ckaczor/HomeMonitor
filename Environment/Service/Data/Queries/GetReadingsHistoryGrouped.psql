@@ -1,5 +1,5 @@
 SELECT
-  time_bucket('15 minute', time) AS bucket,
+  time_bucket('@BucketMinutes minute', time) AS bucket,
   name,
   ROUND(avg(temperature), 2) AS averageTemperature,
   ROUND(avg(pressure), 2) AS averagePressure,
