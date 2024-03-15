@@ -38,26 +38,25 @@
     @media (min-width: 1024px) {
         .container {
             display: grid;
-            grid-template-columns: repeat(5, max-content);
+            grid-template-columns: 360px 350px 210px 1fr;
             grid-template-rows: repeat(3, max-content);
             gap: 15px 15px;
             grid-auto-flow: row;
             grid-template-areas:
-                'current-weather current-weather almanac almanac current-power'
-                'current-weather current-weather almanac almanac current-laundry-status'
-                'upstairs downstairs . . .';
+                'current-weather almanac current-laundry-status'
+                'current-weather almanac current-power'
+                'upstairs downstairs .';
         }
     }
 
     @media (max-width: 1024px) {
         .container {
             display: grid;
-            grid-template-columns: repeat(4, max-content);
-            grid-template-rows: repeat(3, max-content);
+            grid-template-columns: repeat(4, 180px);
+            grid-template-rows: repeat(2, max-content);
             gap: 15px 15px;
             grid-auto-flow: row;
             grid-template-areas:
-                'current-weather current-weather almanac almanac'
                 'current-weather current-weather almanac almanac'
                 'current-power current-laundry-status upstairs downstairs';
         }

@@ -73,49 +73,29 @@
                     <tr>
                         <td className="almanac-table-header">Sunrise</td>
                         <td colSpan="{2}">
-                            {{
-                                format(
-                                    almanacStore.sunTimes.sunrise,
-                                    'hh:mm:ss aa'
-                                )
-                            }}
+                            {{ format(almanacStore.sunTimes.sunrise, 'hh:mm:ss aa') }}
                         </td>
                     </tr>
                     <tr>
                         <td className="almanac-table-header">Sunset</td>
                         <td colSpan="{2}">
-                            {{
-                                format(
-                                    almanacStore.sunTimes.sunset,
-                                    'hh:mm:ss aa'
-                                )
-                            }}
+                            {{ format(almanacStore.sunTimes.sunset, 'hh:mm:ss aa') }}
                         </td>
                     </tr>
                     <tr>
                         <td className="almanac-table-header">Day length</td>
                         <td colSpan="{2}">{{ dayLength() }}</td>
                     </tr>
-                    <tr v-if="almanacStore.moonTimes?.rise">
+                    <tr>
                         <td className="almanac-table-header">Moonrise</td>
                         <td colSpan="{2}">
-                            {{
-                                format(
-                                    almanacStore.moonTimes.rise,
-                                    'hh:mm:ss aa'
-                                )
-                            }}
+                            {{ almanacStore.moonTimes?.rise ? format(almanacStore.moonTimes.rise, 'hh:mm:ss aa') : 'None' }}
                         </td>
                     </tr>
-                    <tr v-if="almanacStore.moonTimes?.set">
+                    <tr>
                         <td className="almanac-table-header">Moonset</td>
                         <td colSpan="{2}">
-                            {{
-                                format(
-                                    almanacStore.moonTimes.set,
-                                    'hh:mm:ss aa'
-                                )
-                            }}
+                            {{ almanacStore.moonTimes?.set ? format(almanacStore.moonTimes.set, 'hh:mm:ss aa') : 'None' }}
                         </td>
                     </tr>
                     <tr>
@@ -123,12 +103,7 @@
                         <td>
                             {{ moonPhaseName() }}
                             <br />
-                            {{
-                                (
-                                    almanacStore.moonIllumination.fraction *
-                                    100
-                                ).toFixed(1)
-                            }}% illuminated
+                            {{ (almanacStore.moonIllumination.fraction * 100).toFixed(1) }}% illuminated
                         </td>
                         <td>
                             <div className="moon-phase">
