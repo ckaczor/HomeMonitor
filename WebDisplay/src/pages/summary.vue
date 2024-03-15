@@ -56,22 +56,41 @@
     @media (min-width: 1024px) {
         .container {
             display: grid;
-            grid-template-columns: repeat(2, max-content);
+            grid-template-columns: 425px max-content;
             grid-template-rows: repeat(2, max-content);
             gap: 15px 15px;
             grid-auto-flow: row;
-            grid-template-areas: 'weather-summary .' 'main-summary basement-summary';
+            grid-template-areas:
+                'weather-summary main-summary'
+                'weather-summary basement-summary';
         }
     }
 
     @media (max-width: 1024px) {
         .container {
-            padding: 7px;
             display: grid;
-            grid-template-columns: repeat(1, max-content);
+            grid-template-columns: 425px;
             grid-template-rows: repeat(3, max-content);
-            gap: 10px 0px;
-            grid-template-areas: 'weather-summary' 'main-summary' 'basement-summary';
+            gap: 15px 0px;
+            grid-auto-flow: row;
+            grid-template-areas:
+                'weather-summary'
+                'main-summary'
+                'basement-summary';
+        }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(3, max-content);
+            gap: 15px 0px;
+            grid-auto-flow: row;
+            grid-template-areas:
+                'weather-summary'
+                'main-summary'
+                'basement-summary';
         }
     }
 
