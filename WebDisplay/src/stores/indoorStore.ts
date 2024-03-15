@@ -2,8 +2,9 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 import Environment from '@/environment';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
-import { LatestReadings } from '@/models/environment.ts/latestReadings';
-import { ReadingsGrouped } from '@/models/environment.ts/readingsGrouped';
+import { LatestReadings } from '@/models/environment/latestReadings';
+import { ReadingsGrouped } from '@/models/environment/readingsGrouped';
+import ReadingsAggregate from '@/models/environment/readingsAggregate';
 
 export function createIndoorStore(name: string) {
     return defineStore(`indoor-${name}`, {
@@ -56,6 +57,16 @@ export function createIndoorStore(name: string) {
                 );
 
                 return response.data;
+            },
+            async getReadingsAggregate(name: string, start: Date, end: Date): Promise<ReadingsAggregate | undefined> {
+                const startString = start.toISOString();
+                const endString = end.toISOString();
+
+                const response = await axios.get<ReadingsAggregate[]>(
+                    Environment.getUrlPrefix() + `/api/environment/readings/aggregate?start=${startString}&end=${endString}`
+                );
+
+                return response.data.find((aggregate) => aggregate.name === name);
             }
         }
     })();

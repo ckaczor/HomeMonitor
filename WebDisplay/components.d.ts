@@ -13,6 +13,7 @@ declare module 'vue' {
     CurrentWeather: typeof import('./src/components/CurrentWeather.vue')['default']
     DashboardItem: typeof import('./src/components/DashboardItem.vue')['default']
     Indoor: typeof import('./src/components/Indoor.vue')['default']
+    IndoorSummary: typeof import('./src/components/IndoorSummary.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TimeRange: typeof import('./src/components/TimeRange.vue')['default']

@@ -30,6 +30,20 @@
                 :start="start"
                 :end="end"></WeatherSummary>
         </v-card>
+        <v-card class="main-summary">
+            <IndoorSummary
+                name="main"
+                title="Upstairs"
+                :start="start"
+                :end="end"></IndoorSummary>
+        </v-card>
+        <v-card class="basement-summary">
+            <IndoorSummary
+                name="basement"
+                title="Downstairs"
+                :start="start"
+                :end="end"></IndoorSummary>
+        </v-card>
     </v-container>
 </template>
 
@@ -42,41 +56,34 @@
     @media (min-width: 1024px) {
         .container {
             display: grid;
-            grid-template-columns: repeat(3, max-content);
+            grid-template-columns: repeat(2, max-content);
             grid-template-rows: repeat(2, max-content);
             gap: 15px 15px;
             grid-auto-flow: row;
-            grid-template-areas:
-                'weather-summary weather-summary weather-summary'
-                'weather-summary weather-summary weather-summary';
+            grid-template-areas: 'weather-summary .' 'main-summary basement-summary';
         }
     }
 
     @media (max-width: 1024px) {
         .container {
-            display: grid;
-            grid-template-columns: repeat(3, max-content);
-            grid-template-rows: repeat(2, max-content);
-            gap: 15px 15px;
-            grid-auto-flow: row;
-            grid-template-areas:
-                'weather-summary weather-summary weather-summary'
-                'weather-summary weather-summary weather-summary';
-        }
-    }
-
-    @media (max-width: 768px) {
-        .container {
             padding: 7px;
             display: grid;
             grid-template-columns: repeat(1, max-content);
-            grid-template-rows: repeat(1, max-content);
+            grid-template-rows: repeat(3, max-content);
             gap: 10px 0px;
-            grid-template-areas: 'weather-summary';
+            grid-template-areas: 'weather-summary' 'main-summary' 'basement-summary';
         }
     }
 
     .weather-summary {
         grid-area: weather-summary;
+    }
+
+    .main-summary {
+        grid-area: main-summary;
+    }
+
+    .basement-summary {
+        grid-area: basement-summary;
     }
 </style>
