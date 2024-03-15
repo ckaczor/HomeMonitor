@@ -14,18 +14,18 @@
 
     const weatherStore = useWeatherStore();
 
-    weatherStore.getReadingAggregate(props.start, props.end).then((newWeatherAggregates) => {
-        weatherAggregates.value = newWeatherAggregates;
-    });
+    const load = () => {
+        weatherStore.getReadingAggregate(props.start, props.end).then((newWeatherAggregates) => {
+            weatherAggregates.value = newWeatherAggregates;
+        });
+    };
 
     watch(
         () => [props.start, props.end],
-        () => {
-            weatherStore.getReadingAggregate(props.start, props.end).then((newWeatherAggregates) => {
-                weatherAggregates.value = newWeatherAggregates;
-            });
-        }
+        () => load()
     );
+
+    load();
 </script>
 
 <template>

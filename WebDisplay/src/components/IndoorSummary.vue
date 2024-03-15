@@ -24,7 +24,7 @@
 
     watch(
         () => [props.start, props.end],
-        () => load
+        () => load()
     );
 
     load();
