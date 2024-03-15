@@ -2,7 +2,7 @@
     import { ref, watch } from 'vue';
     import { createIndoorStore } from '@/stores/indoorStore';
     import ReadingsAggregate from '@/models/environment/readingsAggregate';
-    import { ConvertPascalToInchesOfMercury } from '@/pressureConverter';
+    import { ConvertMillibarToInchesOfMercury } from '@/pressureConverter';
     import { ConvertCToF } from '@/temperatureConverter';
 
     const props = defineProps({
@@ -56,9 +56,9 @@
                     </tr>
                     <tr>
                         <td class="reading-summary-header">Pressure</td>
-                        <td>{{ ConvertPascalToInchesOfMercury(readingAggregates!.minimumPressure).toFixed(2) }}"</td>
-                        <td>{{ ConvertPascalToInchesOfMercury(readingAggregates!.averagePressure).toFixed(2) }}"</td>
-                        <td>{{ ConvertPascalToInchesOfMercury(readingAggregates!.maximumPressure).toFixed(2) }}"</td>
+                        <td>{{ ConvertMillibarToInchesOfMercury(readingAggregates!.minimumPressure).toFixed(2) }}"</td>
+                        <td>{{ ConvertMillibarToInchesOfMercury(readingAggregates!.averagePressure).toFixed(2) }}"</td>
+                        <td>{{ ConvertMillibarToInchesOfMercury(readingAggregates!.maximumPressure).toFixed(2) }}"</td>
                     </tr>
                 </tbody>
             </table>
