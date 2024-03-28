@@ -13,19 +13,16 @@
     const readingsReady = ref(false);
     const windReady = ref(false);
 
-    const readingsCategories = ref<number[]>([]);
-    const windCategories = ref<number[]>([]);
+    const temperatureSeries = ref({ name: 'Average Temperature', data: [] as number[][] });
+    const humiditySeries = ref({ name: 'Average Humidity', data: [] as number[][] });
+    const pressureSeries = ref({ name: 'Average Pressure', data: [] as number[][] });
+    const lightSeries = ref({ name: 'Average Light', data: [] as number[][] });
+    const rainSeries = ref({ name: 'Total Rain', data: [] as number[][] });
 
-    const temperatureSeries = ref({ name: 'Average Temperature', data: [] as number[] });
-    const humiditySeries = ref({ name: 'Average Humidity', data: [] as number[] });
-    const pressureSeries = ref({ name: 'Average Pressure', data: [] as number[] });
-    const lightSeries = ref({ name: 'Average Light', data: [] as number[] });
-    const rainSeries = ref({ name: 'Total Rain', data: [] as number[] });
-
-    const windMinimumSeries = ref({ name: 'Minimum', data: [] as number[] });
-    const windAverageSeries = ref({ name: 'Average', data: [] as number[] });
-    const windMaximumSeries = ref({ name: 'Maximum', data: [] as number[] });
-    const windDirectionSeries = ref({ name: 'Average Direction', data: [] as number[] });
+    const windMinimumSeries = ref({ name: 'Minimum', data: [] as number[][] });
+    const windAverageSeries = ref({ name: 'Average', data: [] as number[][] });
+    const windMaximumSeries = ref({ name: 'Maximum', data: [] as number[][] });
+    const windDirectionSeries = ref({ name: 'Average Direction', data: [] as number[][] });
 
     const end = ref(new Date());
     const start = ref(subHours(end.value, 24));
@@ -36,7 +33,6 @@
         windReady.value = false;
 
         weatherStore.getReadingHistoryGrouped(start.value, end.value, 15).then((groupedReadingsList) => {
-            readingsCategories.value.length = 0;
             temperatureSeries.value.data.length = 0;
             humiditySeries.value.data.length = 0;
             pressureSeries.value.data.length = 0;
@@ -44,33 +40,32 @@
             rainSeries.value.data.length = 0;
 
             groupedReadingsList.forEach((groupedReadings) => {
-                readingsCategories.value.push(new Date(groupedReadings.bucket).getTime());
+                const date = new Date(groupedReadings.bucket).getTime();
 
-                temperatureSeries.value.data.push(groupedReadings.averageTemperature);
-                humiditySeries.value.data.push(groupedReadings.averageHumidity);
-                pressureSeries.value.data.push(ConvertPascalToInchesOfMercury(groupedReadings.averagePressure));
-                lightSeries.value.data.push(groupedReadings.averageLightLevel);
-                rainSeries.value.data.push(groupedReadings.rainTotal);
+                temperatureSeries.value.data.push([date, groupedReadings.averageTemperature]);
+                humiditySeries.value.data.push([date, groupedReadings.averageHumidity]);
+                pressureSeries.value.data.push([date, ConvertPascalToInchesOfMercury(groupedReadings.averagePressure)]);
+                lightSeries.value.data.push([date, groupedReadings.averageLightLevel]);
+                rainSeries.value.data.push([date, groupedReadings.rainTotal]);
             });
 
             readingsReady.value = true;
         });
 
         weatherStore.getWindHistoryGrouped(start.value, end.value, 15).then((groupedReadingsList) => {
-            windCategories.value.length = 0;
             windMinimumSeries.value.data.length = 0;
             windAverageSeries.value.data.length = 0;
             windMaximumSeries.value.data.length = 0;
             windDirectionSeries.value.data.length = 0;
 
             groupedReadingsList.forEach((groupedReadings) => {
-                windCategories.value.push(new Date(groupedReadings.bucket).getTime());
+                const date = new Date(groupedReadings.bucket).getTime();
 
-                windMinimumSeries.value.data.push(groupedReadings.minimumSpeed);
-                windAverageSeries.value.data.push(groupedReadings.averageSpeed);
-                windMaximumSeries.value.data.push(groupedReadings.maximumSpeed);
+                windMinimumSeries.value.data.push([date, groupedReadings.minimumSpeed]);
+                windAverageSeries.value.data.push([date, groupedReadings.averageSpeed]);
+                windMaximumSeries.value.data.push([date, groupedReadings.maximumSpeed]);
 
-                windDirectionSeries.value.data.push(ConvertWindDirectionToDegrees(groupedReadings.averageDirection));
+                windDirectionSeries.value.data.push([date, ConvertWindDirectionToDegrees(groupedReadings.averageDirection)]);
             });
 
             windReady.value = true;
@@ -112,7 +107,6 @@
                         title="Temperature"
                         unit="°F"
                         group="outdoor"
-                        :categories="readingsCategories"
                         :series="[temperatureSeries]">
                     </ValueChart>
                 </v-col>
@@ -126,7 +120,6 @@
                         title="Humidity"
                         unit="%"
                         group="outdoor"
-                        :categories="readingsCategories"
                         :series="[humiditySeries]">
                     </ValueChart>
                 </v-col>
@@ -141,7 +134,6 @@
                         unit='"'
                         group="outdoor"
                         :y-axis-decimal-points="1"
-                        :categories="readingsCategories"
                         :series="[pressureSeries]">
                     </ValueChart>
                 </v-col>
@@ -155,7 +147,6 @@
                         title="Light"
                         unit=" lx"
                         group="outdoor"
-                        :categories="readingsCategories"
                         :series="[lightSeries]">
                     </ValueChart>
                 </v-col>
@@ -172,7 +163,6 @@
                         :stepline="true"
                         :y-axis-decimal-points="3"
                         :value-decimal-points="2"
-                        :categories="readingsCategories"
                         :series="[rainSeries]">
                     </ValueChart>
                 </v-col>
@@ -187,7 +177,6 @@
                         unit=" MPH"
                         group="outdoor"
                         :y-axis-decimal-points="0"
-                        :categories="windCategories"
                         :series="[windMaximumSeries, windAverageSeries, windMinimumSeries]">
                     </ValueChart>
                 </v-col>
@@ -206,7 +195,6 @@
                         :y-axis-maximum="360"
                         :y-axis-label-formatter="ConvertDegreesToShortLabel"
                         :y-axis-value-formatter="ConvertDegreesToShortLabel"
-                        :categories="windCategories"
                         :series="[windDirectionSeries]">
                     </ValueChart>
                 </v-col>

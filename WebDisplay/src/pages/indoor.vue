@@ -16,23 +16,19 @@
     const start = ref(subHours(end.value, 24));
     const timeSpan = ref(TimeSpan.Last24Hours);
 
-    const categories = ref<number[]>([]);
+    const mainTemperatureSeries = ref({ name: 'Upstairs', data: [] as number[][] });
+    const basementTemperatureSeries = ref({ name: 'Downstairs', data: [] as number[][] });
 
-    const mainTemperatureSeries = ref({ name: 'Upstairs', data: [] as number[] });
-    const basementTemperatureSeries = ref({ name: 'Downstairs', data: [] as number[] });
+    const mainHumiditySeries = ref({ name: 'Upstairs', data: [] as number[][] });
+    const basementHumiditySeries = ref({ name: 'Downstairs', data: [] as number[][] });
 
-    const mainHumiditySeries = ref({ name: 'Upstairs', data: [] as number[] });
-    const basementHumiditySeries = ref({ name: 'Downstairs', data: [] as number[] });
-
-    const mainPressureSeries = ref({ name: 'Upstairs', data: [] as number[] });
-    const basementPressureSeries = ref({ name: 'Downstairs', data: [] as number[] });
+    const mainPressureSeries = ref({ name: 'Upstairs', data: [] as number[][] });
+    const basementPressureSeries = ref({ name: 'Downstairs', data: [] as number[][] });
 
     const load = () => {
         ready.value = false;
 
         indoorStore.getReadingValueHistoryGrouped(start.value, end.value, 15).then((groupedReadingsList) => {
-            categories.value.length = 0;
-
             mainTemperatureSeries.value.data.length = 0;
             basementTemperatureSeries.value.data.length = 0;
 
@@ -43,16 +39,16 @@
             basementPressureSeries.value.data.length = 0;
 
             groupedReadingsList.forEach((groupedReadings) => {
-                if (groupedReadings.name === 'main') {
-                    categories.value.push(new Date(groupedReadings.bucket).getTime());
+                const date = new Date(groupedReadings.bucket).getTime();
 
-                    mainTemperatureSeries.value.data.push(ConvertCToF(groupedReadings.averageTemperature));
-                    mainHumiditySeries.value.data.push(groupedReadings.averageHumidity);
-                    mainPressureSeries.value.data.push(ConvertMillibarToInchesOfMercury(groupedReadings.averagePressure));
+                if (groupedReadings.name === 'main') {
+                    mainTemperatureSeries.value.data.push([date, ConvertCToF(groupedReadings.averageTemperature)]);
+                    mainHumiditySeries.value.data.push([date, groupedReadings.averageHumidity]);
+                    mainPressureSeries.value.data.push([date, ConvertMillibarToInchesOfMercury(groupedReadings.averagePressure)]);
                 } else if (groupedReadings.name === 'basement') {
-                    basementTemperatureSeries.value.data.push(ConvertCToF(groupedReadings.averageTemperature));
-                    basementHumiditySeries.value.data.push(groupedReadings.averageHumidity);
-                    basementPressureSeries.value.data.push(ConvertMillibarToInchesOfMercury(groupedReadings.averagePressure));
+                    basementTemperatureSeries.value.data.push([date, ConvertCToF(groupedReadings.averageTemperature)]);
+                    basementHumiditySeries.value.data.push([date, groupedReadings.averageHumidity]);
+                    basementPressureSeries.value.data.push([date, ConvertMillibarToInchesOfMercury(groupedReadings.averagePressure)]);
                 }
             });
 
@@ -94,7 +90,6 @@
                         title="Temperature"
                         unit="°F"
                         group="indoor"
-                        :categories="categories"
                         :series="[mainTemperatureSeries, basementTemperatureSeries]"></ValueChart>
                 </v-col>
                 <v-col
@@ -106,7 +101,6 @@
                         title="Humidity"
                         unit="%"
                         group="indoor"
-                        :categories="categories"
                         :series="[mainHumiditySeries, basementHumiditySeries]"></ValueChart>
                 </v-col>
                 <v-col
@@ -119,7 +113,6 @@
                         unit='"'
                         group="indoor"
                         :y-axis-decimal-points="1"
-                        :categories="categories"
                         :series="[mainPressureSeries, basementPressureSeries]"></ValueChart>
                 </v-col>
             </v-row>

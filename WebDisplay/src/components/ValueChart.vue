@@ -5,8 +5,7 @@
         type: { type: String, required: true },
         title: { type: String, required: true },
         unit: { type: String, required: true },
-        categories: { type: Array<number>, required: true },
-        series: { type: Array<{ name: string; data: Array<number> }>, required: true },
+        series: { type: Array<{ name: string; data: Array<Array<number>> }>, required: true },
         yAxisDecimalPoints: { type: Number, required: false, default: 0 },
         valueDecimalPoints: { type: Number, required: false, default: 2 },
         group: { type: String, required: false, default: undefined },
@@ -60,7 +59,6 @@
         },
         xaxis: {
             type: 'datetime',
-            categories: props.categories,
             tooltip: {
                 enabled: false
             },
