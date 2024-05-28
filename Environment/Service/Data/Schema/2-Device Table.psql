@@ -1,0 +1,5 @@
+CREATE TABLE device(
+  name text NOT NULL,
+  last_updated timestamptz NULL,
+  CONSTRAINT device_pk PRIMARY KEY (name)
+);

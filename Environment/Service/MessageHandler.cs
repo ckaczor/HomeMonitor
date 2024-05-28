@@ -77,6 +77,8 @@ public class MessageHandler : IHostedService
 
         await _database.StoreMessageAsync(message);
 
+        await _database.SetDeviceLastUpdatedAsync(message.Name, message.Timestamp);
+
         await SendMessage(message);
     }
 

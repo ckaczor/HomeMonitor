@@ -1,0 +1,11 @@
+INSERT INTO device(
+    name,
+    last_updated
+)
+VALUES (
+    @Name,
+    @LastUpdated
+)
+ON CONFLICT (name)
+    DO UPDATE
+    SET last_updated = EXCLUDED.last_updated

@@ -1,0 +1,7 @@
+SELECT
+    name AS Name,
+    last_updated AS LastUpdated
+FROM
+    device
+WHERE
+    name = @Name

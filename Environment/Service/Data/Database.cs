@@ -1,4 +1,5 @@
 ﻿using ChrisKaczor.HomeMonitor.Environment.Service.Models;
+using ChrisKaczor.HomeMonitor.Environment.Service.Models.Device;
 using ChrisKaczor.HomeMonitor.Environment.Service.Models.Indoor;
 using Dapper;
 using DbUp;
@@ -79,5 +80,32 @@ public class Database(IConfiguration configuration)
         var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.GetReadingsAggregate.psql");
 
         return await connection.QueryAsync<ReadingsAggregate>(query, new { Start = start, End = end }).ConfigureAwait(false);
+    }
+
+    public async Task<IEnumerable<Device>> GetDevicesAsync()
+    {
+        await using var connection = CreateConnection();
+
+        var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.GetDevices.psql");
+
+        return await connection.QueryAsync<Device>(query).ConfigureAwait(false);
+    }
+
+    public async Task<Device?> GetDeviceAsync(string deviceName)
+    {
+        await using var connection = CreateConnection();
+
+        var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.GetDevice.psql");
+
+        return await connection.QueryFirstOrDefaultAsync<Device>(query, new { Name = deviceName }).ConfigureAwait(false);
+    }
+
+    public async Task SetDeviceLastUpdatedAsync(string deviceName, DateTimeOffset? lastUpdated)
+    {
+        await using var connection = CreateConnection();
+
+        var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.SetDeviceLastUpdated.psql");
+
+        await connection.ExecuteAsync(query, new { Name = deviceName, LastUpdated = lastUpdated }).ConfigureAwait(false);
     }
 }

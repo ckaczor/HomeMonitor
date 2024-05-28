@@ -14,7 +14,11 @@
     <None Remove="Data\Queries\GetReadingsAggregate.psql" />
     <None Remove="Data\Queries\GetReadingsHistoryGrouped.psql" />
     <None Remove="Data\Queries\GetRecentReadings.psql" />
+    <None Remove="Data\Queries\GetDevices.psql" />
+    <None Remove="Data\Queries\GetDevice.psql" />
+    <None Remove="Data\Queries\SetDeviceLastUpdated.psql" />
     <None Remove="Data\Schema\1-Initial Schema.psql" />
+    <None Remove="Data\Schema\2-Device Table.psql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,7 +26,11 @@
     <EmbeddedResource Include="Data\Queries\GetReadingsHistoryGrouped.psql" />
     <EmbeddedResource Include="Data\Queries\GetRecentReadings.psql" />
     <EmbeddedResource Include="Data\Queries\CreateReading.psql" />
+    <EmbeddedResource Include="Data\Queries\GetDevices.psql" />
+    <EmbeddedResource Include="Data\Queries\GetDevice.psql" />
+    <EmbeddedResource Include="Data\Queries\SetDeviceLastUpdated.psql" />
     <EmbeddedResource Include="Data\Schema\1-Initial Schema.psql" />
+    <EmbeddedResource Include="Data\Schema\2-Device Table.psql" />
   </ItemGroup>
 
   <ItemGroup>

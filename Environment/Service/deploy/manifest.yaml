@@ -112,6 +112,11 @@ spec:
               key: password    
         - name: Environment__Hub__Url
           value: http://hub-service/environment
+        - name: AuthorizationToken
+          valueFrom:
+            secretKeyRef:
+              name: authorization
+              key: token
         resources:
           limits:
             cpu: 1000m

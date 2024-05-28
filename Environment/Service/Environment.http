@@ -17,3 +17,55 @@ Accept: application/json
 
 GET {{Environment_HostAddress}}/readings/aggregate?start=2024-03-11T00:00&end=2024-03-12T00:00
 Accept: application/json
+
+###
+
+GET {{Environment_HostAddress}}/device
+Accept: application/json
+
+###
+
+GET {{Environment_HostAddress}}/device/main
+Accept: application/json
+
+###
+
+GET {{Environment_HostAddress}}/device/test
+Accept: application/json
+
+###
+
+POST {{Environment_HostAddress}}/device
+Content-Type: application/json
+Authorization: Bearer test-token
+Accept: application/json
+
+{ "name": "test" }
+
+###
+
+POST {{Environment_HostAddress}}/device
+Content-Type: application/json
+Authorization: Bearer test-token
+Accept: application/json
+
+{ }
+
+###
+
+POST {{Environment_HostAddress}}/device
+Content-Type: application/json
+Authorization: Bearer foo
+Accept: application/json
+
+{ "name": "test" }
+
+###
+
+POST {{Environment_HostAddress}}/device
+Content-Type: application/json
+Accept: application/json
+
+{ "name": "test" }
+
+###
