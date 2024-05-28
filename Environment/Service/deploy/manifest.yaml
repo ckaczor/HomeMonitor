@@ -117,6 +117,16 @@ spec:
             secretKeyRef:
               name: authorization
               key: token
+        - name: Telegram__BotToken
+          valueFrom:
+            secretKeyRef:
+              name: telegram
+              key: bot-token 
+        - name: Telegram__ChatId
+          valueFrom:
+            secretKeyRef:
+              name: telegram
+              key: chat-id 
         resources:
           limits:
             cpu: 1000m
