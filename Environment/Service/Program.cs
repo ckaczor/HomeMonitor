@@ -20,6 +20,7 @@ public static class Program
 
         builder.Services.AddTransient<Database>();
         builder.Services.AddHostedService<MessageHandler>();
+        builder.Services.AddHostedService<DeviceCheckService>();
 
         // -- -- 
 
