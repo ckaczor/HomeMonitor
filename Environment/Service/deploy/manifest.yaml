@@ -121,7 +121,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: telegram
-              key: bot-token 
+              key: bot-token-home
         - name: Telegram__ChatId
           valueFrom:
             secretKeyRef:
