@@ -40,11 +40,7 @@ spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
-      tolerations: 
-      - key: weather
-        operator: Equal
-        value: "true"
-        effect: NoSchedule
+      nodeName: weather
   volumeClaimTemplates:
     - metadata:
         name: data
@@ -114,8 +110,4 @@ spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
-      tolerations: 
-      - key: "weather"
-        operator: Equal
-        value: "true"
-        effect: NoSchedule
+      nodeName: weather
