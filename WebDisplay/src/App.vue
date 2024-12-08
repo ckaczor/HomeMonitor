@@ -1,52 +1,35 @@
 <template>
     <v-app>
-        <v-app-bar
-            title="Home Monitor"
-            color="primary">
-            <template v-slot:prepend>
-                <v-app-bar-nav-icon
-                    v-show="!mdAndUp"
-                    @click="drawer = !drawer"></v-app-bar-nav-icon>
-            </template>
-        </v-app-bar>
-
         <v-navigation-drawer
-            mobile-breakpoint="md"
-            :expand-on-hover="mdAndUp"
-            :rail="mdAndUp"
-            :model-value="mdAndUp ? true : drawer">
+            rail
+            permanent>
             <v-list
                 density="compact"
                 nav>
                 <v-list-item
                     prepend-icon="mdi-information-outline"
                     title="Current"
-                    to="/"
-                    @click="drawer = false">
+                    to="/">
                 </v-list-item>
                 <v-list-item
                     prepend-icon="mdi-chart-box-outline"
                     title="Summary"
-                    to="summary"
-                    @click="drawer = false">
+                    to="summary">
                 </v-list-item>
                 <v-list-item
                     prepend-icon="mdi-sun-thermometer"
                     title="Outdoor"
-                    to="outdoor"
-                    @click="drawer = false">
+                    to="outdoor">
                 </v-list-item>
                 <v-list-item
                     prepend-icon="mdi-home-analytics"
                     title="Indoor"
-                    to="indoor"
-                    @click="drawer = false">
+                    to="indoor">
                 </v-list-item>
                 <v-list-item
                     prepend-icon="mdi-home-lightning-bolt-outline"
                     title="Power"
-                    to="power"
-                    @click="drawer = false">
+                    to="power">
                 </v-list-item>
             </v-list>
         </v-navigation-drawer>
@@ -58,10 +41,5 @@
 </template>
 
 <script lang="ts" setup>
-    import { ref } from 'vue';
-    import { useDisplay } from 'vuetify';
 
-    const drawer = ref(false);
-
-    const { mdAndUp } = useDisplay();
 </script>
