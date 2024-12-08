@@ -1,6 +1,7 @@
 {
     "name": "web-display",
     "version": "1.0.0",
+    "packageManager": "pnpm@9.15.0",
     "scripts": {
         "dev": "cross-env NODE_OPTIONS='--no-warnings' vite",
         "build": "vue-tsc --noEmit && vite build",
