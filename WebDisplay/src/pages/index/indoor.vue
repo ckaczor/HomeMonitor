@@ -4,7 +4,7 @@
     import { createIndoorStore } from '@/stores/indoorStore';
     import { ConvertCToF } from '@/temperatureConverter';
     import { ConvertMillibarToInchesOfMercury } from '@/pressureConverter';
-    import ValueChart from '../components/ValueChart.vue';
+    import ValueChart from '@/components/ValueChart.vue';
     import TimeRange from '@/components/TimeRange.vue';
     import TimeSpan from '@/models/time-span';
 

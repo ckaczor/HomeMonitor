@@ -3,7 +3,7 @@
     import { subHours } from 'date-fns';
     import { usePowerStore } from '@/stores/powerStore';
     import { useWeatherStore } from '@/stores/weatherStore';
-    import ValueChart from '../components/ValueChart.vue';
+    import ValueChart from '@/components/ValueChart.vue';
     import TimeRange from '@/components/TimeRange.vue';
     import WeatherValueType from '@/models/weather/weather-value-type';
     import TimeSpan from '@/models/time-span';

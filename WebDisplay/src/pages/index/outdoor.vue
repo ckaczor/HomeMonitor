@@ -3,7 +3,7 @@
     import { subHours } from 'date-fns';
     import { useWeatherStore } from '@/stores/weatherStore';
     import { ConvertPascalToInchesOfMercury } from '@/pressureConverter';
-    import ValueChart from '../components/ValueChart.vue';
+    import ValueChart from '@/components/ValueChart.vue';
     import TimeRange from '@/components/TimeRange.vue';
     import TimeSpan from '@/models/time-span';
     import { ConvertDegreesToShortLabel, ConvertWindDirectionToDegrees } from '@/windConverter';
