@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-    import { ref } from 'vue';
+    import { capitalize, ref } from 'vue';
     import { useWeatherStore } from '@/stores/weatherStore';
     import { useLaundryStore } from '@/stores/laundryStore';
     import { usePowerStore } from '@/stores/powerStore';
+    import { useHomeAssistantStore } from '@/stores/homeAssistantStore';
 
     const weatherStore = useWeatherStore();
     weatherStore.start();
@@ -12,6 +13,9 @@
 
     const powerStore = usePowerStore();
     powerStore.start();
+
+    const homeAssistantStore = useHomeAssistantStore();
+    homeAssistantStore.start();
 
     const currentTime = ref(new Date());
 
@@ -45,38 +49,66 @@
                 {{ weatherStore.current?.Humidity?.toFixed(0) + '%' }}
             </div>
             <div
-                class="kiosk-generation pl-2 pt-4"
+                class="kiosk-generation text-center pt-4"
                 v-if="powerStore.current">
                 <v-icon
                     class="kiosk-device"
                     icon="mdi-solar-power-variant" />
-                {{ (powerStore.current!.Generation < 0 ? 0 : powerStore.current!.Generation) + '&thinsp;W' }}
+                <div>
+                    {{ (powerStore.current!.Generation < 0 ? 0 : powerStore.current!.Generation) + '&thinsp;W' }}
+                </div>
             </div>
             <div
-                class="kiosk-consumption pl-2 pt-4"
+                class="kiosk-consumption text-center pt-4"
                 v-if="powerStore.current">
                 <v-icon
                     class="kiosk-device"
                     icon="mdi-home-lightning-bolt" />
-                {{ powerStore.current.Consumption + '&thinsp;W' }}
+                <div>
+                    {{ powerStore.current.Consumption + '&thinsp;W' }}
+                </div>
             </div>
             <div
-                class="kiosk-washer pl-2 pt-4"
+                class="kiosk-washer text-center pt-4"
                 v-if="laundryStore?.current?.washer !== undefined"
                 :class="laundryStore.current.washer.toString()">
                 <v-icon
                     class="kiosk-device"
                     icon="mdi-washing-machine" />
-                {{ laundryStore.current.washer ? 'On' : 'Off' }}
+                <div>
+                    {{ laundryStore.current.washer ? 'On' : 'Off' }}
+                </div>
             </div>
             <div
-                class="kiosk-dryer pl-2 pt-4"
+                class="kiosk-dryer text-center pt-4"
                 v-if="laundryStore?.current?.dryer !== undefined"
                 :class="laundryStore.current.dryer.toString()">
                 <v-icon
                     class="kiosk-device"
                     icon="mdi-tumble-dryer" />
-                {{ laundryStore.current.dryer ? 'On' : 'Off' }}
+                <div>
+                    {{ laundryStore.current.dryer ? 'On' : 'Off' }}
+                </div>
+            </div>
+            <div
+                class="kiosk-garage-door text-center pt-4"
+                v-if="homeAssistantStore?.garageState">
+                <v-icon
+                    class="kiosk-device"
+                    :icon="homeAssistantStore.garageState === 'closed' ? 'mdi-garage' : 'mdi-garage-open'" />
+                <div>
+                    {{ capitalize(homeAssistantStore.garageState) }}
+                </div>
+            </div>
+            <div
+                class="kiosk-house-alarm text-center pt-4"
+                v-if="homeAssistantStore?.houseAlarmState">
+                <v-icon
+                    class="kiosk-device"
+                    icon="mdi-shield-home" />
+                <div>
+                    {{ capitalize(homeAssistantStore.houseAlarmState) }}
+                </div>
             </div>
         </div>
     </v-container>
@@ -114,7 +146,7 @@
 
         display: grid;
         grid-template-columns: repeat(2, 50%);
-        grid-template-rows: repeat(5, auto) 1fr;
+        grid-template-rows: repeat(6, auto) 1fr;
         grid-column-gap: 0px;
         grid-row-gap: 0px;
 
@@ -123,7 +155,8 @@
             'kiosk-date kiosk-date'
             'kiosk-temperature kiosk-humidity'
             'kiosk-generation kiosk-consumption'
-            'kiosk-washer kiosk-dryer';
+            'kiosk-washer kiosk-dryer'
+            'kiosk-garage-door kiosk-house-alarm';
     }
 
     .kiosk-time {
@@ -160,6 +193,14 @@
 
     .kiosk-dryer {
         grid-area: kiosk-dryer;
+    }
+
+    .kiosk-garage-door {
+        grid-area: kiosk-garage-door;
+    }
+
+    .kiosk-house-alarm {
+        grid-area: kiosk-house-alarm;
     }
 
     .kiosk-device {
