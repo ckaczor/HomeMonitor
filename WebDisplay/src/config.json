@@ -1,3 +1,7 @@
 {
-    "API_PREFIX": ""
+    "API_PREFIX": "",
+    "HOME_ASSISTANT_TOKEN": null,
+    "HOME_ASSISTANT_URL": null,
+    "GARAGE_DEVICE": null,
+    "ALARM_DEVICE": null
 }
