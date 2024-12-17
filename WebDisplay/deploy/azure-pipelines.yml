@@ -92,6 +92,6 @@ stages:
         namespace: 'home-monitor'
         command: 'apply'
         useConfigurationFile: true
-        configuration: '$(System.ArtifactsDirectory)/Manifest/manifest-internal.yaml'
+        configuration: '$(System.ArtifactsDirectory)/Manifest-Internal/manifest-internal.yaml'
         secretType: 'dockerRegistry'
         containerRegistryType: 'Container Registry'
