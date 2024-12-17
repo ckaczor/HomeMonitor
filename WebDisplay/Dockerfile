@@ -15,4 +15,5 @@ COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE 80
 COPY ./nginx/entrypoint.sh ./docker-entrypoint.d/entrypoint.sh
 RUN chmod +x ./docker-entrypoint.d/entrypoint.sh
-CMD ["nginx", "-g", "daemon off;"]
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+CMD ["nginx"]
