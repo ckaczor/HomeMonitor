@@ -52,9 +52,9 @@
                 class="kiosk-generation text-center pt-4"
                 v-if="powerStore.current">
                 <v-icon
-                    class="kiosk-device"
+                    class="kiosk-device-icon"
                     icon="mdi-solar-power-variant" />
-                <div>
+                <div class="kiosk-device-text">
                     {{ (powerStore.current!.Generation < 0 ? 0 : powerStore.current!.Generation) + '&thinsp;W' }}
                 </div>
             </div>
@@ -62,9 +62,9 @@
                 class="kiosk-consumption text-center pt-4"
                 v-if="powerStore.current">
                 <v-icon
-                    class="kiosk-device"
+                    class="kiosk-device-icon"
                     icon="mdi-home-lightning-bolt" />
-                <div>
+                <div class="kiosk-device-text">
                     {{ powerStore.current.Consumption + '&thinsp;W' }}
                 </div>
             </div>
@@ -73,9 +73,9 @@
                 v-if="laundryStore?.current?.washer !== undefined"
                 :class="laundryStore.current.washer.toString()">
                 <v-icon
-                    class="kiosk-device"
+                    class="kiosk-device-icon"
                     icon="mdi-washing-machine" />
-                <div>
+                <div class="kiosk-device-text">
                     {{ laundryStore.current.washer ? 'On' : 'Off' }}
                 </div>
             </div>
@@ -84,9 +84,9 @@
                 v-if="laundryStore?.current?.dryer !== undefined"
                 :class="laundryStore.current.dryer.toString()">
                 <v-icon
-                    class="kiosk-device"
+                    class="kiosk-device-icon"
                     icon="mdi-tumble-dryer" />
-                <div>
+                <div class="kiosk-device-text">
                     {{ laundryStore.current.dryer ? 'On' : 'Off' }}
                 </div>
             </div>
@@ -94,9 +94,9 @@
                 class="kiosk-garage-door text-center pt-4"
                 v-if="homeAssistantStore?.garageState">
                 <v-icon
-                    class="kiosk-device"
+                    class="kiosk-device-icon"
                     :icon="homeAssistantStore.garageState === 'closed' ? 'mdi-garage' : 'mdi-garage-open'" />
-                <div>
+                <div class="kiosk-device-text">
                     {{ capitalize(homeAssistantStore.garageState) }}
                 </div>
             </div>
@@ -104,9 +104,9 @@
                 class="kiosk-house-alarm text-center pt-4"
                 v-if="homeAssistantStore?.houseAlarmState">
                 <v-icon
-                    class="kiosk-device"
+                    class="kiosk-device-icon"
                     icon="mdi-shield-home" />
-                <div>
+                <div class="kiosk-device-text">
                     {{ capitalize(homeAssistantStore.houseAlarmState) }}
                 </div>
             </div>
@@ -160,22 +160,22 @@
     }
 
     .kiosk-time {
-        font-size: 2rem;
+        font-size: 2.8rem;
         grid-area: kiosk-time;
     }
 
     .kiosk-date {
-        font-size: 1.1rem;
+        font-size: 1.25rem;
         grid-area: kiosk-date;
     }
 
     .kiosk-temperature {
-        font-size: 2rem;
+        font-size: 2.8rem;
         grid-area: kiosk-temperature;
     }
 
     .kiosk-humidity {
-        font-size: 2rem;
+        font-size: 2.8rem;
         grid-area: kiosk-humidity;
     }
 
@@ -203,8 +203,12 @@
         grid-area: kiosk-house-alarm;
     }
 
-    .kiosk-device {
+    .kiosk-device-icon {
         font-size: 2.5rem;
+    }
+
+    .kiosk-device-text {
+        font-size: 1.3rem;
     }
 
     .true {
