@@ -75,7 +75,7 @@ stages:
         configuration: '$(System.ArtifactsDirectory)/Manifest/manifest.yaml'
         secretType: 'dockerRegistry'
         containerRegistryType: 'Container Registry'
-  - job: Deploy Internal
+  - job: Deploy_Internal
     pool:
       vmImage: 'ubuntu-latest'
     steps:
