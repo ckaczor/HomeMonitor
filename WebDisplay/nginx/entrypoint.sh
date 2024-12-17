@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 sed -i -e "s~#API_PREFIX#~$API_PREFIX~g" /usr/share/nginx/html/assets/*
 sed -i -e "s~#HOME_ASSISTANT_URL#~$HOME_ASSISTANT_URL~g" /usr/share/nginx/html/assets/*

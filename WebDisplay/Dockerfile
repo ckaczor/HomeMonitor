@@ -13,7 +13,6 @@ COPY nginx/default.conf /etc/nginx/conf.d/
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE 80
-COPY ./nginx/entrypoint.sh ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
+COPY ./nginx/entrypoint.sh ./docker-entrypoint.d/entrypoint.sh
+RUN chmod +x ./docker-entrypoint.d/entrypoint.sh
 CMD ["nginx", "-g", "daemon off;"]
