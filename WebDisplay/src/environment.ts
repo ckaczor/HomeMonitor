@@ -1,21 +1,21 @@
 export default class Environment {
     public static getUrlPrefix(): string {
-        return '%API_PREFIX%';
+        return '#API_PREFIX#';
     }
 
     public static getHomeAssistantUrl(): string {
-        return '%HOME_ASSISTANT_URL%';
+        return '#HOME_ASSISTANT_URL#';
     }
 
     public static getHomeAssistantToken(): string {
-        return '%HOME_ASSISTANT_TOKEN%';
+        return '#HOME_ASSISTANT_TOKEN#';
     }
 
     public static getGarageDevice(): string {
-        return '%GARAGE_DEVICE%';
+        return '#GARAGE_DEVICE#';
     }
 
     public static getAlarmDevice(): string {
-        return '%ALARM_DEVICE%';
+        return '#ALARM_DEVICE#';
     }
 }
