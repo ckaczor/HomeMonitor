@@ -35,6 +35,8 @@ spec:
           value:
         - name: ALARM_DEVICE
           value:
+        - name: CALENDAR_EMBED_URL
+          value:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

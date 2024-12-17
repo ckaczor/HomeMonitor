@@ -47,6 +47,11 @@ spec:
             secretKeyRef:
               name: display-internal-config
               key: ALARM_DEVICE   
+        - name: CALENDAR_EMBED_URL
+          valueFrom:
+            secretKeyRef:
+              name: display-internal-config
+              key: CALENDAR_EMBED_URL   
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

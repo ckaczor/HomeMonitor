@@ -4,6 +4,7 @@
     import { useLaundryStore } from '@/stores/laundryStore';
     import { usePowerStore } from '@/stores/powerStore';
     import { useHomeAssistantStore } from '@/stores/homeAssistantStore';
+    import Environment from '@/environment';
 
     const weatherStore = useWeatherStore();
     weatherStore.start();
@@ -111,6 +112,17 @@
                 </div>
             </div>
         </div>
+        <div class="kiosk-content" v-if="Environment.getCalendarEmbedUrl()">
+            <div class="kiosk-calendar">
+                <iframe
+                    :src="Environment.getCalendarEmbedUrl()"
+                    style="border-width: 0"
+                    width="100%"
+                    height="100%"
+                    frameborder="0"
+                    scrolling="no"></iframe>
+            </div>
+        </div>
     </v-container>
 </template>
 
@@ -118,17 +130,13 @@
     .kiosk-container {
         height: 100%;
         padding: 0;
-        background-color: #020c25;
-        color: #9acef1;
+        background-color: #212428;
+        color: #1f1f1f;
         display: grid;
         grid-template-columns: 250px 1fr;
         grid-template-rows: 1fr;
-        gap: 15px 15px;
         grid-auto-flow: row;
-        grid-template-areas:
-            'kiosk-sidebar . '
-            'kiosk-sidebar . '
-            'kiosk-sidebar . ';
+        grid-template-areas: 'kiosk-sidebar kiosk-content';
     }
 
     .kiosk-row {
@@ -141,7 +149,7 @@
 
     .kiosk-sidebar {
         padding: 5px;
-        background-color: #13213e;
+        background-color: #121212;
         grid-area: kiosk-sidebar;
 
         display: grid;
@@ -157,6 +165,16 @@
             'kiosk-generation kiosk-consumption'
             'kiosk-washer kiosk-dryer'
             'kiosk-garage-door kiosk-house-alarm';
+    }
+
+    .kiosk-content {
+        height: 100%;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        grid-auto-flow: row;
+        grid-template-areas: 'kiosk-calendar .';
     }
 
     .kiosk-time {
@@ -209,6 +227,10 @@
 
     .kiosk-device-text {
         font-size: 1.3rem;
+    }
+
+    .kiosk-calendar {
+        grid-area: kiosk-calendar;
     }
 
     .true {
