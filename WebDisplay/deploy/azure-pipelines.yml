@@ -43,6 +43,15 @@ stages:
         PathtoPublish: 'WebDisplay/deploy/manifest.yaml'
         ArtifactName: 'Manifest'
         publishLocation: 'Container'
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: 'sed -i s/#BUILD_BUILDNUMBER#/$BUILD_BUILDNUMBER/ WebDisplay/deploy/manifest-internal.yaml'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'WebDisplay/deploy/manifest-internal.yaml'
+        ArtifactName: 'Manifest-Internal'
+        publishLocation: 'Container'
 
 - stage: Deploy
   jobs:
@@ -64,5 +73,25 @@ stages:
         command: 'apply'
         useConfigurationFile: true
         configuration: '$(System.ArtifactsDirectory)/Manifest/manifest.yaml'
+        secretType: 'dockerRegistry'
+        containerRegistryType: 'Container Registry'
+  - job: Deploy Internal
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        artifactName: 'Manifest-Internal'
+        buildType: 'current'
+        downloadType: 'single'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'Kubernetes'
+        namespace: 'home-monitor'
+        command: 'apply'
+        useConfigurationFile: true
+        configuration: '$(System.ArtifactsDirectory)/Manifest/manifest-internal.yaml'
         secretType: 'dockerRegistry'
         containerRegistryType: 'Container Registry'
