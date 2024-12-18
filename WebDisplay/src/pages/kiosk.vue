@@ -148,7 +148,8 @@
             </div>
             <div
                 class="kiosk-garage-door text-center pt-4"
-                v-if="homeAssistantStore?.garageState">
+                v-if="homeAssistantStore?.garageState"
+                v-on:click="homeAssistantStore.toggleGarage()">
                 <v-icon
                     class="kiosk-device-icon"
                     :icon="homeAssistantStore.garageState === 'closed' ? 'mdi-garage' : 'mdi-garage-open'" />
