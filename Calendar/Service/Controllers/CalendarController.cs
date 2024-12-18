@@ -8,14 +8,14 @@ namespace ChrisKaczor.HomeMonitor.Calendar.Service.Controllers;
 public class CalendarController(IConfiguration configuration, HttpClient httpClient) : ControllerBase
 {
     [HttpGet("upcoming")]
-    public async Task<ActionResult<IEnumerable<CalendarEntry>>> GetUpcoming([FromQuery] int? days)
+    public async Task<ActionResult<IEnumerable<CalendarEntry>>> GetUpcoming([FromQuery] int days = 1)
     {
         var data = await httpClient.GetStringAsync(configuration["Calendar:PersonalUrl"]);
 
         var calendar = Ical.Net.Calendar.Load(data);
 
         var start = DateTimeOffset.Now.Date;
-        var end = start.AddDays(days ?? 1);
+        var end = start.AddDays(days);
 
         var calendarEntries = calendar
             .GetOccurrences(start, end)
