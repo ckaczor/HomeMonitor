@@ -4,7 +4,13 @@
     import { useLaundryStore } from '@/stores/laundryStore';
     import { usePowerStore } from '@/stores/powerStore';
     import { useHomeAssistantStore } from '@/stores/homeAssistantStore';
-    import Environment from '@/environment';
+    import { useCalendarStore } from '@/stores/calendarStore';
+    import { format, startOfDay, endOfDay } from 'date-fns';
+    import CalendarDay from '@/models/calendar/calendar-day';
+
+    const calendarDayCount = 7;
+
+    const calendarReady = ref(false);
 
     const weatherStore = useWeatherStore();
     weatherStore.start();
@@ -18,12 +24,61 @@
     const homeAssistantStore = useHomeAssistantStore();
     homeAssistantStore.start();
 
+    const calendarStore = useCalendarStore();
+
     const currentTime = ref(new Date());
+    const calendarDays = ref([] as CalendarDay[]);
 
     const timeFormatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' });
     const dateFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
-    setInterval(() => (currentTime.value = new Date()), 1000);
+    function alarmState(state: string): string {
+        switch (state) {
+            case 'armed_home':
+                return 'Armed';
+            case 'armed_away':
+                return 'Armed';
+            case 'disarmed':
+                return 'Disarmed';
+            default:
+                return 'Unknown';
+        }
+    }
+
+    function loadCalendar() {
+        const newCalendarDays = [] as CalendarDay[];
+
+        calendarStore.getUpcoming(calendarDayCount).then((upcoming) => {
+            const currentDay = startOfDay(currentTime.value);
+
+            for (let i = 0; i < calendarDayCount; i++) {
+                const day = new Date(currentDay);
+                day.setDate(day.getDate() + i);
+
+                const entries = upcoming.filter((entry) => {
+                    const entryStart = startOfDay(entry.start);
+                    const entryEnd = endOfDay(entry.end);
+
+                    if (entry.isAllDay) {
+                        return day > entryStart && day < entryEnd;
+                    }
+
+                    return day >= entryStart && day <= entryEnd;
+                });
+
+                newCalendarDays.push(new CalendarDay(day, entries));
+            }
+
+            calendarDays.value = newCalendarDays;
+
+            calendarReady.value = true;
+        });
+    }
+
+    loadCalendar();
+
+    setInterval(() => currentTime.value = new Date(), 1000);
+    setInterval(() => loadCalendar(), 60000);
 </script>
 
 <template>
@@ -108,19 +163,38 @@
                     class="kiosk-device-icon"
                     icon="mdi-shield-home" />
                 <div class="kiosk-device-text">
-                    {{ capitalize(homeAssistantStore.houseAlarmState) }}
+                    {{ alarmState(homeAssistantStore.houseAlarmState) }}
                 </div>
             </div>
         </div>
-        <div class="kiosk-content" v-if="Environment.getCalendarEmbedUrl()">
-            <div class="kiosk-calendar">
-                <iframe
-                    :src="Environment.getCalendarEmbedUrl()"
-                    style="border-width: 0"
-                    width="100%"
-                    height="100%"
-                    frameborder="0"
-                    scrolling="no"></iframe>
+        <div class="kiosk-content">
+            <div
+                class="kiosk-calendar"
+                v-if="calendarReady">
+                <div class="kiosk-calendar-header">
+                    {{ 'Next ' + calendarDayCount + ' Days' }}
+                </div>
+                <ul class="kiosk-calendar-day-list">
+                    <li
+                        class="kiosk-calendar-day-item"
+                        v-for="calendarDay in calendarDays">
+                        <div>
+                            <span class="kiosk-calendar-day-item-number">
+                                {{ format(calendarDay.date, 'dd') }}
+                            </span>
+                            <span class="kiosk-calendar-day-item-name">
+                                {{ format(calendarDay.date, 'MMMM, EEEE') }}
+                            </span>
+                            <ul
+                                class="kiosk-calendar-entry"
+                                v-for="calendarEntry in calendarDay.entries">
+                                <span>
+                                    {{ calendarEntry.summary }}
+                                </span>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </v-container>
@@ -131,7 +205,7 @@
         height: 100%;
         padding: 0;
         background-color: #212428;
-        color: #1f1f1f;
+        color: #ebebeb;
         display: grid;
         grid-template-columns: 250px 1fr;
         grid-template-rows: 1fr;
@@ -169,12 +243,15 @@
 
     .kiosk-content {
         height: 100%;
+        max-height: 100vh;
         padding: 0;
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(2, 1fr);
         grid-auto-flow: row;
-        grid-template-areas: 'kiosk-calendar .';
+        grid-template-areas:
+            'kiosk-calendar . .'
+            'kiosk-calendar . .';
     }
 
     .kiosk-time {
@@ -231,6 +308,48 @@
 
     .kiosk-calendar {
         grid-area: kiosk-calendar;
+        background-color: #121212;
+        margin: 10px;
+        border-radius: 10px;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+    }
+
+    .kiosk-calendar-header {
+        font-size: 1.15em;
+        padding-top: 10px;
+        padding-bottom: 2px;
+        text-align: center;
+    }
+
+    .kiosk-calendar-day-item-number {
+        font-size: 1.25em;
+        padding-right: 0.5em;
+    }
+
+    .kiosk-calendar-day-list {
+        margin-left: 10px;
+        overflow: auto;
+        flex: 1;
+    }
+
+    .kiosk-calendar-day-item:not(:last-child) {
+        padding-bottom: 2px;
+    }
+
+    .kiosk-calendar-day-item:first-of-type {
+        color: #c75ec7;
+    }
+
+    .kiosk-calendar-day-item:not(:first-child) {
+        padding-top: 4px;
+    }
+
+    .kiosk-calendar-entry {
+        color: #ebebeb;
+        padding-left: 2em;
+        padding-bottom: 2px;
     }
 
     .true {

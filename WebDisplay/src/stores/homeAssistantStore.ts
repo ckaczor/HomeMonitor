@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia';
-import { WebSocketStream } from 'websocketstream-polyfill';
-import { MessageType, AuthMessage, IncomingMessage, SubscribeEntitiesMessage, EventMessage } from '@/models/home-assistant/home-assistant';
-
+import { createConnection, subscribeEntities, createLongLivedTokenAuth, Connection } from 'home-assistant-js-websocket';
 import Environment from '@/environment';
 
 export const useHomeAssistantStore = defineStore('home-assistant', {
@@ -9,7 +7,7 @@ export const useHomeAssistantStore = defineStore('home-assistant', {
         return {
             garageState: null as string | null,
             houseAlarmState: null as string | null,
-            _wss: null as WebSocketStream | null
+            _connection: null as Connection | null
         };
     },
     actions: {
@@ -21,72 +19,27 @@ export const useHomeAssistantStore = defineStore('home-assistant', {
             const garageDevice = Environment.getGarageDevice();
             const alarmDevice = Environment.getAlarmDevice();
 
-            this._wss = new WebSocketStream(Environment.getHomeAssistantUrl());
+            const auth = createLongLivedTokenAuth(Environment.getHomeAssistantUrl(), Environment.getHomeAssistantToken());
 
-            const { readable, writable } = await this._wss.opened;
+            this._connection = await createConnection({ auth });
 
-            const reader = readable.getReader();
-            const writer = writable.getWriter();
+            subscribeEntities(this._connection as Connection, entities => {
+                const garageEntity = entities[garageDevice];
 
-            while (true) {
-                const { value, done } = await reader.read();
-
-                const message = JSON.parse(value as string) as IncomingMessage;
-
-                console.info(message);
-
-                switch (message.type) {
-                    case MessageType.auth_required:
-                        const authMessage = new AuthMessage(Environment.getHomeAssistantToken());
-                        writer.write(JSON.stringify(authMessage));
-                        break;
-                    case MessageType.auth_ok:
-                        const subscribeEntitiesMessage = new SubscribeEntitiesMessage([
-                            garageDevice,
-                            alarmDevice
-                        ]);
-                        writer.write(JSON.stringify(subscribeEntitiesMessage));
-                        break;
-                    case MessageType.event:
-                        const eventMessage = message as EventMessage;
-
-                        if (!eventMessage?.event?.a) {
-                            break;
-                        }
-
-                        const garageEntity = eventMessage.event.a[garageDevice];
-
-                        if (garageEntity) {
-                            this.$patch({ garageState: garageEntity.s });
-                        }
-
-                        const houseAlarmEntity = eventMessage.event.a[alarmDevice];
-
-                        if (houseAlarmEntity) {
-                            this.$patch({ houseAlarmState: houseAlarmEntity.s });
-                        }
-
-                        break;
-                    case MessageType.result:
-                        // Handle result type
-                        break;
-                    default:
-                        // Handle unknown message type
-                        break;
+                if (garageEntity) {
+                    this.$patch({ garageState: garageEntity.state });
                 }
 
-                if (done) {
-                    break;
+                const houseAlarmEntity = entities[alarmDevice];
+
+                if (houseAlarmEntity) {
+                    this.$patch({ houseAlarmState: houseAlarmEntity.state });
                 }
-            }
+            });
         },
         async stop() {
-            if (!this._wss) {
-                return;
-            }
-
-            this._wss.close();
-            this._wss = null;
+            this._connection?.close();
+            this._connection = null;
         }
     }
 });

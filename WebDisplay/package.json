@@ -17,6 +17,7 @@
         "axios": "^1.7.9",
         "core-js": "^3.39.0",
         "date-fns": "^3.6.0",
+        "home-assistant-js-websocket": "^9.4.0",
         "pinia": "^2.3.0",
         "roboto-fontface": "^0.10.0",
         "suncalc": "^1.9.0",
@@ -45,7 +46,6 @@
         "vite": "^5.4.11",
         "vite-plugin-vuetify": "^2.0.4",
         "vue-router": "^4.5.0",
-        "vue-tsc": "^2.1.10",
-        "websocketstream-polyfill": "^1.0.1"
+        "vue-tsc": "^2.1.10"
     }
 }
