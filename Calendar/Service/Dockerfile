@@ -1,15 +1,18 @@
-FROM node:20-alpine
-
-WORKDIR /usr/src/app
-
-COPY package*.json ./
-
-RUN npm install
-
-COPY . .
-
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS base
+WORKDIR /app
 EXPOSE 8080
 
-RUN npm run build
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
+WORKDIR /src
+COPY ["./Service.csproj", "./"]
+RUN dotnet restore "Service.csproj"
+COPY . .
+WORKDIR "/src"
+RUN dotnet publish "Service.csproj" -c Release -o /app
 
-CMD ["npm", "run", "dist"]
+FROM base AS final
+WORKDIR /app
+COPY --from=build /app .
+RUN apk add --no-cache tzdata icu-libs
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+ENTRYPOINT ["dotnet", "ChrisKaczor.HomeMonitor.Calendar.Service.dll"]

@@ -1,0 +1,21 @@
+@Calendar_HostAddress = http://localhost:5060
+
+GET {{Calendar_HostAddress}}/calendar/upcoming
+Accept: application/json
+
+###
+
+GET {{Calendar_HostAddress}}/calendar/upcoming?days=7
+Accept: application/json
+
+###
+
+GET {{Calendar_HostAddress}}/events/next
+Accept: application/json
+
+###
+
+GET {{Calendar_HostAddress}}/events/next?timezone=America/New_York
+Accept: application/json
+
+###

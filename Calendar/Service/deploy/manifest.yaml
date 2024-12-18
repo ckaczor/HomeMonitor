@@ -24,6 +24,17 @@ spec:
         imagePullPolicy: Always
         securityContext:
           privileged: true
+        env:
+        - name: Calendar__PersonalUrl
+          valueFrom:
+            secretKeyRef:
+              name: calendar-config
+              key: PERSONAL_URL               
+        - name: Calendar__HolidayUrl
+          valueFrom:
+            secretKeyRef:
+              name: calendar-config
+              key: HOLIDAYS_URL    
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
