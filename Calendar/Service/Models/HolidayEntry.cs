@@ -4,6 +4,7 @@ public class HolidayEntry
 {
     public string Name { get; set; }
     public DateTimeOffset Date { get; set; }
+    public string Type { get; set; }
     public bool IsToday { get; set; }
     public Duration DurationUntil { get; set; }
 
@@ -11,6 +12,7 @@ public class HolidayEntry
     {
         Name = calendarEntry.Summary;
         Date = TimeZoneInfo.ConvertTime(calendarEntry.Start, timeZoneInfo).Subtract(timeZoneInfo.GetUtcOffset(calendarEntry.Start));
+        Type = "public";
         IsToday = Date.Date == DateTimeOffset.UtcNow.Date;
         DurationUntil = new Duration(Date);
     }
