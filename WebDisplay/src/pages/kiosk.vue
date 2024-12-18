@@ -184,7 +184,7 @@
                                 {{ format(calendarDay.date, 'dd') }}
                             </span>
                             <span class="kiosk-calendar-day-item-name">
-                                {{ format(calendarDay.date, 'MMMM, EEEE') }}
+                                {{ format(calendarDay.date, 'EEEE') }}
                             </span>
                             <ul
                                 class="kiosk-calendar-entry"
