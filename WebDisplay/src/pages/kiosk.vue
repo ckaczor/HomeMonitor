@@ -127,7 +127,7 @@
             <div
                 class="kiosk-washer text-center pt-4"
                 v-if="laundryStore?.current?.washer !== undefined"
-                :class="laundryStore.current.washer.toString()">
+                :class="laundryStore.current.washer ? 'warning' : 'normal'">
                 <v-icon
                     class="kiosk-device-icon"
                     icon="mdi-washing-machine" />
@@ -138,7 +138,7 @@
             <div
                 class="kiosk-dryer text-center pt-4"
                 v-if="laundryStore?.current?.dryer !== undefined"
-                :class="laundryStore.current.dryer.toString()">
+                :class="laundryStore.current.dryer ? 'warning' : 'normal'">
                 <v-icon
                     class="kiosk-device-icon"
                     icon="mdi-tumble-dryer" />
@@ -149,7 +149,8 @@
             <div
                 class="kiosk-garage-door text-center pt-4"
                 v-if="homeAssistantStore?.garageState"
-                v-on:click="homeAssistantStore.toggleGarage()">
+                v-on:click="homeAssistantStore.toggleGarage()"
+                :class="homeAssistantStore.garageState === 'closed' ? 'normal' : 'warning'">
                 <v-icon
                     class="kiosk-device-icon"
                     :icon="homeAssistantStore.garageState === 'closed' ? 'mdi-garage' : 'mdi-garage-open'" />
@@ -159,7 +160,8 @@
             </div>
             <div
                 class="kiosk-house-alarm text-center pt-4"
-                v-if="homeAssistantStore?.houseAlarmState">
+                v-if="homeAssistantStore?.houseAlarmState"
+                :class="homeAssistantStore.houseAlarmState === 'disarmed' ? 'normal' : 'warning'">
                 <v-icon
                     class="kiosk-device-icon"
                     icon="mdi-shield-home" />
@@ -353,11 +355,11 @@
         padding-bottom: 2px;
     }
 
-    .true {
+    .warning {
         color: #d09f27;
     }
 
-    .false {
+    .normal {
         color: #208b20;
     }
 </style>
