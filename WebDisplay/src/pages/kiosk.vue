@@ -48,7 +48,7 @@
     function loadCalendar() {
         const newCalendarDays = [] as CalendarDay[];
 
-        calendarStore.getUpcoming(calendarDayCount).then((upcoming) => {
+        calendarStore.getUpcoming(calendarDayCount, true).then((upcoming) => {
             const currentDay = startOfDay(currentTime.value);
 
             for (let i = 0; i < calendarDayCount; i++) {
@@ -78,7 +78,7 @@
     loadCalendar();
 
     setInterval(() => currentTime.value = new Date(), 1000);
-    setInterval(() => loadCalendar(), 60000);
+    setInterval(() => loadCalendar(), 30 * 60 * 1000);
 </script>
 
 <template>

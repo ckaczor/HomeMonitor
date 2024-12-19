@@ -8,8 +8,8 @@ export const useCalendarStore = defineStore('calendar', {
         return {};
     },
     actions: {
-        async getUpcoming(days: number): Promise<CalendarEntry[]> {
-            const response = await axios.get<CalendarEntry[]>(Environment.getUrlPrefix() + `:8081/api/calendar/calendar/upcoming?days=${days}`);
+        async getUpcoming(days: number, includeHolidays: boolean): Promise<CalendarEntry[]> {
+            const response = await axios.get<CalendarEntry[]>(Environment.getUrlPrefix() + `:8081/api/calendar/calendar/upcoming?days=${days}&includeHolidays=${includeHolidays}`);
 
             return response.data;
         }
