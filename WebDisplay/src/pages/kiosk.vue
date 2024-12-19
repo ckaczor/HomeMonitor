@@ -7,10 +7,9 @@
     import { useCalendarStore } from '@/stores/calendarStore';
     import { format, startOfDay, endOfDay } from 'date-fns';
     import CalendarDay from '@/models/calendar/calendar-day';
+    import NationalDayEntry from '@/models/calendar/national-day';
 
     const calendarDayCount = 7;
-
-    const calendarReady = ref(false);
 
     const weatherStore = useWeatherStore();
     weatherStore.start();
@@ -28,6 +27,10 @@
 
     const currentTime = ref(new Date());
     const calendarDays = ref([] as CalendarDay[]);
+    const calendarReady = ref(false);
+
+    const nationalDays = ref([] as NationalDayEntry[]);
+    const nationalDaysReady = ref(false);
 
     const timeFormatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' });
     const dateFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
@@ -77,8 +80,19 @@
 
     loadCalendar();
 
+    function loadNationalDays() {
+        calendarStore.getNationalDays().then((data) => {
+            nationalDays.value = data;
+
+            nationalDaysReady.value = true;
+        });
+    }
+
+    loadNationalDays();
+
     setInterval(() => (currentTime.value = new Date()), 1000);
     setInterval(() => loadCalendar(), 30 * 60 * 1000);
+    setInterval(() => loadNationalDays(), 2 * 60 * 60 * 1000);
 </script>
 
 <template>
@@ -202,6 +216,13 @@
                     </li>
                 </ul>
             </div>
+            <div
+                class="kiosk-national-days"
+                v-if="nationalDaysReady">
+                <div v-for="nationalDay in nationalDays">
+                    {{ nationalDay.name }}
+                </div>
+            </div>
         </div>
     </v-container>
 </template>
@@ -250,12 +271,14 @@
     .kiosk-content {
         height: 100%;
         max-height: 100vh;
-        padding: 0;
+        padding: 10px;
+        gap: 10px;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(2, 50%);
+        grid-template-rows: repeat(3, auto);
         grid-auto-flow: row;
         grid-template-areas:
+            'kiosk-calendar kiosk-national-days kiosk-national-days'
             'kiosk-calendar . .'
             'kiosk-calendar . .';
     }
@@ -315,11 +338,18 @@
     .kiosk-calendar {
         grid-area: kiosk-calendar;
         background-color: #121212;
-        margin: 10px;
         border-radius: 10px;
         display: flex;
         flex: 1;
         flex-direction: column;
+    }
+
+    .kiosk-national-days {
+        grid-area: kiosk-national-days;
+        background-color: #121212;
+        border-radius: 10px;
+        padding: 10px;
+        overflow: auto;
     }
 
     .kiosk-calendar-header {
