@@ -10,6 +10,16 @@ Accept: application/json
 
 ###
 
+GET {{Calendar_HostAddress}}/calendar/upcoming?includeHolidays=true
+Accept: application/json
+
+###
+
+GET {{Calendar_HostAddress}}/calendar/upcoming?days=7&includeHolidays=true
+Accept: application/json
+
+###
+
 GET {{Calendar_HostAddress}}/events/next
 Accept: application/json
 
