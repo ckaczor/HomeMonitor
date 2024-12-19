@@ -21,7 +21,7 @@ public class HolidayController(IConfiguration configuration, HttpClient httpClie
 
         var calendarEntries = calendar
             .GetOccurrences(start, end)
-            .Select(o => new CalendarEntry(o))
+            .Select(o => new CalendarEntry(o, true))
             .OrderBy(ce => ce.Start);
 
         var nextCalendarEntry = calendarEntries.First();

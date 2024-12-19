@@ -7,7 +7,7 @@ namespace ChrisKaczor.HomeMonitor.Calendar.Service.Controllers;
 [ApiController]
 public class CalendarController(IConfiguration configuration, HttpClient httpClient) : ControllerBase
 {
-    private async Task<IEnumerable<CalendarEntry>> GetCalendarEntries(string calendarUrl, int days)
+    private async Task<IEnumerable<CalendarEntry>> GetCalendarEntries(string calendarUrl, int days, bool isHoliday)
     {
         var data = await httpClient.GetStringAsync(calendarUrl);
 
@@ -18,7 +18,7 @@ public class CalendarController(IConfiguration configuration, HttpClient httpCli
 
         var calendarEntries = calendar
             .GetOccurrences(start, end)
-            .Select(o => new CalendarEntry(o))
+            .Select(o => new CalendarEntry(o, isHoliday))
             .OrderBy(ce => ce.Start);
 
         return calendarEntries;
@@ -27,12 +27,12 @@ public class CalendarController(IConfiguration configuration, HttpClient httpCli
     [HttpGet("upcoming")]
     public async Task<ActionResult<IEnumerable<CalendarEntry>>> GetUpcoming([FromQuery] int days = 1, [FromQuery] bool includeHolidays = false)
     {
-        var calendarEntries = await GetCalendarEntries(configuration["Calendar:PersonalUrl"]!, days);
+        var calendarEntries = await GetCalendarEntries(configuration["Calendar:PersonalUrl"]!, days, false);
 
         if (!includeHolidays) 
             return Ok(calendarEntries);
 
-        var holidayEntries = await GetCalendarEntries(configuration["Calendar:HolidayUrl"]!, days);
+        var holidayEntries = await GetCalendarEntries(configuration["Calendar:HolidayUrl"]!, days, true);
         calendarEntries = calendarEntries.Concat(holidayEntries).OrderBy(c => c.Start);
 
         return Ok(calendarEntries);
