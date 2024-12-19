@@ -1,4 +1,5 @@
 using ChrisKaczor.Common.OpenTelemetry;
+using RestSharp;
 using System.Reflection;
 
 namespace ChrisKaczor.HomeMonitor.Calendar.Service;
@@ -21,6 +22,7 @@ public static class Program
             builder.Configuration["Telemetry:Endpoint"]);
 
         builder.Services.AddSingleton<HttpClient>();
+        builder.Services.AddSingleton(new RestClient());
 
         builder.Services.AddControllers();
 

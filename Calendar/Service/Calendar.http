@@ -29,3 +29,8 @@ GET {{Calendar_HostAddress}}/events/next?timezone=America/New_York
 Accept: application/json
 
 ###
+
+GET {{Calendar_HostAddress}}/national-days/today
+Accept: application/json
+
+###
