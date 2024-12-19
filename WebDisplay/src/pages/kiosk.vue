@@ -90,7 +90,7 @@
 
     function loadNationalDays() {
         calendarStore.getNationalDays().then((data) => {
-            nationalDays.value = data;
+            nationalDays.value = data.sort((a, b) => a.name.localeCompare(b.name));
 
             nationalDaysReady.value = true;
         });
@@ -227,9 +227,11 @@
             <div
                 class="kiosk-national-days"
                 v-if="nationalDaysReady">
-                <div v-for="nationalDay in nationalDays">
-                    {{ nationalDay.name }}
-                </div>
+                <ul>
+                    <li v-for="nationalDay in nationalDays">
+                        {{ nationalDay.name }}
+                    </li>
+                </ul>
             </div>
         </div>
     </v-container>
