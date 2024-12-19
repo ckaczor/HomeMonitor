@@ -3,4 +3,5 @@ export default interface CalendarEntry {
     isAllDay: boolean;
     start: Date;
     end: Date;
+    isHoliday: boolean;
 }

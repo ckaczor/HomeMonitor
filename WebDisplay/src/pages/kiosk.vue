@@ -77,7 +77,7 @@
 
     loadCalendar();
 
-    setInterval(() => currentTime.value = new Date(), 1000);
+    setInterval(() => (currentTime.value = new Date()), 1000);
     setInterval(() => loadCalendar(), 30 * 60 * 1000);
 </script>
 
@@ -182,15 +182,18 @@
                         class="kiosk-calendar-day-item"
                         v-for="calendarDay in calendarDays">
                         <div>
-                            <span class="kiosk-calendar-day-item-number">
-                                {{ format(calendarDay.date, 'dd') }}
-                            </span>
-                            <span class="kiosk-calendar-day-item-name">
-                                {{ format(calendarDay.date, 'EEEE') }}
-                            </span>
+                            <div class="kiosk-calendar-day-item-header">
+                                <span class="kiosk-calendar-day-item-number">
+                                    {{ format(calendarDay.date, 'dd') }}
+                                </span>
+                                <span class="kiosk-calendar-day-item-name">
+                                    {{ format(calendarDay.date, 'EEEE') }}
+                                </span>
+                            </div>
                             <ul
                                 class="kiosk-calendar-entry"
-                                v-for="calendarEntry in calendarDay.entries">
+                                v-for="calendarEntry in calendarDay.entries"
+                                :class="calendarEntry.isHoliday ? 'holiday' : ''">
                                 <span>
                                     {{ calendarEntry.summary }}
                                 </span>
@@ -250,7 +253,7 @@
         padding: 0;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 50%);
         grid-auto-flow: row;
         grid-template-areas:
             'kiosk-calendar . .'
@@ -326,9 +329,18 @@
         text-align: center;
     }
 
+    .kiosk-calendar-day-item-header {
+        display: flex;
+        align-items: center;
+    }
+
     .kiosk-calendar-day-item-number {
         font-size: 1.25em;
         padding-right: 0.5em;
+    }
+
+    .kiosk-calendar-day-item-name {
+        font-size: 1em;
     }
 
     .kiosk-calendar-day-list {
@@ -361,5 +373,9 @@
 
     .normal {
         color: #208b20;
+    }
+
+    .holiday {
+        color: #5e83c7;
     }
 </style>
