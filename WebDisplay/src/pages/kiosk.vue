@@ -4,12 +4,7 @@
     import { useLaundryStore } from '@/stores/laundryStore';
     import { usePowerStore } from '@/stores/powerStore';
     import { useHomeAssistantStore } from '@/stores/homeAssistantStore';
-    import { useCalendarStore } from '@/stores/calendarStore';
-    import { format, startOfDay, endOfDay, isEqual } from 'date-fns';
-    import CalendarDay from '@/models/calendar/calendar-day';
-    import NationalDayEntry from '@/models/calendar/national-day';
-
-    const calendarDayCount = 7;
+    import CalendarAgenda from '@/components/CalendarAgenda.vue';
 
     const weatherStore = useWeatherStore();
     weatherStore.start();
@@ -23,15 +18,7 @@
     const homeAssistantStore = useHomeAssistantStore();
     homeAssistantStore.start();
 
-    const calendarStore = useCalendarStore();
-
     const currentTime = ref(new Date());
-    const calendarDays = ref([] as CalendarDay[]);
-    const calendarReady = ref(false);
-
-    const nationalDays = ref([] as NationalDayEntry[]);
-    const nationalDaysReady = ref(false);
-    const loadedNationalDay = ref(null as Date | null);
 
     const timeFormatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' });
     const dateFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
@@ -49,67 +36,7 @@
         }
     }
 
-    function loadCalendar() {
-        const newCalendarDays = [] as CalendarDay[];
-
-        calendarStore.getUpcoming(calendarDayCount, true).then((upcoming) => {
-            const currentDay = startOfDay(currentTime.value);
-
-            for (let i = 0; i < calendarDayCount; i++) {
-                const day = new Date(currentDay);
-                day.setDate(day.getDate() + i);
-
-                const entries = upcoming
-                    .filter((entry) => {
-                        const entryStart = startOfDay(entry.start);
-                        const entryEnd = endOfDay(entry.end);
-
-                        if (entry.isAllDay) {
-                            return day > entryStart && day < entryEnd;
-                        }
-
-                        return day >= entryStart && day <= entryEnd;
-                    })
-                    .sort((a, b) => {
-                        if (a.isHoliday == b.isHoliday) {
-                            return a.summary.localeCompare(b.summary);
-                        }
-
-                        return (b.isHoliday ? 1 : 0) - (a.isHoliday ? 1 : 0);
-                    });
-
-                newCalendarDays.push(new CalendarDay(day, entries));
-            }
-
-            calendarDays.value = newCalendarDays;
-
-            calendarReady.value = true;
-        });
-    }
-
-    loadCalendar();
-
-    function loadNationalDays() {
-        calendarStore.getNationalDays().then((data) => {
-            nationalDays.value = data.sort((a, b) => a.name.localeCompare(b.name));
-
-            loadedNationalDay.value = startOfDay(currentTime.value);
-
-            nationalDaysReady.value = true;
-        });
-    }
-
-    loadNationalDays();
-
-    setInterval(() => {
-        currentTime.value = new Date();
-
-        if (loadedNationalDay.value && !isEqual(loadedNationalDay.value, startOfDay(currentTime.value))) {
-            loadNationalDays();
-        }
-    }, 1000);
-
-    setInterval(() => loadCalendar(), 30 * 60 * 1000);
+    setInterval(() => (currentTime.value = new Date()), 1000);
 </script>
 
 <template>
@@ -202,46 +129,11 @@
             </div>
         </div>
         <div class="kiosk-content">
-            <div
+            <CalendarAgenda
                 class="kiosk-calendar"
-                v-if="calendarReady">
-                <div class="kiosk-calendar-header">
-                    {{ 'Next ' + calendarDayCount + ' Days' }}
-                </div>
-                <ul class="kiosk-calendar-day-list">
-                    <li
-                        class="kiosk-calendar-day-item"
-                        v-for="calendarDay in calendarDays">
-                        <div>
-                            <div class="kiosk-calendar-day-item-header">
-                                <span class="kiosk-calendar-day-item-number">
-                                    {{ format(calendarDay.date, 'dd') }}
-                                </span>
-                                <span class="kiosk-calendar-day-item-name">
-                                    {{ format(calendarDay.date, 'EEEE') }}
-                                </span>
-                            </div>
-                            <ul
-                                class="kiosk-calendar-entry"
-                                v-for="calendarEntry in calendarDay.entries"
-                                :class="calendarEntry.isHoliday ? 'holiday' : ''">
-                                <span>
-                                    {{ calendarEntry.summary }}
-                                </span>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div
-                class="kiosk-national-days"
-                v-if="nationalDaysReady">
-                <ul>
-                    <li v-for="nationalDay in nationalDays">
-                        {{ nationalDay.name }}
-                    </li>
-                </ul>
-            </div>
+                days="7"
+                :refresh-interval="30 * 60 * 1000" />
+            <NationalDays class="kiosk-national-days" />
         </div>
     </v-container>
 </template>
@@ -356,64 +248,12 @@
 
     .kiosk-calendar {
         grid-area: kiosk-calendar;
-        background-color: #121212;
-        border-radius: 10px;
-        display: flex;
-        flex: 1;
-        flex-direction: column;
+        overflow: auto;
     }
 
     .kiosk-national-days {
         grid-area: kiosk-national-days;
-        background-color: #121212;
-        border-radius: 10px;
-        padding: 10px;
         overflow: auto;
-    }
-
-    .kiosk-calendar-header {
-        font-size: 1.15em;
-        padding-top: 10px;
-        padding-bottom: 2px;
-        text-align: center;
-    }
-
-    .kiosk-calendar-day-item-header {
-        display: flex;
-        align-items: center;
-    }
-
-    .kiosk-calendar-day-item-number {
-        font-size: 1.25em;
-        padding-right: 0.5em;
-    }
-
-    .kiosk-calendar-day-item-name {
-        font-size: 1em;
-    }
-
-    .kiosk-calendar-day-list {
-        margin-left: 10px;
-        overflow: auto;
-        flex: 1;
-    }
-
-    .kiosk-calendar-day-item:not(:last-child) {
-        padding-bottom: 2px;
-    }
-
-    .kiosk-calendar-day-item:first-of-type {
-        color: #c75ec7;
-    }
-
-    .kiosk-calendar-day-item:not(:first-child) {
-        padding-top: 4px;
-    }
-
-    .kiosk-calendar-entry {
-        color: #ebebeb;
-        padding-left: 2em;
-        padding-bottom: 2px;
     }
 
     .warning {
@@ -422,9 +262,5 @@
 
     .normal {
         color: #208b20;
-    }
-
-    .holiday {
-        color: #5e83c7;
     }
 </style>

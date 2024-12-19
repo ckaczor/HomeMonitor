@@ -8,12 +8,14 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Almanac: typeof import('./src/components/Almanac.vue')['default']
+    CalendarAgenda: typeof import('./src/components/CalendarAgenda.vue')['default']
     CurrentLaundryStatus: typeof import('./src/components/CurrentLaundryStatus.vue')['default']
     CurrentPower: typeof import('./src/components/CurrentPower.vue')['default']
     CurrentWeather: typeof import('./src/components/CurrentWeather.vue')['default']
     DashboardItem: typeof import('./src/components/DashboardItem.vue')['default']
     Indoor: typeof import('./src/components/Indoor.vue')['default']
     IndoorSummary: typeof import('./src/components/IndoorSummary.vue')['default']
+    NationalDays: typeof import('./src/components/NationalDays.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TimeRange: typeof import('./src/components/TimeRange.vue')['default']
