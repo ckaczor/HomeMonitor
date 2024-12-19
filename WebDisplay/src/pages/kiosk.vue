@@ -5,7 +5,7 @@
     import { usePowerStore } from '@/stores/powerStore';
     import { useHomeAssistantStore } from '@/stores/homeAssistantStore';
     import { useCalendarStore } from '@/stores/calendarStore';
-    import { format, startOfDay, endOfDay } from 'date-fns';
+    import { format, startOfDay, endOfDay, isEqual } from 'date-fns';
     import CalendarDay from '@/models/calendar/calendar-day';
     import NationalDayEntry from '@/models/calendar/national-day';
 
@@ -31,6 +31,7 @@
 
     const nationalDays = ref([] as NationalDayEntry[]);
     const nationalDaysReady = ref(false);
+    const loadedNationalDay = ref(null as Date | null);
 
     const timeFormatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' });
     const dateFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
@@ -92,15 +93,23 @@
         calendarStore.getNationalDays().then((data) => {
             nationalDays.value = data.sort((a, b) => a.name.localeCompare(b.name));
 
+            loadedNationalDay.value = startOfDay(currentTime.value);
+
             nationalDaysReady.value = true;
         });
     }
 
     loadNationalDays();
 
-    setInterval(() => (currentTime.value = new Date()), 1000);
+    setInterval(() => {
+        currentTime.value = new Date();
+
+        if (loadedNationalDay.value && !isEqual(loadedNationalDay.value, startOfDay(currentTime.value))) {
+            loadNationalDays();
+        }
+    }, 1000);
+
     setInterval(() => loadCalendar(), 30 * 60 * 1000);
-    setInterval(() => loadNationalDays(), 2 * 60 * 60 * 1000);
 </script>
 
 <template>
