@@ -58,16 +58,24 @@
                 const day = new Date(currentDay);
                 day.setDate(day.getDate() + i);
 
-                const entries = upcoming.filter((entry) => {
-                    const entryStart = startOfDay(entry.start);
-                    const entryEnd = endOfDay(entry.end);
+                const entries = upcoming
+                    .filter((entry) => {
+                        const entryStart = startOfDay(entry.start);
+                        const entryEnd = endOfDay(entry.end);
 
-                    if (entry.isAllDay) {
-                        return day > entryStart && day < entryEnd;
-                    }
+                        if (entry.isAllDay) {
+                            return day > entryStart && day < entryEnd;
+                        }
 
-                    return day >= entryStart && day <= entryEnd;
-                });
+                        return day >= entryStart && day <= entryEnd;
+                    })
+                    .sort((a, b) => {
+                        if (a.isHoliday == b.isHoliday) {
+                            return a.summary.localeCompare(b.summary);
+                        }
+
+                        return (b.isHoliday ? 1 : 0) - (a.isHoliday ? 1 : 0);
+                    });
 
                 newCalendarDays.push(new CalendarDay(day, entries));
             }
