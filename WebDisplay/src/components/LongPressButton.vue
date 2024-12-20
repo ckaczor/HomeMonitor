@@ -9,32 +9,32 @@
 
     let interval: NodeJS.Timeout;
 
-    function mousedown() {
+    function startProgress() {
         loading.value = true;
 
-        increment();
+        incrementProgress();
 
-        interval = setInterval(increment, props.increment);
+        interval = setInterval(incrementProgress, props.increment);
     }
 
-    function mouseup() {
-        reset();
+    function stopProgress() {
+        resetProgress();
     }
 
-    function reset() {
+    function resetProgress() {
         clearInterval(interval);
 
         loading.value = false;
         current.value = 0;
     }
 
-    function increment() {
+    function incrementProgress() {
         current.value = current.value + props.increment;
 
         if (current.value >= props.duration) {
             emit('longPress');
 
-            reset();
+            resetProgress();
         }
     }
 
@@ -50,8 +50,8 @@
 <template>
     <button
         :class="{ 'loading-button': loading }"
-        @mousedown="mousedown"
-        @mouseup="mouseup">
+        @pointerdown="startProgress"
+        @pointerup="stopProgress">
         <span v-show="!loading">
             <slot name="default"></slot>
         </span>
