@@ -151,7 +151,7 @@
             <CalendarAgenda
                 class="kiosk-calendar"
                 days="7"
-                :refresh-interval="30 * 60 * 1000" />
+                :refresh-interval="5 * 60 * 1000" />
             <NationalDays class="kiosk-national-days" />
         </div>
     </v-container>

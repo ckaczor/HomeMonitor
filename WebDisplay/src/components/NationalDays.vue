@@ -1,32 +1,25 @@
 <script lang="ts" setup>
     import { ref } from 'vue';
     import { useCalendarStore } from '@/stores/calendarStore';
-    import { startOfDay, isEqual } from 'date-fns';
+    import { setNextDayTimer } from '@/nextDayTimer';
     import NationalDayEntry from '@/models/calendar/national-day';
 
     const calendarStore = useCalendarStore();
 
     const nationalDays = ref([] as NationalDayEntry[]);
     const nationalDaysReady = ref(false);
-    const loadedNationalDay = ref(null as Date | null);
 
     function loadNationalDays() {
         calendarStore.getNationalDays().then((data) => {
             nationalDays.value = data.sort((a, b) => a.name.localeCompare(b.name));
 
-            loadedNationalDay.value = startOfDay(new Date());
-
             nationalDaysReady.value = true;
+
+            setNextDayTimer(loadNationalDays, 10000);
         });
     }
 
     loadNationalDays();
-
-    setInterval(() => {
-        if (loadedNationalDay.value && !isEqual(loadedNationalDay.value, startOfDay(new Date()))) {
-            loadNationalDays();
-        }
-    }, 10 * 1000);
 </script>
 
 <template>

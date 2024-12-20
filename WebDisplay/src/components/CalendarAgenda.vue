@@ -2,6 +2,7 @@
     import { ref } from 'vue';
     import { useCalendarStore } from '@/stores/calendarStore';
     import { format, startOfDay, endOfDay } from 'date-fns';
+    import { setNextDayTimer } from '@/nextDayTimer';
     import CalendarDay from '@/models/calendar/calendar-day';
 
     const props = defineProps(['days', 'refreshInterval']);
@@ -46,12 +47,14 @@
             calendarDays.value = newCalendarDays;
 
             calendarReady.value = true;
+
+            setNextDayTimer(loadCalendar, 10000);
         });
     }
 
     loadCalendar();
 
-    setInterval(() => loadCalendar(), props.refreshInterval);
+    setInterval(loadCalendar, props.refreshInterval);
 </script>
 
 <template>
