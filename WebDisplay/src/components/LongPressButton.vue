@@ -20,10 +20,6 @@
     }
 
     function stopProgress() {
-        resetProgress();
-    }
-
-    function resetProgress() {
         clearInterval(interval);
 
         loading.value = false;
@@ -36,7 +32,7 @@
         if (current.value >= props.duration) {
             emit('longPress');
 
-            resetProgress();
+            stopProgress();
         }
     }
 
@@ -51,13 +47,14 @@
 
 <template>
     <button
-        :class="{ 'loading-button': loading }"
+        class="long-press-button"
+        :class="{ loading: loading }"
         @pointerdown="startProgress"
-        @pointerup="stopProgress">
+        @pointerup="stopProgress"
+        @pointercancel="stopProgress">
         <span v-show="!loading">
             <slot name="default"></slot>
         </span>
-
         <v-progress-circular
             v-if="loading"
             :size="props.progressSize"
@@ -66,11 +63,14 @@
 </template>
 
 <style scoped>
-    .loading-button {
+    .long-press-button {
+        touch-action: none;
+    }
+
+    .loading {
         display: inline-flex;
         flex-direction: column;
         align-items: center;
-        touch-action: none;
     }
 </style>
 
