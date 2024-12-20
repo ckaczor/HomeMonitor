@@ -1,28 +1,10 @@
 <script setup lang="ts">
     import { useWeatherStore } from '@/stores/weatherStore';
-    import { ConvertPascalToInchesOfMercury } from '@/pressureConverter';
     import { ShortenWindDirection } from '@/windFormatter';
+    import PressureTrendArrow from './PressureTrendArrow.vue';
 
     const weatherStore = useWeatherStore();
     weatherStore.start();
-
-    const rotationClass = (pressureDifference: number | undefined) => {
-        if (!pressureDifference) {
-            return '';
-        } else if (Math.abs(pressureDifference) <= 1.0) {
-            return '';
-        } else if (pressureDifference > 1.0 && pressureDifference <= 2.0) {
-            return 'up-low';
-        } else if (pressureDifference > 2.0) {
-            return 'up-high';
-        } else if (pressureDifference < -1.0 && pressureDifference >= -2.0) {
-            return 'down-low';
-        } else if (pressureDifference < -2.0) {
-            return 'down-high';
-        }
-
-        return '';
-    };
 </script>
 
 <template>
@@ -65,13 +47,10 @@
                     <tr>
                         <td className="weather-current-header">Pressure</td>
                         <td colspan="3">
-                            {{ weatherStore.current?.Pressure && ConvertPascalToInchesOfMercury(weatherStore.current?.Pressure)?.toFixed(2) }}"
-                            <span
+                            {{ weatherStore.current?.Pressure && (weatherStore.current?.Pressure / 100).toFixed(2) }} mbar
+                            <PressureTrendArrow
                                 class="pressure-trend-arrow"
-                                :class="rotationClass(weatherStore.current?.PressureDifferenceThreeHour)"
-                                :title="'3 Hour Change: ' + weatherStore.current?.PressureDifferenceThreeHour?.toFixed(1)">
-                                ➜
-                            </span>
+                                :pressureDifference="weatherStore.current?.PressureDifferenceThreeHour" />
                         </td>
                     </tr>
                     <tr>
@@ -115,25 +94,6 @@
     }
 
     .pressure-trend-arrow {
-        display: inline-block;
-        position: relative;
-        left: 6px;
-        transform: scale(1.25);
-    }
-
-    .down-high {
-        transform: rotate(60deg) scale(1.25);
-    }
-
-    .down-low {
-        transform: rotate(25deg) scale(1.25);
-    }
-
-    .up-high {
-        transform: rotate(-60deg) scale(1.25);
-    }
-
-    .up-low {
-        transform: rotate(-25deg) scale(1.25);
+        scale: 1.25;
     }
 </style>

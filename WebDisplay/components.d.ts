@@ -17,6 +17,7 @@ declare module 'vue' {
     IndoorSummary: typeof import('./src/components/IndoorSummary.vue')['default']
     LongPressButton: typeof import('./src/components/LongPressButton.vue')['default']
     NationalDays: typeof import('./src/components/NationalDays.vue')['default']
+    PressureTrendArrow: typeof import('./src/components/PressureTrendArrow.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TimeRange: typeof import('./src/components/TimeRange.vue')['default']

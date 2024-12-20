@@ -4,8 +4,10 @@
     import { useLaundryStore } from '@/stores/laundryStore';
     import { usePowerStore } from '@/stores/powerStore';
     import { useHomeAssistantStore } from '@/stores/homeAssistantStore';
+    import { ShortenWindDirection } from '@/windFormatter';
     import CalendarAgenda from '@/components/CalendarAgenda.vue';
     import LongPressButton from '@/components/LongPressButton.vue';
+    import PressureTrendArrow from '@/components/PressureTrendArrow.vue';
 
     const weatherStore = useWeatherStore();
     weatherStore.start();
@@ -62,6 +64,19 @@
                 class="kiosk-humidity text-center pb-3"
                 v-if="weatherStore.current">
                 {{ weatherStore.current?.Humidity?.toFixed(0) + '%' }}
+            </div>
+            <div
+                class="kiosk-wind text-center pb-3"
+                v-if="weatherStore.current">
+                {{ weatherStore.current?.WindSpeed?.toFixed(0) + '&hairsp;' + ShortenWindDirection(weatherStore.current?.WindDirection) }}
+            </div>
+            <div
+                class="kiosk-pressure text-center pb-3"
+                v-if="weatherStore.current">
+                <span>
+                    {{ (weatherStore.current?.Pressure! / 100).toFixed(0) }}
+                </span>
+                <PressureTrendArrow :pressureDifference="weatherStore.current?.PressureDifferenceThreeHour" />
             </div>
             <div
                 class="kiosk-generation text-center pt-4"
@@ -170,7 +185,7 @@
 
         display: grid;
         grid-template-columns: repeat(2, 50%);
-        grid-template-rows: repeat(6, auto) 1fr;
+        grid-template-rows: repeat(7, auto) 1fr;
         grid-column-gap: 0px;
         grid-row-gap: 0px;
 
@@ -178,6 +193,7 @@
             'kiosk-time kiosk-time'
             'kiosk-date kiosk-date'
             'kiosk-temperature kiosk-humidity'
+            'kiosk-wind kiosk-pressure'
             'kiosk-generation kiosk-consumption'
             'kiosk-washer kiosk-dryer'
             'kiosk-garage-door kiosk-house-alarm';
@@ -216,6 +232,16 @@
     .kiosk-humidity {
         font-size: 2.8rem;
         grid-area: kiosk-humidity;
+    }
+
+    .kiosk-wind {
+        font-size: 2rem;
+        grid-area: kiosk-wind;
+    }
+
+    .kiosk-pressure {
+        font-size: 2rem;
+        grid-area: kiosk-pressure;
     }
 
     .kiosk-generation {
