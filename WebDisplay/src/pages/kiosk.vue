@@ -37,6 +37,11 @@
         }
     }
 
+    function toggleGarage() {
+        //homeAssistantStore.toggleGarage();
+        alert('Garage door toggled');
+    }
+
     setInterval(() => (currentTime.value = new Date()), 1000);
 </script>
 
@@ -111,7 +116,7 @@
                 :duration="2000"
                 :increment="100"
                 :progress-size="38"
-                v-on:longPress="homeAssistantStore.toggleGarage()"
+                v-on:longPress="toggleGarage()"
                 :class="homeAssistantStore.garageState === 'closed' ? 'normal' : 'warning'">
                 <v-icon
                     class="kiosk-device-icon"

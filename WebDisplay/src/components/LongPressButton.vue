@@ -70,6 +70,7 @@
         display: inline-flex;
         flex-direction: column;
         align-items: center;
+        touch-action: none;
     }
 </style>
 
