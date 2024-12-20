@@ -18,8 +18,4 @@ export default class Environment {
     public static getAlarmDevice(): string {
         return '#ALARM_DEVICE#';
     }
-
-    public static getCalendarEmbedUrl(): string {
-        return '#CALENDAR_EMBED_URL#';
-    }
 }

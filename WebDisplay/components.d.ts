@@ -15,6 +15,7 @@ declare module 'vue' {
     DashboardItem: typeof import('./src/components/DashboardItem.vue')['default']
     Indoor: typeof import('./src/components/Indoor.vue')['default']
     IndoorSummary: typeof import('./src/components/IndoorSummary.vue')['default']
+    LongPressButton: typeof import('./src/components/LongPressButton.vue')['default']
     NationalDays: typeof import('./src/components/NationalDays.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

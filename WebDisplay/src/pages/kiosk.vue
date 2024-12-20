@@ -5,6 +5,7 @@
     import { usePowerStore } from '@/stores/powerStore';
     import { useHomeAssistantStore } from '@/stores/homeAssistantStore';
     import CalendarAgenda from '@/components/CalendarAgenda.vue';
+    import LongPressButton from '@/components/LongPressButton.vue';
 
     const weatherStore = useWeatherStore();
     weatherStore.start();
@@ -104,10 +105,13 @@
                     {{ laundryStore.current.dryer ? 'On' : 'Off' }}
                 </div>
             </div>
-            <div
+            <LongPressButton
                 class="kiosk-garage-door text-center pt-4"
                 v-if="homeAssistantStore?.garageState"
-                v-on:click="homeAssistantStore.toggleGarage()"
+                :duration="2000"
+                :increment="100"
+                :progress-size="38"
+                v-on:longPress="homeAssistantStore.toggleGarage()"
                 :class="homeAssistantStore.garageState === 'closed' ? 'normal' : 'warning'">
                 <v-icon
                     class="kiosk-device-icon"
@@ -115,7 +119,7 @@
                 <div class="kiosk-device-text">
                     {{ capitalize(homeAssistantStore.garageState) }}
                 </div>
-            </div>
+            </LongPressButton>
             <div
                 class="kiosk-house-alarm text-center pt-4"
                 v-if="homeAssistantStore?.houseAlarmState"
