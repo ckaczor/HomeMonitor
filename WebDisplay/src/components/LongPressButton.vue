@@ -9,7 +9,9 @@
 
     let interval: NodeJS.Timeout;
 
-    function startProgress() {
+    function startProgress(pointerEvent: PointerEvent) {
+        (pointerEvent.target as HTMLButtonElement).setPointerCapture(pointerEvent.pointerId);
+
         loading.value = true;
 
         incrementProgress();
