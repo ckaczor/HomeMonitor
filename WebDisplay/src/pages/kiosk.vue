@@ -9,6 +9,8 @@
     import LongPressButton from '@/components/LongPressButton.vue';
     import PressureTrendArrow from '@/components/PressureTrendArrow.vue';
 
+    const showFeelsLike = ref(false);
+
     const weatherStore = useWeatherStore();
     weatherStore.start();
 
@@ -39,6 +41,26 @@
         }
     }
 
+    function getTemperature(): string {
+        if (showFeelsLike.value && weatherStore.current?.WindChill) {
+            return weatherStore.current?.WindChill?.toFixed(0) + '°';
+        } else if (showFeelsLike.value && weatherStore.current?.HeatIndex) {
+            return weatherStore.current?.HeatIndex?.toFixed(0) + '°';
+        } else {
+            return weatherStore.current?.Temperature?.toFixed(0) + '°';
+        }
+    }
+
+    function getTemperatureClass(): string {
+        if (showFeelsLike.value && weatherStore.current?.WindChill) {
+            return 'temperature-wind-chill';
+        } else if (showFeelsLike.value && weatherStore.current?.HeatIndex) {
+            return 'temperature-heat-index';
+        } else {
+            return '';
+        }
+    }
+
     setInterval(() => (currentTime.value = new Date()), 1000);
 </script>
 
@@ -57,8 +79,10 @@
             </div>
             <div
                 class="kiosk-temperature text-center pb-3"
+                :class="getTemperatureClass()"
+                @click="showFeelsLike = !showFeelsLike"
                 v-if="weatherStore.current">
-                {{ weatherStore.current?.Temperature?.toFixed(0) + '°' }}
+                {{ getTemperature() }}
             </div>
             <div
                 class="kiosk-humidity text-center pb-3"
@@ -285,6 +309,7 @@
     .kiosk-national-days {
         grid-area: kiosk-national-days;
         overflow: auto;
+        scrollbar-width: thin;
     }
 
     .warning {
@@ -293,5 +318,13 @@
 
     .normal {
         color: #208b20;
+    }
+
+    .temperature-wind-chill {
+        color: #4d4dff;
+    }
+
+    .temperature-heat-index {
+        color: #ff4d4d;
     }
 </style>
