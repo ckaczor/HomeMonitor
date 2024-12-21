@@ -58,7 +58,7 @@
             <div
                 class="kiosk-temperature text-center pb-3"
                 v-if="weatherStore.current">
-                {{ weatherStore.current?.Temperature?.toFixed(0) + '°F' }}
+                {{ weatherStore.current?.Temperature?.toFixed(0) + '°' }}
             </div>
             <div
                 class="kiosk-humidity text-center pb-3"
@@ -201,15 +201,16 @@
 
     .kiosk-content {
         height: 100%;
-        max-height: 100vh;
+        max-height: calc(100vh - 30px);
         padding: 10px;
         gap: 10px;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(3, auto);
+        grid-template-rows: repeat(4, 25%);
         grid-auto-flow: row;
         grid-template-areas:
             'kiosk-calendar kiosk-national-days kiosk-national-days'
+            'kiosk-calendar . .'
             'kiosk-calendar . .'
             'kiosk-calendar . .';
     }
@@ -225,12 +226,12 @@
     }
 
     .kiosk-temperature {
-        font-size: 2.8rem;
+        font-size: 2.9rem;
         grid-area: kiosk-temperature;
     }
 
     .kiosk-humidity {
-        font-size: 2.8rem;
+        font-size: 2.9rem;
         grid-area: kiosk-humidity;
     }
 

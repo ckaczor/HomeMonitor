@@ -1,6 +1,6 @@
 export default interface NationalDayEntry {
     name: string;
     url: string;
-    except: string;
+    excerpt: string;
     type: string;
 }
