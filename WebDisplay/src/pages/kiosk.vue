@@ -82,7 +82,10 @@
                 :class="getTemperatureClass()"
                 @click="showFeelsLike = !showFeelsLike"
                 v-if="weatherStore.current">
-                {{ getTemperature() }}
+                <div class="temperature">
+                    <span class="temperature-value">{{ getTemperature() }}</span>
+                    <span class="temperature-label">{{ showFeelsLike ? 'Feels Like' : 'Actual' }}</span>
+                </div>
             </div>
             <div
                 class="kiosk-humidity text-center pb-3"
@@ -318,6 +321,19 @@
 
     .normal {
         color: #208b20;
+    }
+
+    .temperature {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .temperature-value {
+        height: calc(1em + 10px);
+    }
+
+    .temperature-label {
+        font-size: 10pt;
     }
 
     .temperature-wind-chill {
