@@ -40,7 +40,7 @@
                     class="national-day"
                     v-for="nationalDay in nationalDays"
                     @click="onNationalDayClick(nationalDay)">
-                    <span>{{ nationalDay.name }}</span>
+                    <span v-html="nationalDay.name"></span>
                     <v-icon
                         class="national-day-arrow"
                         icon="mdi-menu-right" />
@@ -54,9 +54,13 @@
             theme="dark"
             opacity="0.85"
             scrim="black">
-            <v-card
-                :text="selectedNationalDay.excerpt"
-                :title="selectedNationalDay.name + ' - Excerpt'">
+            <v-card>
+                <template v-slot:title>
+                    <span v-html="selectedNationalDay.name"></span>
+                </template>
+                <template v-slot:text>
+                    <span v-html="selectedNationalDay.excerpt"></span>
+                </template>
                 <template v-slot:actions>
                     <v-btn
                         class="ms-auto"
