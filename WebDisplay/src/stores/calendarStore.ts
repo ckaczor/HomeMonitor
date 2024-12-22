@@ -15,7 +15,7 @@ export const useCalendarStore = defineStore('calendar', {
             return response.data;
         },
         async getNationalDays(): Promise<NationalDayEntry[]> {
-            const response = await axios.get<NationalDayEntry[]>(Environment.getUrlPrefix() + `:8081/api/calendar/national-days/today`);
+            const response = await axios.get<NationalDayEntry[]>(Environment.getUrlPrefix() + `:8081/api/calendar/national-days/today?timezone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`);
 
             return response.data;
         }
