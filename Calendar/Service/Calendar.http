@@ -34,3 +34,8 @@ GET {{Calendar_HostAddress}}/national-days/today
 Accept: application/json
 
 ###
+
+GET {{Calendar_HostAddress}}/national-days/today?timezone=America/New_York
+Accept: application/json
+
+###
