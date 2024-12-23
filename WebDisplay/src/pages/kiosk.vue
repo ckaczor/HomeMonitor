@@ -306,12 +306,10 @@
 
     .kiosk-calendar {
         grid-area: kiosk-calendar;
-        overflow: auto;
     }
 
     .kiosk-national-days {
         grid-area: kiosk-national-days;
-        overflow: auto;
         scrollbar-width: thin;
     }
 

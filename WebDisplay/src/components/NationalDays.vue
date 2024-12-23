@@ -31,22 +31,23 @@
 </script>
 
 <template>
-    <span>
-        <div
-            class="national-days"
-            v-if="nationalDaysReady">
-            <ul>
-                <li
-                    class="national-day"
-                    v-for="nationalDay in nationalDays"
-                    @click="onNationalDayClick(nationalDay)">
-                    <span v-html="nationalDay.name"></span>
-                    <v-icon
-                        class="national-day-arrow"
-                        icon="mdi-menu-right" />
-                </li>
-            </ul>
+    <div
+        class="national-days"
+        v-if="nationalDaysReady">
+        <div class="national-days-header">
+            {{ 'National Days (' + nationalDays.length + ')' }}
         </div>
+        <ul class="national-days-list">
+            <li
+                class="national-day"
+                v-for="nationalDay in nationalDays"
+                @click="onNationalDayClick(nationalDay)">
+                <span v-html="nationalDay.name"></span>
+                <v-icon
+                    class="national-day-arrow"
+                    icon="mdi-menu-right" />
+            </li>
+        </ul>
 
         <v-dialog
             v-model="dialog"
@@ -69,7 +70,7 @@
                 </template>
             </v-card>
         </v-dialog>
-    </span>
+    </div>
 </template>
 
 <style>
@@ -77,6 +78,20 @@
         background-color: #121212;
         border-radius: 10px;
         padding: 10px;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+    }
+
+    .national-days-header {
+        font-size: 1.15em;
+        padding-bottom: 4px;
+        text-align: center;
+    }
+
+    .national-days-list {
+        overflow: auto;
+        flex: 1;
     }
 
     .national-day {
