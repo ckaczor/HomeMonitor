@@ -23,7 +23,7 @@ export const useHomeAssistantStore = defineStore('home-assistant', {
 
             this._connection = await createConnection({ auth });
 
-            subscribeEntities(this._connection as Connection, entities => {
+            subscribeEntities(this._connection as Connection, (entities) => {
                 const garageEntity = entities[garageDevice];
 
                 if (garageEntity) {
@@ -46,7 +46,29 @@ export const useHomeAssistantStore = defineStore('home-assistant', {
         async toggleGarage() {
             const garageDevice = Environment.getGarageDevice();
 
-            callService(this._connection as Connection, 'cover', this.garageState === 'closed' ? 'open_cover' : 'close_cover', { entity_id: garageDevice });
+            let action: string | null;
+
+            switch (this.garageState) {
+                case 'closed':
+                    action = 'open_cover';
+                    break;
+                case 'open':
+                    action = 'close_cover';
+                    break;
+                case 'closing':
+                case 'opening':
+                    action = 'stop_cover';
+                    break;
+                default:
+                    action = null;
+                    break;
+            }
+
+            if (!action) {
+                return;
+            }
+
+            callService(this._connection as Connection, 'cover', action, { entity_id: garageDevice });
         }
     }
 });
