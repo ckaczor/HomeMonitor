@@ -92,6 +92,7 @@
     .national-days-list {
         overflow: auto;
         flex: 1;
+        scrollbar-width: none;
     }
 
     .national-day {

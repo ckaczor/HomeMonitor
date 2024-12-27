@@ -25,7 +25,7 @@
         class="pressure-trend-arrow"
         :class="rotationClass(props.pressureDifference)"
         :title="'3 Hour Change: ' + props.pressureDifference.toFixed(1)">
-        ➜
+        ➝
     </span>
 </template>
 

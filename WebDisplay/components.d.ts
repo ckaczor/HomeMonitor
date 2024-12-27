@@ -23,5 +23,6 @@ declare module 'vue' {
     TimeRange: typeof import('./src/components/TimeRange.vue')['default']
     ValueChart: typeof import('./src/components/ValueChart.vue')['default']
     WeatherSummary: typeof import('./src/components/WeatherSummary.vue')['default']
+    WindDirectionArrow: typeof import('./src/components/WindDirectionArrow.vue')['default']
   }
 }

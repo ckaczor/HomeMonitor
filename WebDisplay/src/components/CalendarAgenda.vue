@@ -71,7 +71,7 @@
                 <div>
                     <div class="calendar-day-item-header">
                         <span class="calendar-day-item-number">
-                            {{ format(calendarDay.date, 'dd') }}
+                            {{ format(calendarDay.date, 'd') }}
                         </span>
                         <span class="calendar-day-item-name">
                             {{ format(calendarDay.date, 'EEEE') }}
@@ -115,6 +115,8 @@
     .calendar-day-item-number {
         font-size: 1.25em;
         padding-right: 0.5em;
+        width: 2rem;
+        text-align: right;
     }
 
     .calendar-day-item-name {
@@ -125,6 +127,7 @@
         margin-left: 10px;
         overflow: auto;
         flex: 1;
+        scrollbar-width: none;
     }
 
     .calendar-day-item:not(:last-child) {

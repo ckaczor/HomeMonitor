@@ -4,12 +4,11 @@
     import { useLaundryStore } from '@/stores/laundryStore';
     import { usePowerStore } from '@/stores/powerStore';
     import { useHomeAssistantStore } from '@/stores/homeAssistantStore';
-    import { ShortenWindDirection } from '@/windFormatter';
     import CalendarAgenda from '@/components/CalendarAgenda.vue';
     import LongPressButton from '@/components/LongPressButton.vue';
     import PressureTrendArrow from '@/components/PressureTrendArrow.vue';
 
-    const showFeelsLike = ref(false);
+    const showFeelsLike = ref(true);
 
     const weatherStore = useWeatherStore();
     weatherStore.start();
@@ -61,6 +60,26 @@
         }
     }
 
+    function dewPointDescription(dewPoint: number | undefined): string {
+        if (dewPoint === undefined) {
+            return '';
+        } else if (dewPoint < 55) {
+            return 'Dry';
+        } else if (dewPoint <= 60) {
+            return 'Comfortable';
+        } else if (dewPoint <= 65) {
+            return 'Slightly Humid';
+        } else if (dewPoint <= 70) {
+            return 'Humid';
+        } else if (dewPoint <= 75) {
+            return 'Very Humid';
+        } else if (dewPoint > 75) {
+            return 'Oppressive';
+        }
+
+        return '';
+    }
+
     setInterval(() => (currentTime.value = new Date()), 1000);
 </script>
 
@@ -82,28 +101,46 @@
                 :class="getTemperatureClass()"
                 @click="showFeelsLike = !showFeelsLike"
                 v-if="weatherStore.current">
-                <div class="temperature">
-                    <span class="temperature-value">{{ getTemperature() }}</span>
-                    <span class="temperature-label">{{ showFeelsLike ? 'Feels Like' : 'Actual' }}</span>
+                <div class="display-item">
+                    <span class="display-item-value">{{ getTemperature() }}</span>
+                    <span class="display-item-label">{{ showFeelsLike ? 'Feels Like' : 'Actual' }}</span>
                 </div>
             </div>
             <div
                 class="kiosk-humidity text-center pb-3"
                 v-if="weatherStore.current">
-                {{ weatherStore.current?.Humidity?.toFixed(0) + '%' }}
+                <div class="display-item">
+                    <span class="display-item-value">
+                        {{ weatherStore.current?.Humidity?.toFixed(0) + '%' }}
+                    </span>
+                    <span class="display-item-label">{{ dewPointDescription(weatherStore.current?.DewPoint) }}</span>
+                </div>
             </div>
             <div
                 class="kiosk-wind text-center pb-3"
                 v-if="weatherStore.current">
-                {{ weatherStore.current?.WindSpeed?.toFixed(0) + '&hairsp;' + ShortenWindDirection(weatherStore.current?.WindDirection) }}
+                <div class="display-item">
+                    <span class="display-item-value">
+                        <span>
+                            {{ weatherStore.current?.WindSpeed?.toFixed(1) }}
+                        </span>
+                        <WindDirectionArrow :windDirection="weatherStore.current?.WindDirection" />
+                    </span>
+                    <span class="display-item-label">MPH</span>
+                </div>
             </div>
             <div
                 class="kiosk-pressure text-center pb-3"
                 v-if="weatherStore.current">
-                <span>
-                    {{ (weatherStore.current?.Pressure! / 100).toFixed(0) }}
-                </span>
-                <PressureTrendArrow :pressureDifference="weatherStore.current?.PressureDifferenceThreeHour" />
+                <div class="display-item">
+                    <span class="display-item-value">
+                        <span>
+                            {{ (weatherStore.current?.Pressure! / 100).toFixed(0) }}
+                        </span>
+                        <PressureTrendArrow :pressureDifference="weatherStore.current?.PressureDifferenceThreeHour" />
+                    </span>
+                    <span class="display-item-label">MB</span>
+                </div>
             </div>
             <div
                 class="kiosk-generation text-center pt-4"
@@ -310,7 +347,6 @@
 
     .kiosk-national-days {
         grid-area: kiosk-national-days;
-        scrollbar-width: thin;
     }
 
     .warning {
@@ -321,16 +357,16 @@
         color: #208b20;
     }
 
-    .temperature {
+    .display-item {
         display: flex;
         flex-direction: column;
     }
 
-    .temperature-value {
+    .display-item-value {
         height: calc(1em + 10px);
     }
 
-    .temperature-label {
+    .display-item-label {
         font-size: 10pt;
     }
 
