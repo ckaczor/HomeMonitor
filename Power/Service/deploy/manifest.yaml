@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: power-database
-        image: mcr.microsoft.com/mssql/server
+        image: mcr.microsoft.com/mssql/server:2022-latest
         terminationMessagePath: "/dev/termination-log"
         terminationMessagePolicy: File
         imagePullPolicy: IfNotPresent
