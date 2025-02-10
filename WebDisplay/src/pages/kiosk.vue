@@ -102,6 +102,7 @@
                 @click="showFeelsLike = !showFeelsLike"
                 v-if="weatherStore.current">
                 <div class="display-item">
+                    <span class="display-item-header">Temperature</span>
                     <span class="display-item-value">{{ getTemperature() }}</span>
                     <span class="display-item-label">{{ showFeelsLike ? 'Feels Like' : 'Actual' }}</span>
                 </div>
@@ -110,8 +111,9 @@
                 class="kiosk-humidity text-center pb-3"
                 v-if="weatherStore.current">
                 <div class="display-item">
+                    <span class="display-item-header">Dew Point</span>
                     <span class="display-item-value">
-                        {{ weatherStore.current?.Humidity?.toFixed(0) + '%' }}
+                        {{ weatherStore.current?.DewPoint?.toFixed(0) + '°' }}
                     </span>
                     <span class="display-item-label">{{ dewPointDescription(weatherStore.current?.DewPoint) }}</span>
                 </div>
@@ -120,6 +122,7 @@
                 class="kiosk-wind text-center pb-3"
                 v-if="weatherStore.current">
                 <div class="display-item">
+                    <span class="display-item-header">Wind</span>
                     <span class="display-item-value">
                         <span>
                             {{ weatherStore.current?.WindSpeed?.toFixed(1) }}
@@ -133,13 +136,14 @@
                 class="kiosk-pressure text-center pb-3"
                 v-if="weatherStore.current">
                 <div class="display-item">
+                    <span class="display-item-header">Pressure</span>
                     <span class="display-item-value">
                         <span>
                             {{ (weatherStore.current?.Pressure! / 100).toFixed(0) }}
                         </span>
                         <PressureTrendArrow :pressureDifference="weatherStore.current?.PressureDifferenceThreeHour" />
                     </span>
-                    <span class="display-item-label">MB</span>
+                    <span class="display-item-label">hPa</span>
                 </div>
             </div>
             <div
@@ -363,7 +367,11 @@
     }
 
     .display-item-value {
-        height: calc(1em + 10px);
+        line-height: calc(100% + 2px);
+    }
+
+    .display-item-header {
+        font-size: 10pt;
     }
 
     .display-item-label {

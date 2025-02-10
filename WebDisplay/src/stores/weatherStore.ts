@@ -32,7 +32,9 @@ export const useWeatherStore = defineStore('weather', {
             await this._connection.start();
 
             this._connection.on('LatestReading', (message: string) => {
-                this.$patch({ current: JSON.parse(message) });
+                const json: WeatherUpdate = JSON.parse(message);
+
+                this.$patch({ current: json });
             });
         },
         async stop() {
