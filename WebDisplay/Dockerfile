@@ -1,5 +1,6 @@
 # build stage
 FROM node:lts-alpine AS build-stage
+RUN npm install -g corepack@latest
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 COPY package*.json ./
