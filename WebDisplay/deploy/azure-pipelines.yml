@@ -22,14 +22,15 @@ stages:
       displayName: 'Build an image'
       inputs:
         command: 'build'
-        containerRegistry:  'Docker Hub'
+        containerRegistry: 'Docker Hub'
         dockerFile: 'WebDisplay/Dockerfile'
         arguments: '-t ckaczor/home-monitor-web-display:$(Build.BuildNumber)'
     - task: Docker@2
       displayName: 'Push an image'
       inputs:
         command: 'push'
-        containerRegistry:  'Docker Hub'
+        containerRegistry: 'Docker Hub'
+        repository: 'ckaczor/home-monitor-web-display'
         arguments: '-t ckaczor/home-monitor-web-display:$(Build.BuildNumber)'
     - task: Bash@3
       inputs:
