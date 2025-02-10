@@ -18,22 +18,19 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - task: Docker@0
+    - task: Docker@2
       displayName: 'Build an image'
       inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryConnection: 'Docker Hub'
+        command: 'build'
+        containerRegistry:  'Docker Hub'
         dockerFile: 'WebDisplay/Dockerfile'
-        imageName: 'ckaczor/home-monitor-web-display:$(Build.BuildNumber)'
-        includeLatestTag: true
-    - task: Docker@0
+        arguments: '-t ckaczor/home-monitor-web-display:$(Build.BuildNumber)'
+    - task: Docker@2
       displayName: 'Push an image'
       inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryConnection: 'Docker Hub'
-        action: 'Push an image'
-        imageName: 'ckaczor/home-monitor-web-display:$(Build.BuildNumber)'
-        includeLatestTag: true
+        command: 'push'
+        containerRegistry:  'Docker Hub'
+        arguments: '-t ckaczor/home-monitor-web-display:$(Build.BuildNumber)'
     - task: Bash@3
       inputs:
         targetType: 'inline'
