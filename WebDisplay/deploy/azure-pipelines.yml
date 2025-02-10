@@ -25,14 +25,14 @@ stages:
                       containerRegistry: 'Docker Hub'
                       dockerFile: 'WebDisplay/Dockerfile'
                       repository: 'ckaczor/home-monitor-web-display'
-                      tags: '$(Build.BuildNumber)'
+                      tags: '$(Build.BuildNumber),latest'
                 - task: Docker@2
                   displayName: 'Push an image'
                   inputs:
                       command: 'push'
                       containerRegistry: 'Docker Hub'
                       repository: 'ckaczor/home-monitor-web-display'
-                      tags: '$(Build.BuildNumber)'
+                      tags: '$(Build.BuildNumber),latest'
                 - task: Bash@3
                   inputs:
                       targetType: 'inline'
