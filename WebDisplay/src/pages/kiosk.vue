@@ -218,7 +218,7 @@
         <div class="kiosk-content">
             <CalendarAgenda
                 class="kiosk-calendar"
-                days="7"
+                days="10"
                 :refresh-interval="5 * 60 * 1000" />
             <NationalDays class="kiosk-national-days" />
         </div>
@@ -278,9 +278,9 @@
         grid-auto-flow: row;
         grid-template-areas:
             'kiosk-calendar kiosk-national-days kiosk-national-days'
-            'kiosk-calendar . .'
-            'kiosk-calendar . .'
-            'kiosk-calendar . .';
+            'kiosk-calendar kiosk-national-days kiosk-national-days'
+            'kiosk-calendar kiosk-national-days kiosk-national-days'
+            'kiosk-calendar kiosk-national-days kiosk-national-days';
     }
 
     .kiosk-time {
