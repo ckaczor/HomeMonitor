@@ -83,6 +83,7 @@
                         :class="{ 'calendar-holiday': calendarEntry.isHoliday }">
                         <span>
                             {{ calendarEntry.summary }}
+                            <span v-if="!calendarEntry.isAllDay">@ {{ format(calendarEntry.start, 'p') }}</span>
                         </span>
                     </ul>
                 </div>
