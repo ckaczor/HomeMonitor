@@ -88,7 +88,7 @@ public class WeatherUpdate : WeatherUpdateBase
         var temperature = Temperature;
         var humidity = Humidity;
 
-        if (temperature.IsBetween(80, 100) && humidity.IsBetween(40, 100))
+        if (temperature > 80 && humidity > 40)
         {
             HeatIndex = -42.379m + 2.04901523m * temperature + 10.14333127m * humidity -
                         .22475541m * temperature * humidity - .00683783m * temperature * temperature -
