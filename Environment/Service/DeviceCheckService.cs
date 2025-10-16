@@ -9,7 +9,7 @@ public class DeviceCheckService(Database _database, IConfiguration _configuratio
     private TimeSpan _warningInterval;
 
     private readonly string _botToken = _configuration["Telegram:BotToken"]!;
-    private readonly string _chatId = _configuration["Telegram:ChatId"]!;
+    private readonly string _chatId = _configuration["Telegram:PersonalChatId"]!;
     private readonly RestClient _restClient = new();
 
     public Task StartAsync(CancellationToken cancellationToken)
