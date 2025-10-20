@@ -100,12 +100,23 @@ public class Database(IConfiguration configuration)
         return await connection.QueryFirstOrDefaultAsync<Device>(query, new { Name = deviceName }).ConfigureAwait(false);
     }
 
-    public async Task SetDeviceLastUpdatedAsync(string deviceName, DateTimeOffset? lastUpdated)
+    public async Task<bool> SetDeviceLastUpdatedAsync(string deviceName, DateTimeOffset? lastUpdated)
     {
         await using var connection = CreateConnection();
 
         var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.SetDeviceLastUpdated.psql");
 
-        await connection.ExecuteAsync(query, new { Name = deviceName, LastUpdated = lastUpdated }).ConfigureAwait(false);
+        var stoppedReporting = await connection.QueryFirstAsync<bool>(query, new { Name = deviceName, LastUpdated = lastUpdated }).ConfigureAwait(false);
+
+        return stoppedReporting;
+    }
+
+    public async Task SetDeviceStoppedReportingAsync(string deviceName, bool stoppedReporting)
+    {
+        await using var connection = CreateConnection();
+
+        var query = ResourceReader.GetString("ChrisKaczor.HomeMonitor.Environment.Service.Data.Queries.SetDeviceStoppedReporting.psql");
+
+        await connection.ExecuteAsync(query, new { Name = deviceName, StoppedReporting = stoppedReporting }).ConfigureAwait(false);
     }
 }

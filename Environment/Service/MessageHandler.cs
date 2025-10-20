@@ -17,11 +17,13 @@ public class MessageHandler : IHostedService
     private readonly MqttFactory _mqttFactory;
     private readonly string _topic;
     private readonly HubConnection? _hubConnection;
+    private readonly TelegramSender _telegramSender;
 
-    public MessageHandler(IConfiguration configuration, Database database)
+    public MessageHandler(IConfiguration configuration, Database database, TelegramSender telegramSender)
     {
         _configuration = configuration;
         _database = database;
+        _telegramSender = telegramSender;
 
         _topic = _configuration["Mqtt:Topic"] ?? string.Empty;
 
@@ -77,9 +79,16 @@ public class MessageHandler : IHostedService
 
         await _database.StoreMessageAsync(message);
 
-        await _database.SetDeviceLastUpdatedAsync(message.Name, message.Timestamp);
+        var hadStoppedReporting = await _database.SetDeviceLastUpdatedAsync(message.Name, message.Timestamp);
 
         await SendMessage(message);
+
+        if (hadStoppedReporting)
+        {
+            var telegramMessage = $"Device now reporting: {message.Name}";
+
+            await _telegramSender.SendMessageAsync(telegramMessage);
+        }
     }
 
     private async Task SendMessage(DeviceMessage message)

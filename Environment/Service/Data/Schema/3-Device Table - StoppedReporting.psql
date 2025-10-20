@@ -1,0 +1,4 @@
+ALTER TABLE 
+    device 
+ADD COLUMN 
+    stopped_reporting boolean NOT NULL DEFAULT false;

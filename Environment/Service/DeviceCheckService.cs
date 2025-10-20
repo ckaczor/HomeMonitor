@@ -1,26 +1,21 @@
 using ChrisKaczor.HomeMonitor.Environment.Service.Data;
-using RestSharp;
 
 namespace ChrisKaczor.HomeMonitor.Environment.Service;
 
-public class DeviceCheckService(Database _database, IConfiguration _configuration) : IHostedService
+public class DeviceCheckService(Database database, IConfiguration configuration, TelegramSender telegramSender) : IHostedService
 {
     private Timer? _timer;
     private TimeSpan _warningInterval;
-
-    private readonly string _botToken = _configuration["Telegram:BotToken"]!;
-    private readonly string _chatId = _configuration["Telegram:PersonalChatId"]!;
-    private readonly RestClient _restClient = new();
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
         WriteLog("DeviceCheckService started");
 
-        _warningInterval = TimeSpan.Parse(_configuration["Environment:DeviceWarningInterval"]!);
+        _warningInterval = TimeSpan.Parse(configuration["Environment:DeviceWarningInterval"]!);
 
-        var checkInterval = TimeSpan.Parse(_configuration["Environment:DeviceCheckInterval"]!);
+        var checkInterval = TimeSpan.Parse(configuration["Environment:DeviceCheckInterval"]!);
 
-        _timer = new Timer((state) => DoWork().Wait(), null, TimeSpan.Zero, checkInterval);
+        _timer = new Timer(_ => DoWork().Wait(cancellationToken), null, TimeSpan.Zero, checkInterval);
 
         return Task.CompletedTask;
     }
@@ -29,7 +24,7 @@ public class DeviceCheckService(Database _database, IConfiguration _configuratio
     {
         WriteLog("Checking devices started");
 
-        var devices = await _database.GetDevicesAsync();
+        var devices = await database.GetDevicesAsync();
 
         foreach (var device in devices)
         {
@@ -50,11 +45,9 @@ public class DeviceCheckService(Database _database, IConfiguration _configuratio
 
             if (message.Length > 0)
             {
-                var encodedMessage = Uri.EscapeDataString(message);
+                await database.SetDeviceStoppedReportingAsync(device.Name, true);
 
-                var restRequest = new RestRequest($"https://api.telegram.org/bot{_botToken}/sendMessage?chat_id={_chatId}&text={encodedMessage}");
-
-                await _restClient.GetAsync(restRequest);
+                await telegramSender.SendMessageAsync(message);
             }
         }
 

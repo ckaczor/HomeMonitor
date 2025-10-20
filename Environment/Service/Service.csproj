@@ -28,8 +28,10 @@
     <EmbeddedResource Include="Data\Queries\CreateReading.psql" />
     <EmbeddedResource Include="Data\Queries\GetDevices.psql" />
     <EmbeddedResource Include="Data\Queries\GetDevice.psql" />
+    <EmbeddedResource Include="Data\Queries\SetDeviceStoppedReporting.psql" />
     <EmbeddedResource Include="Data\Queries\SetDeviceLastUpdated.psql" />
     <EmbeddedResource Include="Data\Schema\1-Initial Schema.psql" />
+    <EmbeddedResource Include="Data\Schema\3-Device Table - StoppedReporting.psql" />
     <EmbeddedResource Include="Data\Schema\2-Device Table.psql" />
   </ItemGroup>
 
@@ -40,7 +42,7 @@
     <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.1" />
     <PackageReference Include="MQTTnet.AspNetCore" Version="4.3.3.952" />
-    <PackageReference Include="RestSharp" Version="111.1.0" />
+    <PackageReference Include="RestSharp" Version="112.1.0" />
   </ItemGroup>
 
   <ItemGroup>

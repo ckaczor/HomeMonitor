@@ -1,11 +1,16 @@
 INSERT INTO device(
     name,
-    last_updated
+    last_updated,
+    stopped_reporting
 )
 VALUES (
     @Name,
-    @LastUpdated
+    @LastUpdated,
+    false
 )
 ON CONFLICT (name)
     DO UPDATE
-    SET last_updated = EXCLUDED.last_updated
+    SET last_updated = EXCLUDED.last_updated,
+        stopped_reporting = false
+RETURNING
+    (SELECT stopped_reporting FROM device WHERE name = @Name);

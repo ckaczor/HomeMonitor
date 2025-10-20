@@ -19,6 +19,7 @@ public static class Program
         builder.Services.AddControllers();
 
         builder.Services.AddTransient<Database>();
+        builder.Services.AddTransient<TelegramSender>();
         builder.Services.AddHostedService<MessageHandler>();
         builder.Services.AddHostedService<DeviceCheckService>();
 

@@ -1,0 +1,6 @@
+UPDATE
+    device
+SET
+    stopped_reporting = @StoppedReporting
+WHERE
+    name = @Name;
