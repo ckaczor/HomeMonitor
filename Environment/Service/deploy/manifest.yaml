@@ -122,11 +122,16 @@ spec:
             secretKeyRef:
               name: telegram
               key: bot-token-home
-        - name: Telegram__ChatId
+        - name: Telegram__GroupChatId
           valueFrom:
             secretKeyRef:
               name: telegram
-              key: chat-id 
+              key: group-chat-id 
+        - name: Telegram__PersonalChatId
+          valueFrom:
+            secretKeyRef:
+              name: telegram
+              key: personal-chat-id 
         resources:
           limits:
             cpu: 1000m
