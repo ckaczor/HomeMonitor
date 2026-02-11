@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { dateReviver } from '@/dateReviver';
 import axios from 'axios';
 import Environment from '@/environment';
 import WeatherUpdate from '@/models/weather/weather-update';
@@ -32,7 +33,7 @@ export const useWeatherStore = defineStore('weather', {
             await this._connection.start();
 
             this._connection.on('LatestReading', (message: string) => {
-                const json: WeatherUpdate = JSON.parse(message);
+                const json: WeatherUpdate = JSON.parse(message, dateReviver);
 
                 this.$patch({ current: json });
             });

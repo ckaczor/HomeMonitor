@@ -8,6 +8,8 @@
     import LongPressButton from '@/components/LongPressButton.vue';
     import PressureTrendArrow from '@/components/PressureTrendArrow.vue';
 
+    const outOfDateDuration = 5000;
+
     const showFeelsLike = ref(true);
 
     const weatherStore = useWeatherStore();
@@ -50,8 +52,18 @@
         }
     }
 
+    function weatherOutOfDate(): boolean {
+        return weatherStore.current?.Timestamp !== undefined && Date.now() - weatherStore.current.Timestamp.getTime() >= outOfDateDuration;
+    }
+
+    function powerOutOfDate(): boolean {
+        return powerStore.current?.Timestamp !== undefined && Date.now() - powerStore.current.Timestamp.getTime() >= outOfDateDuration;
+    }
+
     function getTemperatureClass(): string {
-        if (showFeelsLike.value && weatherStore.current?.WindChill) {
+        if (weatherOutOfDate()) {
+            return 'out-of-date-reading';
+        } else if (showFeelsLike.value && weatherStore.current?.WindChill) {
             return 'temperature-wind-chill';
         } else if (showFeelsLike.value && weatherStore.current?.HeatIndex) {
             return 'temperature-heat-index';
@@ -109,6 +121,7 @@
             </div>
             <div
                 class="kiosk-humidity text-center pb-3"
+                :class="{ 'out-of-date-reading': weatherOutOfDate() }"
                 v-if="weatherStore.current">
                 <div class="display-item">
                     <span class="display-item-header">Dew Point</span>
@@ -120,6 +133,7 @@
             </div>
             <div
                 class="kiosk-wind text-center pb-3"
+                :class="{ 'out-of-date-reading': weatherOutOfDate() }"
                 v-if="weatherStore.current">
                 <div class="display-item">
                     <span class="display-item-header">Wind</span>
@@ -134,6 +148,7 @@
             </div>
             <div
                 class="kiosk-pressure text-center pb-3"
+                :class="{ 'out-of-date-reading': weatherOutOfDate() }"
                 v-if="weatherStore.current">
                 <div class="display-item">
                     <span class="display-item-header">Pressure</span>
@@ -148,6 +163,7 @@
             </div>
             <div
                 class="kiosk-generation text-center pt-4"
+                :class="{ 'out-of-date-reading': powerOutOfDate() }"
                 v-if="powerStore.current">
                 <v-icon
                     class="kiosk-device-icon"
@@ -158,6 +174,7 @@
             </div>
             <div
                 class="kiosk-consumption text-center pt-4"
+                :class="{ 'out-of-date-reading': powerOutOfDate() }"
                 v-if="powerStore.current">
                 <v-icon
                     class="kiosk-device-icon"
@@ -384,5 +401,9 @@
 
     .temperature-heat-index {
         color: #ff4d4d;
+    }
+
+    .out-of-date-reading {
+        color: #d09f27;
     }
 </style>

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { dateReviver } from '@/dateReviver';
 import axios from 'axios';
 import Environment from '@/environment';
 import PowerStatus from '@/models/power/power-status';
@@ -27,7 +28,7 @@ export const usePowerStore = defineStore('power', {
             await this._connection.start();
 
             this._connection.on('LatestSample', (message: string) => {
-                this.$patch({ current: JSON.parse(message) });
+                this.$patch({ current: JSON.parse(message, dateReviver) });
             });
         },
         async stop() {
