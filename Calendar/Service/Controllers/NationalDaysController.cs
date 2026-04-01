@@ -1,8 +1,8 @@
 ﻿using ChrisKaczor.HomeMonitor.Calendar.Service.Models;
-using DaysOfTheYear = ChrisKaczor.HomeMonitor.Calendar.Service.Models.DaysOfTheYear;
-using HolidayCalendar = ChrisKaczor.HomeMonitor.Calendar.Service.Models.HolidayCalendar;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
+using DaysOfTheYear = ChrisKaczor.HomeMonitor.Calendar.Service.Models.DaysOfTheYear;
+using HolidayCalendar = ChrisKaczor.HomeMonitor.Calendar.Service.Models.HolidayCalendar;
 
 namespace ChrisKaczor.HomeMonitor.Calendar.Service.Controllers;
 
@@ -51,17 +51,18 @@ public class NationalDaysController(IConfiguration configuration, RestClient res
         var now = DateTimeOffset.UtcNow.ToOffset(timeZoneOffset);
         var dateString = now.ToString("yyyy-MM-dd");
 
+        var countries = configuration.GetSection("Calendar:HolidayCalendar:CountryCodes").Get<List<string>>() ?? [];
+
         var restRequest = new RestRequest(configuration["Calendar:HolidayCalendar:Url"]);
         restRequest.AddHeader("Authorization", $"Bearer {configuration["Calendar:HolidayCalendar:Key"] ?? string.Empty}");
         restRequest.AddQueryParameter("limit", 100);
-        restRequest.AddQueryParameter("country", configuration["Calendar:HolidayCalendar:Country"]);
         restRequest.AddQueryParameter("type", "Day");
         restRequest.AddQueryParameter("startDate", dateString);
         restRequest.AddQueryParameter("endDate", dateString);
 
         var response = await restClient.GetAsync<HolidayCalendar.Response>(restRequest);
 
-        var nationalDays = response?.Data.Items.Select(i => new NationalDay(i));
+        var nationalDays = response?.Data.Items.Where(i => countries.Contains(i.Country.Code)).Select(i => new NationalDay(i));
 
         return nationalDays;
     }

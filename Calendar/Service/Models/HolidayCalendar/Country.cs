@@ -3,12 +3,9 @@
 namespace ChrisKaczor.HomeMonitor.Calendar.Service.Models.HolidayCalendar;
 
 [PublicAPI]
-public class Item
+public class Country
 {
     public required string Id { get; set; }
     public required string Name { get; set; }
-    public required string Excerpt { get; set; }
-    public required string Url { get; set; }
-    public required string Type { get; set; }
-    public required Country Country { get; set; }
+    public required string Code { get; set; }
 }
