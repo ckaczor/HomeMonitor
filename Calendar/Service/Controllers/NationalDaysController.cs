@@ -1,4 +1,6 @@
-﻿using ChrisKaczor.HomeMonitor.Calendar.Service.Models.NationalDays;
+﻿using ChrisKaczor.HomeMonitor.Calendar.Service.Models;
+using DaysOfTheYear = ChrisKaczor.HomeMonitor.Calendar.Service.Models.DaysOfTheYear;
+using HolidayCalendar = ChrisKaczor.HomeMonitor.Calendar.Service.Models.HolidayCalendar;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 
@@ -9,17 +11,58 @@ namespace ChrisKaczor.HomeMonitor.Calendar.Service.Controllers;
 public class NationalDaysController(IConfiguration configuration, RestClient restClient) : ControllerBase
 {
     [HttpGet("today")]
-    public async Task<ActionResult<Response>> GetToday([FromQuery] string timezone = "Etc/UTC")
+    public async Task<ActionResult<IEnumerable<NationalDay>>> GetToday([FromQuery] string timezone = "Etc/UTC", [FromQuery] string provider = "")
     {
+        if (string.IsNullOrEmpty(provider))
+        {
+            provider = configuration["Calendar:NationalDays:Provider"] ?? string.Empty;
+        }
+
         var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timezone);
-        var timeZoneOffset = timeZoneInfo.GetUtcOffset(DateTimeOffset.Now).TotalHours;
+        var timeZoneOffset = timeZoneInfo.GetUtcOffset(DateTimeOffset.Now);
 
-        var restRequest = new RestRequest(configuration["Calendar:NationalDays:Url"]);
-        restRequest.AddHeader("X-Api-Key", configuration["Calendar:NationalDays:Key"] ?? string.Empty);
-        restRequest.AddQueryParameter("timezone_offset", timeZoneOffset);
+        if (provider == "DaysOfTheYear")
+        {
+            return Ok(await GetFromDaysOfTheYear(timeZoneOffset));
+        }
 
-        var response = await restClient.GetAsync<Response>(restRequest);
+        return Ok(await GetFromHolidayCalendar(timeZoneOffset));
+    }
 
-        return Ok(response?.Data.Where(d => d.Type == "day"));
+    private async Task<IEnumerable<NationalDay>?> GetFromDaysOfTheYear(TimeSpan timeZoneOffset)
+    {
+        var timeZoneOffsetHours = timeZoneOffset.TotalHours;
+
+        var restRequest = new RestRequest(configuration["Calendar:DaysOfTheYear:Url"]);
+        restRequest.AddHeader("X-Api-Key", configuration["Calendar:DaysOfTheYear:Key"] ?? string.Empty);
+        restRequest.AddQueryParameter("timezone_offset", timeZoneOffsetHours);
+
+        var response = await restClient.GetAsync<DaysOfTheYear.Response>(restRequest);
+
+        var items = response?.Data.Where(d => d.Type == "day");
+
+        var nationalDays = items?.Select(i => new NationalDay(i));
+
+        return nationalDays;
+    }
+
+    private async Task<IEnumerable<NationalDay>?> GetFromHolidayCalendar(TimeSpan timeZoneOffset)
+    {
+        var now = DateTimeOffset.UtcNow.ToOffset(timeZoneOffset);
+        var dateString = now.ToString("yyyy-MM-dd");
+
+        var restRequest = new RestRequest(configuration["Calendar:HolidayCalendar:Url"]);
+        restRequest.AddHeader("Authorization", $"Bearer {configuration["Calendar:HolidayCalendar:Key"] ?? string.Empty}");
+        restRequest.AddQueryParameter("limit", 100);
+        restRequest.AddQueryParameter("country", configuration["Calendar:HolidayCalendar:Country"]);
+        restRequest.AddQueryParameter("type", "Day");
+        restRequest.AddQueryParameter("startDate", dateString);
+        restRequest.AddQueryParameter("endDate", dateString);
+
+        var response = await restClient.GetAsync<HolidayCalendar.Response>(restRequest);
+
+        var nationalDays = response?.Data.Items.Select(i => new NationalDay(i));
+
+        return nationalDays;
     }
 }

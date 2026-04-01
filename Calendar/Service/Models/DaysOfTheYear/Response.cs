@@ -1,11 +1,11 @@
 ﻿using JetBrains.Annotations;
 
-namespace ChrisKaczor.HomeMonitor.Calendar.Service.Models.NationalDays;
+namespace ChrisKaczor.HomeMonitor.Calendar.Service.Models.DaysOfTheYear;
 
 [PublicAPI]
 public class Response
 {
     public int Code { get; set; }
     public Meta Meta { get; set; } = new();
-    public IEnumerable<Entry> Data { get; set; } = Array.Empty<Entry>();
+    public IEnumerable<Entry> Data { get; set; } = [];
 }

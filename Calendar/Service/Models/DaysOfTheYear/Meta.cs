@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System.Text.Json.Serialization;
 
-namespace ChrisKaczor.HomeMonitor.Calendar.Service.Models.NationalDays;
+namespace ChrisKaczor.HomeMonitor.Calendar.Service.Models.DaysOfTheYear;
 
 [PublicAPI]
 public class Meta

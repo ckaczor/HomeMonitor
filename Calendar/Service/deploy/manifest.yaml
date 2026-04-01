@@ -35,16 +35,26 @@ spec:
             secretKeyRef:
               name: calendar-config
               key: HOLIDAYS_URL    
-        - name: Calendar__NationalDays__Url
+        - name: Calendar__DaysOfTheYear__Url
           valueFrom:
             secretKeyRef:
               name: calendar-config
-              key: NATIONAL_DAYS_URL    
-        - name: Calendar__NationalDays__Key
+              key: DAYS_OF_THE_YEAR_URL    
+        - name: Calendar__DaysOfTheYear__Key
           valueFrom:
             secretKeyRef:
               name: calendar-config
-              key: NATIONAL_DAYS_KEY    
+              key: DAYS_OF_THE_YEAR_KEY    
+        - name: Calendar__HolidayCalendar__Url
+          valueFrom:
+            secretKeyRef:
+              name: calendar-config
+              key: HOLIDAY_CALENDAR_URL    
+        - name: Calendar__HolidayCalendar__Key
+          valueFrom:
+            secretKeyRef:
+              name: calendar-config
+              key: HOLIDAY_CALENDAR_KEY    
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
