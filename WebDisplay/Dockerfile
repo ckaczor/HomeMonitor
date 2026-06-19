@@ -4,6 +4,8 @@ RUN npm install -g corepack@latest
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 COPY package*.json ./
+COPY pnpm-workspace.yaml ./
+ENV CI=true
 RUN pnpm install
 COPY . .
 RUN pnpm run build
