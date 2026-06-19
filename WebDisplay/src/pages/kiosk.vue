@@ -7,6 +7,14 @@
     import CalendarAgenda from '@/components/CalendarAgenda.vue';
     import LongPressButton from '@/components/LongPressButton.vue';
     import PressureTrendArrow from '@/components/PressureTrendArrow.vue';
+    import AlarmOverview from '@/components/AlarmOverview.vue';
+
+    enum KioskPage {
+        Calendar,
+        AlarmOverview
+    }
+
+    const kioskPage = ref(KioskPage.Calendar);
 
     const outOfDateDuration = 5000;
 
@@ -233,11 +241,34 @@
             </div>
         </div>
         <div class="kiosk-content">
-            <CalendarAgenda
-                class="kiosk-calendar"
-                days="10"
-                :refresh-interval="5 * 60 * 1000" />
-            <NationalDays class="kiosk-national-days" />
+            <div class="kiosk-navigation">
+                <v-icon
+                    class="kiosk-navigation-icon"
+                    icon="mdi-calendar"
+                    :class="{ 'kiosk-navigation-selected': kioskPage === KioskPage.Calendar }"
+                    @click="kioskPage = KioskPage.Calendar" />
+                <v-icon
+                    class="kiosk-navigation-icon"
+                    icon="mdi-shield-home-outline"
+                    :class="{ 'kiosk-navigation-selected': kioskPage === KioskPage.AlarmOverview }"
+                    @click="kioskPage = KioskPage.AlarmOverview" />
+            </div>
+            <div
+                class="kiosk-calendar-page"
+                v-show="kioskPage === KioskPage.Calendar">
+                <CalendarAgenda
+                    class="kiosk-calendar"
+                    days="10"
+                    :refresh-interval="5 * 60 * 1000" />
+                <NationalDays
+                    class="kiosk-national-days"
+                    v-show="kioskPage === KioskPage.Calendar" />
+            </div>
+            <div
+                class="kiosk-alarm-overview-page"
+                v-show="kioskPage === KioskPage.AlarmOverview">
+                <AlarmOverview class="kiosk-alarm-overview" />
+            </div>
         </div>
     </v-container>
 </template>
@@ -286,18 +317,25 @@
 
     .kiosk-content {
         height: 100%;
-        max-height: calc(100vh - 30px);
+        max-height: calc(100vh);
         padding: 10px;
-        gap: 10px;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(4, 25%);
-        grid-auto-flow: row;
-        grid-template-areas:
-            'kiosk-calendar kiosk-national-days kiosk-national-days'
-            'kiosk-calendar kiosk-national-days kiosk-national-days'
-            'kiosk-calendar kiosk-national-days kiosk-national-days'
-            'kiosk-calendar kiosk-national-days kiosk-national-days';
+    }
+
+    .kiosk-navigation {
+        background-color: #121212;
+        border-radius: 10px;
+        align-content: center;
+        padding: 0 10px;
+        height: 50px;
+    }
+
+    .kiosk-navigation-icon {
+        font-size: 2rem;
+        margin-right: 10px;
+    }
+
+    .kiosk-navigation-selected {
+        color: #5e83c7;
     }
 
     .kiosk-time {
@@ -362,12 +400,27 @@
         font-size: 1.3rem;
     }
 
+    .kiosk-calendar-page {
+        display: flex;
+        padding-top: 10px;
+        gap: 10px;
+        height: calc(100vh - 70px);
+    }
+
+    .kiosk-alarm-overview-page {
+        display: flex;
+        padding-top: 10px;
+        gap: 10px;
+        height: calc(100vh - 70px);
+    }
+
     .kiosk-calendar {
-        grid-area: kiosk-calendar;
+        flex-basis: 20%;
     }
 
     .kiosk-national-days {
-        grid-area: kiosk-national-days;
+        flex-grow: 1;
+        flex-basis: auto;
     }
 
     .warning {

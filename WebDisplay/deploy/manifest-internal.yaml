@@ -51,7 +51,9 @@ spec:
           valueFrom:
             secretKeyRef:
               name: display-internal-config
-              key: CALENDAR_EMBED_URL   
+              key: CALENDAR_EMBED_URL
+        - name: ALARM_INTEGRATION
+          value: abode              
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

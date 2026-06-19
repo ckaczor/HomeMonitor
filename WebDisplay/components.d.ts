@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AlarmOverview: typeof import('./src/components/AlarmOverview.vue')['default']
     Almanac: typeof import('./src/components/Almanac.vue')['default']
     CalendarAgenda: typeof import('./src/components/CalendarAgenda.vue')['default']
     CurrentLaundryStatus: typeof import('./src/components/CurrentLaundryStatus.vue')['default']

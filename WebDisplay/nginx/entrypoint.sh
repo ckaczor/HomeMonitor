@@ -5,3 +5,4 @@ sed -i -e "s~#HOME_ASSISTANT_URL#~$HOME_ASSISTANT_URL~g" /usr/share/nginx/html/a
 sed -i -e "s~#HOME_ASSISTANT_TOKEN#~$HOME_ASSISTANT_TOKEN~g" /usr/share/nginx/html/assets/*
 sed -i -e "s~#GARAGE_DEVICE#~$GARAGE_DEVICE~g" /usr/share/nginx/html/assets/*
 sed -i -e "s~#ALARM_DEVICE#~$ALARM_DEVICE~g" /usr/share/nginx/html/assets/*
+sed -i -e "s~#ALARM_INTEGRATION#~$ALARM_INTEGRATION~g" /usr/share/nginx/html/assets/*

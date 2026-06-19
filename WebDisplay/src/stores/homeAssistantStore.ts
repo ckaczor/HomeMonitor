@@ -1,12 +1,14 @@
 import { defineStore } from 'pinia';
-import { createConnection, subscribeEntities, createLongLivedTokenAuth, Connection, callService } from 'home-assistant-js-websocket';
+import { createConnection, subscribeEntities, createLongLivedTokenAuth, Connection, callService, HassEntities, HassEntity } from 'home-assistant-js-websocket';
 import Environment from '@/environment';
+import { HomeAssistantRegistryEntity } from '@/models/homeAssistant/registryEntity';
 
 export const useHomeAssistantStore = defineStore('home-assistant', {
     state: () => {
         return {
             garageState: null as string | null,
             houseAlarmState: null as string | null,
+            alarmEntities: {} as Record<string, HassEntity>,
             _connection: null as Connection | null
         };
     },
@@ -18,12 +20,21 @@ export const useHomeAssistantStore = defineStore('home-assistant', {
 
             const garageDevice = Environment.getGarageDevice();
             const alarmDevice = Environment.getAlarmDevice();
+            const alarmIntegration = Environment.getAlarmIntegration();
 
             const auth = createLongLivedTokenAuth(Environment.getHomeAssistantUrl(), Environment.getHomeAssistantToken());
 
             this._connection = await createConnection({ auth });
 
-            subscribeEntities(this._connection as Connection, (entities) => {
+            const homeAssistantRegistryEntries: HomeAssistantRegistryEntity[] = await this._connection.sendMessagePromise({
+                type: 'config/entity_registry/list'
+            });
+
+            const alarmEntityList = homeAssistantRegistryEntries.filter((entity) => entity.platform === alarmIntegration);
+
+            const alarmEntities: Record<string, HomeAssistantRegistryEntity> = Object.fromEntries(alarmEntityList.map((entity) => [entity.entity_id, entity]));
+
+            subscribeEntities(this._connection as Connection, (entities: HassEntities) => {
                 const garageEntity = entities[garageDevice];
 
                 if (garageEntity) {
@@ -35,6 +46,12 @@ export const useHomeAssistantStore = defineStore('home-assistant', {
                 if (houseAlarmEntity) {
                     this.$patch({ houseAlarmState: houseAlarmEntity.state });
                 }
+
+                Object.entries(entities).forEach(([entityId, entity]) => {
+                    if (alarmEntities[entityId]) {
+                        this.$patch((state) => (state.alarmEntities[entityId] = entity));
+                    }
+                });
             });
 
             setInterval(async () => await this._connection?.ping(), 5000);

@@ -18,4 +18,8 @@ export default class Environment {
     public static getAlarmDevice(): string {
         return '#ALARM_DEVICE#';
     }
+
+    public static getAlarmIntegration(): string {
+        return '#ALARM_INTEGRATION#';
+    }
 }
