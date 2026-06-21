@@ -26,23 +26,27 @@
                 }
             "></TimeRange>
         <v-card class="weather-summary">
-            <WeatherSummary
-                :start="start"
-                :end="end"></WeatherSummary>
+            <DashboardItem title="Weather">
+                <WeatherSummary
+                    :start="start"
+                    :end="end"></WeatherSummary>
+            </DashboardItem>
         </v-card>
         <v-card class="main-summary">
-            <IndoorSummary
-                name="main"
-                title="Upstairs"
-                :start="start"
-                :end="end"></IndoorSummary>
+            <DashboardItem title="Upstairs">
+                <IndoorSummary
+                    name="main"
+                    :start="start"
+                    :end="end"></IndoorSummary>
+            </DashboardItem>
         </v-card>
         <v-card class="basement-summary">
-            <IndoorSummary
-                name="basement"
-                title="Downstairs"
-                :start="start"
-                :end="end"></IndoorSummary>
+            <DashboardItem title="Downstairs">
+                <IndoorSummary
+                    name="basement"
+                    :start="start"
+                    :end="end"></IndoorSummary>
+            </DashboardItem>
         </v-card>
     </v-container>
 </template>

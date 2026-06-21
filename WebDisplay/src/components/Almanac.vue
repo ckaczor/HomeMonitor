@@ -65,56 +65,54 @@
 </script>
 
 <template>
-    <DashboardItem title="Almanac">
-        <div className="almanac-content">
-            <div v-if="!almanacStore.sunTimes || !almanacStore.moonIllumination">Loading...</div>
-            <table v-else>
-                <tbody>
-                    <tr>
-                        <td className="almanac-table-header">Sunrise</td>
-                        <td colSpan="{2}">
-                            {{ format(almanacStore.sunTimes.sunrise, 'hh:mm:ss aa') }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="almanac-table-header">Sunset</td>
-                        <td colSpan="{2}">
-                            {{ format(almanacStore.sunTimes.sunset, 'hh:mm:ss aa') }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="almanac-table-header">Day length</td>
-                        <td colSpan="{2}">{{ dayLength() }}</td>
-                    </tr>
-                    <tr>
-                        <td className="almanac-table-header">Moonrise</td>
-                        <td colSpan="{2}">
-                            {{ almanacStore.moonTimes?.rise ? format(almanacStore.moonTimes.rise, 'hh:mm:ss aa') : 'None' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="almanac-table-header">Moonset</td>
-                        <td colSpan="{2}">
-                            {{ almanacStore.moonTimes?.set ? format(almanacStore.moonTimes.set, 'hh:mm:ss aa') : 'None' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="almanac-table-header">Moon</td>
-                        <td>
-                            {{ moonPhaseName() }}
-                            <br />
-                            {{ (almanacStore.moonIllumination.fraction * 100).toFixed(1) }}% illuminated
-                        </td>
-                        <td>
-                            <div className="moon-phase">
-                                {{ moonPhaseLetter() }}
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </DashboardItem>
+    <div className="almanac-content">
+        <div v-if="!almanacStore.sunTimes || !almanacStore.moonIllumination">Loading...</div>
+        <table v-else>
+            <tbody>
+                <tr>
+                    <td className="almanac-table-header">Sunrise</td>
+                    <td colSpan="{2}">
+                        {{ format(almanacStore.sunTimes.sunrise, 'hh:mm:ss aa') }}
+                    </td>
+                </tr>
+                <tr>
+                    <td className="almanac-table-header">Sunset</td>
+                    <td colSpan="{2}">
+                        {{ format(almanacStore.sunTimes.sunset, 'hh:mm:ss aa') }}
+                    </td>
+                </tr>
+                <tr>
+                    <td className="almanac-table-header">Day length</td>
+                    <td colSpan="{2}">{{ dayLength() }}</td>
+                </tr>
+                <tr>
+                    <td className="almanac-table-header">Moonrise</td>
+                    <td colSpan="{2}">
+                        {{ almanacStore.moonTimes?.rise ? format(almanacStore.moonTimes.rise, 'hh:mm:ss aa') : 'None' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td className="almanac-table-header">Moonset</td>
+                    <td colSpan="{2}">
+                        {{ almanacStore.moonTimes?.set ? format(almanacStore.moonTimes.set, 'hh:mm:ss aa') : 'None' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td className="almanac-table-header">Moon</td>
+                    <td>
+                        {{ moonPhaseName() }}
+                        <br />
+                        {{ (almanacStore.moonIllumination.fraction * 100).toFixed(1) }}% illuminated
+                    </td>
+                    <td>
+                        <div className="moon-phase">
+                            {{ moonPhaseLetter() }}
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 
 <style scoped>

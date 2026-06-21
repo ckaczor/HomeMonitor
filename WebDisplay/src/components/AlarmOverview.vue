@@ -82,8 +82,6 @@
 
 <style scoped>
     .alarm-overview {
-        background-color: #121212;
-        border-radius: 10px;
         display: flex;
         flex: 1;
         flex-direction: column;

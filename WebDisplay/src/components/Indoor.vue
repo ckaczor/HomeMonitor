@@ -4,7 +4,6 @@
     import { ConvertMillibarToInchesOfMercury } from '@/pressureConverter';
 
     const props = defineProps({
-        title: { type: String, required: true },
         deviceName: { type: String, required: true }
     });
 
@@ -53,35 +52,33 @@
 </script>
 
 <template>
-    <DashboardItem :title="title">
-        <div className="current">
-            <div v-if="!indoorStore.current">Loading...</div>
-            <table v-else>
-                <tbody>
-                    <tr>
-                        <td className="header">Temperature</td>
-                        <td>{{ ConvertCToF(indoorStore.current.temperature).toFixed(2) }}°F</td>
-                    </tr>
-                    <tr>
-                        <td className="header">Humidity</td>
-                        <td>{{ indoorStore.current.humidity.toFixed(2) }}%</td>
-                    </tr>
-                    <tr>
-                        <td className="header">Pressure</td>
-                        <td>{{ ConvertMillibarToInchesOfMercury(indoorStore.current.pressure).toFixed(2) }}"</td>
-                    </tr>
-                    <tr>
-                        <td className="header">Air quality</td>
-                        <td
-                            :class="airQualityClass(indoorStore.current.airQualityIndex)"
-                            :title="indoorStore.current.airQualityIndex.toString()">
-                            {{ airQualityDescription(indoorStore.current.airQualityIndex) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </DashboardItem>
+    <div className="current">
+        <div v-if="!indoorStore.current">Loading...</div>
+        <table v-else>
+            <tbody>
+                <tr>
+                    <td className="header">Temperature</td>
+                    <td>{{ ConvertCToF(indoorStore.current.temperature).toFixed(2) }}°F</td>
+                </tr>
+                <tr>
+                    <td className="header">Humidity</td>
+                    <td>{{ indoorStore.current.humidity.toFixed(2) }}%</td>
+                </tr>
+                <tr>
+                    <td className="header">Pressure</td>
+                    <td>{{ ConvertMillibarToInchesOfMercury(indoorStore.current.pressure).toFixed(2) }}"</td>
+                </tr>
+                <tr>
+                    <td className="header">Air quality</td>
+                    <td
+                        :class="airQualityClass(indoorStore.current.airQualityIndex)"
+                        :title="indoorStore.current.airQualityIndex.toString()">
+                        {{ airQualityDescription(indoorStore.current.airQualityIndex) }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 
 <style scoped>

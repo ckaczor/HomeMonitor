@@ -8,13 +8,21 @@
     import LongPressButton from '@/components/LongPressButton.vue';
     import PressureTrendArrow from '@/components/PressureTrendArrow.vue';
     import AlarmOverview from '@/components/AlarmOverview.vue';
+    import WeatherSummary from '@/components/WeatherSummary.vue';
+    import { subHours } from 'date-fns';
+    import Almanac from '@/components/Almanac.vue';
 
     enum KioskPage {
         Calendar,
-        AlarmOverview
+        AlarmOverview,
+        WeatherSummary,
+        Almanac
     }
 
     const kioskPage = ref(KioskPage.Calendar);
+
+    const end = ref(new Date());
+    const start = ref(subHours(end.value, 24));
 
     const outOfDateDuration = 5000;
 
@@ -252,22 +260,50 @@
                     icon="mdi-shield-home-outline"
                     :class="{ 'kiosk-navigation-selected': kioskPage === KioskPage.AlarmOverview }"
                     @click="kioskPage = KioskPage.AlarmOverview" />
+                <v-icon
+                    class="kiosk-navigation-icon"
+                    icon="mdi-weather-cloudy-clock"
+                    :class="{ 'kiosk-navigation-selected': kioskPage === KioskPage.WeatherSummary }"
+                    @click="kioskPage = KioskPage.WeatherSummary" />
+                <v-icon
+                    class="kiosk-navigation-icon"
+                    icon="mdi-notebook-outline"
+                    :class="{ 'kiosk-navigation-selected': kioskPage === KioskPage.Almanac }"
+                    @click="kioskPage = KioskPage.Almanac" />
             </div>
             <div
-                class="kiosk-calendar-page"
+                class="kiosk-page"
                 v-show="kioskPage === KioskPage.Calendar">
                 <CalendarAgenda
-                    class="kiosk-calendar"
+                    class="kiosk-panel kiosk-calendar"
                     days="10"
                     :refresh-interval="5 * 60 * 1000" />
                 <NationalDays
-                    class="kiosk-national-days"
+                    class="kiosk-panel kiosk-national-days"
                     v-show="kioskPage === KioskPage.Calendar" />
             </div>
             <div
-                class="kiosk-alarm-overview-page"
+                class="kiosk-page"
                 v-show="kioskPage === KioskPage.AlarmOverview">
-                <AlarmOverview class="kiosk-alarm-overview" />
+                <AlarmOverview class="kiosk-panel" />
+            </div>
+            <div
+                class="kiosk-page"
+                v-show="kioskPage === KioskPage.WeatherSummary">
+                <div class="kiosk-panel">
+                    <div class="kiosk-panel-header">Weather Summary</div>
+                    <WeatherSummary
+                        :start="start"
+                        :end="end"></WeatherSummary>
+                </div>
+            </div>
+            <div
+                class="kiosk-page"
+                v-show="kioskPage === KioskPage.Almanac">
+                <div class="kiosk-panel">
+                    <div class="kiosk-panel-header">Almanac</div>
+                    <Almanac></Almanac>
+                </div>
             </div>
         </div>
     </v-container>
@@ -292,6 +328,23 @@
         flex-direction: row;
         justify-content: space-around;
         align-items: center;
+    }
+
+    .kiosk-panel {
+        background-color: #121212;
+        border-radius: 10px;
+        width: 100%;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+    }
+
+    .kiosk-panel-header {
+        font-size: 1.15em;
+        padding-top: 10px;
+        padding-bottom: 2px;
+        text-align: center;
+        width: 100%;
     }
 
     .kiosk-sidebar {
@@ -331,7 +384,7 @@
 
     .kiosk-navigation-icon {
         font-size: 2rem;
-        margin-right: 10px;
+        margin-right: 15px;
     }
 
     .kiosk-navigation-selected {
@@ -400,14 +453,7 @@
         font-size: 1.3rem;
     }
 
-    .kiosk-calendar-page {
-        display: flex;
-        padding-top: 10px;
-        gap: 10px;
-        height: calc(100vh - 70px);
-    }
-
-    .kiosk-alarm-overview-page {
+    .kiosk-page {
         display: flex;
         padding-top: 10px;
         gap: 10px;
@@ -415,11 +461,14 @@
     }
 
     .kiosk-calendar {
-        flex-basis: 20%;
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 50%;
     }
 
     .kiosk-national-days {
         flex-grow: 1;
+        flex-shrink: 1;
         flex-basis: auto;
     }
 

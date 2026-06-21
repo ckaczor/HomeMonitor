@@ -5,26 +5,34 @@
         fluid
         class="container">
         <v-card class="current-weather">
-            <CurrentWeather></CurrentWeather>
+            <DashboardItem title="Weather">
+                <CurrentWeather></CurrentWeather>
+            </DashboardItem>
         </v-card>
         <v-card class="almanac">
-            <Almanac></Almanac>
+            <DashboardItem title="Almanac">
+                <Almanac></Almanac>
+            </DashboardItem>
         </v-card>
         <v-card class="current-power">
-            <CurrentPower></CurrentPower>
+            <DashboardItem title="Power">
+                <CurrentPower></CurrentPower>
+            </DashboardItem>
         </v-card>
         <v-card class="current-laundry-status">
-            <CurrentLaundryStatus></CurrentLaundryStatus>
+            <DashboardItem title="Laundry">
+                <CurrentLaundryStatus></CurrentLaundryStatus>
+            </DashboardItem>
         </v-card>
         <v-card class="upstairs">
-            <Indoor
-                title="Upstairs"
-                deviceName="main"></Indoor>
+            <DashboardItem title="Upstairs">
+                <Indoor deviceName="main"></Indoor>
+            </DashboardItem>
         </v-card>
         <v-card class="downstairs">
-            <Indoor
-                title="Downstairs"
-                deviceName="basement"></Indoor>
+            <DashboardItem title="Downstairs">
+                <Indoor deviceName="basement"></Indoor>
+            </DashboardItem>
         </v-card>
     </v-container>
 </template>

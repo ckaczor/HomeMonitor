@@ -75,8 +75,6 @@
 
 <style>
     .national-days {
-        background-color: #121212;
-        border-radius: 10px;
         padding: 10px;
         display: flex;
         flex: 1;
