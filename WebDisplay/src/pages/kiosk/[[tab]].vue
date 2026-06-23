@@ -9,20 +9,17 @@
     import PressureTrendArrow from '@/components/PressureTrendArrow.vue';
     import AlarmOverview from '@/components/AlarmOverview.vue';
     import WeatherSummary from '@/components/WeatherSummary.vue';
-    import { subHours } from 'date-fns';
+    import { endOfDay, startOfDay } from 'date-fns';
     import Almanac from '@/components/Almanac.vue';
+    import { useRoute } from 'vue-router/auto';
+    import { useRouter } from 'vue-router';
 
-    enum KioskPage {
-        Calendar,
-        AlarmOverview,
-        WeatherSummary,
-        Almanac
-    }
+    const route = useRoute('/kiosk/[[tab]]');
+    const router = useRouter();
 
-    const kioskPage = ref(KioskPage.Calendar);
-
-    const end = ref(new Date());
-    const start = ref(subHours(end.value, 24));
+    const date = new Date();
+    const end = endOfDay(date);
+    const start = startOfDay(date);
 
     const outOfDateDuration = 5000;
 
@@ -44,6 +41,14 @@
 
     const timeFormatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' });
     const dateFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+    function tabSelected(tab: string): boolean {
+        return (route.params.tab || 'calendar') === tab;
+    }
+
+    function selectTab(tab: string) {
+        router.push({ name: '/kiosk/[[tab]]', params: { tab: tab }, replace: true });
+    }
 
     function alarmState(state: string): string {
         switch (state) {
@@ -253,45 +258,43 @@
                 <v-icon
                     class="kiosk-navigation-icon"
                     icon="mdi-calendar"
-                    :class="{ 'kiosk-navigation-selected': kioskPage === KioskPage.Calendar }"
-                    @click="kioskPage = KioskPage.Calendar" />
+                    :class="{ 'kiosk-navigation-selected': tabSelected('calendar') }"
+                    @click="selectTab('calendar')" />
                 <v-icon
                     class="kiosk-navigation-icon"
                     icon="mdi-shield-home-outline"
-                    :class="{ 'kiosk-navigation-selected': kioskPage === KioskPage.AlarmOverview }"
-                    @click="kioskPage = KioskPage.AlarmOverview" />
+                    :class="{ 'kiosk-navigation-selected': tabSelected('alarm') }"
+                    @click="selectTab('alarm')" />
                 <v-icon
                     class="kiosk-navigation-icon"
                     icon="mdi-weather-cloudy-clock"
-                    :class="{ 'kiosk-navigation-selected': kioskPage === KioskPage.WeatherSummary }"
-                    @click="kioskPage = KioskPage.WeatherSummary" />
+                    :class="{ 'kiosk-navigation-selected': tabSelected('weather') }"
+                    @click="selectTab('weather')" />
                 <v-icon
                     class="kiosk-navigation-icon"
                     icon="mdi-notebook-outline"
-                    :class="{ 'kiosk-navigation-selected': kioskPage === KioskPage.Almanac }"
-                    @click="kioskPage = KioskPage.Almanac" />
+                    :class="{ 'kiosk-navigation-selected': tabSelected('almanac') }"
+                    @click="selectTab('almanac')" />
             </div>
             <div
                 class="kiosk-page"
-                v-show="kioskPage === KioskPage.Calendar">
+                v-show="tabSelected('calendar')">
                 <CalendarAgenda
                     class="kiosk-panel kiosk-calendar"
                     days="10"
                     :refresh-interval="5 * 60 * 1000" />
-                <NationalDays
-                    class="kiosk-panel kiosk-national-days"
-                    v-show="kioskPage === KioskPage.Calendar" />
+                <NationalDays class="kiosk-panel kiosk-national-days" />
             </div>
             <div
                 class="kiosk-page"
-                v-show="kioskPage === KioskPage.AlarmOverview">
+                v-show="tabSelected('alarm')">
                 <AlarmOverview class="kiosk-panel" />
             </div>
             <div
                 class="kiosk-page"
-                v-show="kioskPage === KioskPage.WeatherSummary">
+                v-show="tabSelected('weather')">
                 <div class="kiosk-panel">
-                    <div class="kiosk-panel-header">Weather Summary</div>
+                    <div class="kiosk-panel-header">Weather Summary Today</div>
                     <WeatherSummary
                         :start="start"
                         :end="end"></WeatherSummary>
@@ -299,7 +302,7 @@
             </div>
             <div
                 class="kiosk-page"
-                v-show="kioskPage === KioskPage.Almanac">
+                v-show="tabSelected('almanac')">
                 <div class="kiosk-panel">
                     <div class="kiosk-panel-header">Almanac</div>
                     <Almanac></Almanac>

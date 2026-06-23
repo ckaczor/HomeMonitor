@@ -45,7 +45,7 @@ declare module 'vue-router/auto/routes' {
     '//outdoor': RouteRecordInfo<'//outdoor', '/outdoor', Record<never, never>, Record<never, never>>,
     '//power': RouteRecordInfo<'//power', '/power', Record<never, never>, Record<never, never>>,
     '//summary': RouteRecordInfo<'//summary', '/summary', Record<never, never>, Record<never, never>>,
-    '/kiosk': RouteRecordInfo<'/kiosk', '/kiosk', Record<never, never>, Record<never, never>>,
+    '/kiosk/[[tab]]': RouteRecordInfo<'/kiosk/[[tab]]', '/kiosk/:tab?', { tab?: ParamValueZeroOrOne<true> }, { tab?: ParamValueZeroOrOne<false> }>,
   }
 }
 

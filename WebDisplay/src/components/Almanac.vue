@@ -1,10 +1,15 @@
 <script lang="ts" setup>
-    import DashboardItem from './DashboardItem.vue';
+    import { setNextDayTimer } from '@/nextDayTimer.js';
     import { useAlmanacStore } from '@/stores/almanacStore';
     import { format, formatDuration, intervalToDuration } from 'date-fns';
 
     const almanacStore = useAlmanacStore();
-    almanacStore.load();
+
+    function loadAlmanac() {
+        almanacStore.load(new Date()).then((_) => {
+            setNextDayTimer(loadAlmanac, 10000);
+        });
+    }
 
     const dayLength = (): string => {
         const duration = intervalToDuration({
@@ -62,6 +67,8 @@
 
         return '';
     };
+
+    loadAlmanac();
 </script>
 
 <template>

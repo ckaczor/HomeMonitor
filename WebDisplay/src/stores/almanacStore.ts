@@ -12,12 +12,10 @@ export const useAlmanacStore = defineStore('almanac', {
         };
     },
     actions: {
-        async load() {
+        async load(date: Date) {
             const weatherStore = useWeatherStore();
 
             weatherStore.getLatest().then((weatherRecent: WeatherRecent) => {
-                const date = new Date();
-
                 this.sunTimes = SunCalc.getTimes(
                     date,
                     weatherRecent?.latitude!,
