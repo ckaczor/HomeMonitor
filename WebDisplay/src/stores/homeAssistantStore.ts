@@ -60,6 +60,30 @@ export const useHomeAssistantStore = defineStore('home-assistant', {
             this._connection?.close();
             this._connection = null;
         },
+        async toggleAlarm() {
+            const alarmDevice = Environment.getAlarmDevice();
+
+            let action: string | null;
+
+            switch (this.houseAlarmState) {
+                case 'disarmed':
+                    action = 'alarm_arm_home';
+                    break;
+                case 'armed_home':
+                case 'armed_away':
+                    action = 'alarm_disarm';
+                    break;
+                default:
+                    action = null;
+                    break;
+            }
+
+            if (!action) {
+                return;
+            }
+
+            callService(this._connection as Connection, 'alarm_control_panel', action, { entity_id: alarmDevice });
+        },
         async toggleGarage() {
             const garageDevice = Environment.getGarageDevice();
 

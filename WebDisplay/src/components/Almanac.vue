@@ -1,12 +1,13 @@
 <script lang="ts" setup>
     import { setNextDayTimer } from '@/nextDayTimer.js';
     import { useAlmanacStore } from '@/stores/almanacStore';
-    import { format, formatDuration, intervalToDuration } from 'date-fns';
+    import { format, formatDuration, intervalToDuration, startOfDay } from 'date-fns';
 
     const almanacStore = useAlmanacStore();
 
     function loadAlmanac() {
-        almanacStore.load(new Date()).then((_) => {
+        const date = startOfDay(new Date());
+        almanacStore.load(date).then((_) => {
             setNextDayTimer(loadAlmanac, 10000);
         });
     }

@@ -241,9 +241,13 @@
                     {{ capitalize(homeAssistantStore.garageState) }}
                 </div>
             </LongPressButton>
-            <div
+            <LongPressButton
                 class="kiosk-house-alarm text-center pt-4"
                 v-if="homeAssistantStore?.houseAlarmState"
+                :duration="2000"
+                :increment="100"
+                :progress-size="38"
+                v-on:longPress="homeAssistantStore.toggleAlarm()"
                 :class="homeAssistantStore.houseAlarmState === 'disarmed' ? 'normal' : 'warning'">
                 <v-icon
                     class="kiosk-device-icon"
@@ -251,7 +255,7 @@
                 <div class="kiosk-device-text">
                     {{ alarmState(homeAssistantStore.houseAlarmState) }}
                 </div>
-            </div>
+            </LongPressButton>
         </div>
         <div class="kiosk-content">
             <div class="kiosk-navigation">
